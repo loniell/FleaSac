@@ -1,0 +1,438 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to use Django with uWSGI &mdash; Django 1.4 alpha 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.4 alpha 1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Django 1.4 alpha 1 documentation" href="../../../index.html" />
+    <link rel="up" title="How to deploy with WSGI" href="index.html" />
+    <link rel="next" title="How to use Django with FastCGI, SCGI, or AJP" href="../fastcgi.html" />
+    <link rel="prev" title="How to use Django with Gunicorn" href="gunicorn.html" />
+ 
+<script type="text/javascript" src="../../../templatebuiltins.js"></script>
+<script type="text/javascript">
+(function($) {
+    if (!django_template_builtins) {
+       // templatebuiltins.js missing, do nothing.
+       return;
+    }
+    $(document).ready(function() {
+        // Hyperlink Django template tags and filters
+        var base = "../../../ref/templates/builtins.html";
+        if (base == "#") {
+            // Special case for builtins.html itself
+            base = "";
+        }
+        // Tags are keywords, class '.k'
+        $("div.highlight\\-html\\+django span.k").each(function(i, elem) {
+             var tagname = $(elem).text();
+             if ($.inArray(tagname, django_template_builtins.ttags) != -1) {
+                 var fragment = tagname.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + tagname + "</a>");
+             }
+        });
+        // Filters are functions, class '.nf'
+        $("div.highlight\\-html\\+django span.nf").each(function(i, elem) {
+             var filtername = $(elem).text();
+             if ($.inArray(filtername, django_template_builtins.tfilters) != -1) {
+                 var fragment = filtername.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + filtername + "</a>");
+             }
+        });
+    });
+})(jQuery);
+</script>
+
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../../../index.html">Django 1.4 alpha 1 documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../../../index.html">Home</a>  |
+        <a title="Table of contents" href="../../../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../../../genindex.html">Index</a>  |
+        <a title="Module index" href="../../../py-modindex.html">Modules</a>
+      </div>
+      <div class="nav">
+    &laquo; <a href="gunicorn.html" title="How to use Django with Gunicorn">previous</a> 
+     |
+    <a href="../../index.html" title="&amp;#8220;How-to&amp;#8221; guides" accesskey="U">up</a>
+   |
+    <a href="../fastcgi.html" title="How to use Django with FastCGI, SCGI, or AJP">next</a> &raquo;</div>
+    </div>
+    
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="howto-deployment-wsgi-uwsgi">
+            
+  <div class="section" id="s-how-to-use-django-with-uwsgi">
+<span id="how-to-use-django-with-uwsgi"></span><h1>How to use Django with uWSGI<a class="headerlink" href="#how-to-use-django-with-uwsgi" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://projects.unbit.it/uwsgi/">uWSGI</a> is a fast, self-healing and developer/sysadmin-friendly application
+container server coded in pure C.</p>
+<p>It also provides a fast <a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/CachingFramework">caching framework</a> but its documentation is not the
+purpose of this document.</p>
+<div class="section" id="s-prerequisite-uwsgi">
+<span id="prerequisite-uwsgi"></span><h2>Prerequisite: uWSGI<a class="headerlink" href="#prerequisite-uwsgi" title="Permalink to this headline">¶</a></h2>
+<p>The wiki describes several <a class="reference external" href="http://projects0.unbit.it/uwsgi/wiki/Install">installation procedures</a>. Using pip, the python
+package manager, installing any uWSGI version can be done with one command
+line. For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># install current stable version</span>
+pip install uwsgi
+
+<span class="c"># or install LTS (long term support)</span>
+pip install http://projects.unbit.it/downloads/uwsgi-lts.tar.gz
+</pre></div>
+</div>
+</div>
+<div class="section" id="s-prerequisite-general-concept">
+<span id="prerequisite-general-concept"></span><h2>Prerequisite: general concept<a class="headerlink" href="#prerequisite-general-concept" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="s-uwsgi-model">
+<span id="uwsgi-model"></span><h3>uWSGI model<a class="headerlink" href="#uwsgi-model" title="Permalink to this headline">¶</a></h3>
+<p>uWSGI operates on a client-server model. Your Web server (ie. nginx, Apache)
+communicates with a django-uwsgi &#8220;worker&#8221; process to serve dynamic content.
+The Web server can communicate with the uWSGI process either:</p>
+<ul class="simple">
+<li>directly by the uWSGI protocol through a socket created by uWSGI,</li>
+<li>or by proxying HTTP requests to the minimalist HTTP server built in uWSGI.</li>
+</ul>
+<p>In the first case: the Web server can do uWSGI protocol (often with a
+module). It can then use either a Unix domain socket (a &#8220;named pipe&#8221; on Win32
+systems), or it can use a TCP socket. What you choose is a matterr of
+preference. Usually, a TCP socket is easier because connecting to a port
+doesn&#8217;t require special permissions.</p>
+<p>In the second case, the Web server doesn&#8217;t need to speak the uWSGI protocol. It
+just needs to be able to proxy HTTP requests to the HTTP server built-in uWSGI.
+The procedure is the same as proxying to any HTTP server. Note that the Web
+server is a &#8220;reverse proxy&#8221; in this case.</p>
+</div>
+<div class="section" id="s-configuring-the-uwsgi-server">
+<span id="configuring-the-uwsgi-server"></span><h3>Configuring the uWSGI server<a class="headerlink" href="#configuring-the-uwsgi-server" title="Permalink to this headline">¶</a></h3>
+<p>In any case, when you set up your Web server, you&#8217;ll just need to point its
+uwsgi or proxy module to the host/port or socket you specified when starting
+the uWSGI server.</p>
+<div class="admonition-choosing-the-socket admonition">
+<p class="first admonition-title">Choosing the socket</p>
+<p class="last">The easiest is to set the socket to a high level (&gt;49152) local port like
+127.0.0.1:49152. If the socket is a file, the system administrator must
+ensure that the Web server process has read, write and execute privileges
+on that file.</p>
+</div>
+<p>uWSGI is highly configurable and thus there are many ways to start the
+process. For example, uwsgi version 0.9.6.8 provides a hundred switches.  This
+guide demonstrates the most important of them, but is not a substitute the
+official manual and online documentation.</p>
+<p>uWSGI supports configuration through:</p>
+<ul class="simple">
+<li>environment variables</li>
+<li>command line switches</li>
+<li>ldap</li>
+<li>ini files</li>
+<li>xml files</li>
+<li>yaml files</li>
+</ul>
+</div>
+<div class="section" id="s-managing-the-uwsgi-server">
+<span id="managing-the-uwsgi-server"></span><h3>Managing the uWSGI server<a class="headerlink" href="#managing-the-uwsgi-server" title="Permalink to this headline">¶</a></h3>
+<p>The system administrator controls the worker process pool by sending signals
+to the master process. For example, the unix kill command sends such signals.
+uWSGI can write the master process id to a &#8220;pidfile&#8221;. A &#8220;pidfile&#8221; is a plain
+text file containing just a process id.</p>
+</div>
+<div class="section" id="s-starting-the-server">
+<span id="starting-the-server"></span><h3>Starting the server<a class="headerlink" href="#starting-the-server" title="Permalink to this headline">¶</a></h3>
+<p>Starting an uWSGI server is the role of the system administrator, like
+starting the Web server. It is <em>not</em> the role of the Web server to start the
+uWSGI server. This means:</p>
+<ul class="simple">
+<li>the uWSGI server can be restarted or reloaded independently from the Web
+server,</li>
+<li>(except with Cherokee), it is the role of the system administrator to make
+uWSGI start on boot or reboot: either through tools like supervisor or
+daemontools, either directly at init level in a file like /etc/rc.local or
+/etc/conf.d/local</li>
+</ul>
+</div>
+</div>
+<div class="section" id="s-managing-uwsgi">
+<span id="managing-uwsgi"></span><h2>Managing uWSGI<a class="headerlink" href="#managing-uwsgi" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="s-id1">
+<span id="id1"></span><h3>Starting the server<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Example command line for a Web server that understands the uWSGI protocol:</p>
+<div class="highlight-bash"><div class="highlight"><pre>uwsgi --chdir<span class="o">=</span>/path/to/your/project
+    --module<span class="o">=</span><span class="s1">&#39;mysite.wsgi:application&#39;</span> <span class="se">\</span>
+    --env <span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>mysite.settings <span class="se">\</span>
+    --master --pidfile<span class="o">=</span>/tmp/project-master.pid <span class="se">\</span>
+    --socket<span class="o">=</span>127.0.0.1:49152 <span class="se">\ </span>     <span class="c"># can also be a file</span>
+    --processes<span class="o">=</span>5 <span class="se">\ </span>                <span class="c"># number of worker processes</span>
+    --uid<span class="o">=</span>1000 --gid<span class="o">=</span>2000 <span class="se">\ </span>        <span class="c"># if root, uwsgi can drop privileges</span>
+    --harakiri<span class="o">=</span>20 <span class="se">\ </span>                <span class="c"># respawn processes taking more than 20 seconds</span>
+    --limit-as<span class="o">=</span>128 <span class="se">\ </span>               <span class="c"># limit the project to 128 Megabytes</span>
+    --max-requests<span class="o">=</span>5000 <span class="se">\ </span>          <span class="c"># respawn processes after serving 5000 requests</span>
+    --vacuum <span class="se">\ </span>                     <span class="c"># clear environment on exit</span>
+    --home<span class="o">=</span>/path/to/virtual/env <span class="se">\ </span>  <span class="c"># optionnal path to a virtualenv</span>
+    --daemonize<span class="o">=</span>/var/log/uwsgi/yourproject.log      <span class="c"># background the process</span>
+</pre></div>
+</div>
+<p>This assumes that you have a top-level project package named <tt class="docutils literal"><span class="pre">mysite</span></tt>, and
+within it a module <tt class="file docutils literal"><span class="pre">mysite/wsgi.py</span></tt> that contains a WSGI <tt class="docutils literal"><span class="pre">application</span></tt>
+object. This is the layout you will have if you ran <tt class="docutils literal"><span class="pre">django-admin.py</span>
+<span class="pre">startproject</span> <span class="pre">mysite</span></tt> (using your own project name in place of <tt class="docutils literal"><span class="pre">mysite</span></tt>) with
+a recent version of Django. If this file does not exist, you&#8217;ll need to create
+it. See the <a class="reference internal" href="index.html"><em>How to deploy with WSGI</em></a> documentation for the default
+contents you should put in this file, and what else you can add to it.</p>
+<p>The Django-specific options here are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">chdir</span></tt>: the path to the directory that needs to be on Python&#8217;s import path; i.e. the directory containing the <tt class="docutils literal"><span class="pre">mysite</span></tt> package.</li>
+<li><tt class="docutils literal"><span class="pre">module</span></tt>: The WSGI module to use, probably the <tt class="docutils literal"><span class="pre">mysite.wsgi</span></tt> module which
+<a class="reference internal" href="../../../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a> creates.</li>
+<li><tt class="docutils literal"><span class="pre">env</span></tt>: should probably contain at least <tt class="docutils literal"><span class="pre">DJANGO_SETTINGS_MODULE</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">home</span></tt>: optional path to your project virtualenv</li>
+</ul>
+<p>Example ini configuration file:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">[</span>uwsgi<span class="o">]</span>
+<span class="nv">chdir</span><span class="o">=</span>/path/to/your/project
+<span class="nv">module</span><span class="o">=</span><span class="s1">&#39;mysite.wsgi:application&#39;</span>
+<span class="nv">master</span><span class="o">=</span>True
+<span class="nv">pidfile</span><span class="o">=</span>/tmp/project-master.pid
+<span class="nv">vacuum</span><span class="o">=</span>True
+max-requests<span class="o">=</span>5000
+<span class="nv">deamonize</span><span class="o">=</span>/var/log/uwsgi/yourproject.log
+</pre></div>
+</div>
+<p>Example ini configuration file usage:</p>
+<div class="highlight-bash"><div class="highlight"><pre>uwsgi --ini uwsgi.ini
+</pre></div>
+</div>
+<p>Read more <a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/Example">uWSGI configuration examples</a>.</p>
+<div class="admonition-massive-application-hosting admonition">
+<p class="first admonition-title">Massive application hosting</p>
+<p class="last"><a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/Emperor">uWSGI emperor</a> is a special
+uWSGI process that can manage many master processes at once.</p>
+</div>
+</div>
+<div class="section" id="s-reloading-the-daemon">
+<span id="reloading-the-daemon"></span><h3>Reloading the daemon<a class="headerlink" href="#reloading-the-daemon" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, the uWSGI master process is one of the core components of
+the uWSGI stack. The signal to brutally reload all the workers and the master
+process is SIGTERM. Example command to brutally reload the uWSGI processes:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">kill</span> -TERM <span class="sb">`</span>cat /tmp/project-master.pid<span class="sb">`</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="s-patching-the-daemon">
+<span id="patching-the-daemon"></span><h3>Patching the daemon<a class="headerlink" href="#patching-the-daemon" title="Permalink to this headline">¶</a></h3>
+<p>One of the great advantages of uWSGI is its ability to gradually restart each
+worker without losing any requests.</p>
+<p>For example, uWSGI can be signaled that worker should reload the code after
+handling their current request (if any) from bash:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># using kill to send the signal</span>
+<span class="nb">kill</span> -HUP <span class="sb">`</span>cat /tmp/project-master.pid<span class="sb">`</span>
+
+<span class="c"># if uwsgi was started with --touch-reload=/tmp/somefile</span>
+touch /tmp/somefile
+</pre></div>
+</div>
+<p>Or from Python:</p>
+<div class="highlight-bash"><div class="highlight"><pre>uwsgi.reload<span class="o">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="s-stopping-the-daemon">
+<span id="stopping-the-daemon"></span><h3>Stopping the daemon<a class="headerlink" href="#stopping-the-daemon" title="Permalink to this headline">¶</a></h3>
+<p>If you have the process running in the foreground, it&#8217;s easy enough to stop it:
+Simply hitting <tt class="docutils literal"><span class="pre">Ctrl-C</span></tt> will stop and quit the uWSGI server. However, when
+you&#8217;re dealing with background processes, you&#8217;ll need to resort to the Unix
+<tt class="docutils literal"><span class="pre">kill</span></tt> command.</p>
+<p>The <tt class="docutils literal"><span class="pre">kill</span></tt> is used to send a signal to the uWSGI master process. The
+<a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/uWSGISignals">uWSGI signals are documented online</a>. Example command to
+completely stop the uWSGI stack:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">kill</span> -INT <span class="sb">`</span>cat /tmp/project-master.pid<span class="sb">`</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="s-http-server-configuration">
+<span id="http-server-configuration"></span><h2>HTTP server configuration<a class="headerlink" href="#http-server-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="s-nginx-setup">
+<span id="nginx-setup"></span><h3>Nginx setup<a class="headerlink" href="#nginx-setup" title="Permalink to this headline">¶</a></h3>
+<p>Nginx provides the <a class="reference external" href="http://wiki.nginx.org/HttpUwsgiModule">uwsgi module</a> by
+default since nginx 0.8.40. Configuring Nginx to use an uWSGI server is as
+simple as setting it up to proxy requests:</p>
+<div class="highlight-bash"><div class="highlight"><pre>location / <span class="o">{</span>
+    uwsgi_pass 127.0.0.1:49152;
+    <span class="c"># in case of a socket file:</span>
+    <span class="c"># uwsgi_pass unix:/tmp/yourproject.sock;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Note that default uwsgi parameters should be included somewhere in your Nginx
+configuration. For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre>http <span class="o">{</span>
+    include       uwsgi_params;
+    <span class="c"># [...] normal nginx configuration here</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="s-cherokee-setup">
+<span id="cherokee-setup"></span><h3>Cherokee setup<a class="headerlink" href="#cherokee-setup" title="Permalink to this headline">¶</a></h3>
+<p>Cherokee setup is documented in the <a class="reference external" href="http://www.cherokee-project.com/doc/cookbook_uwsgi.html">official Cherokee uWSGI documentation</a>.</p>
+</div>
+<div class="section" id="s-lighttpd-setup">
+<span id="lighttpd-setup"></span><h3>Lighttpd setup<a class="headerlink" href="#lighttpd-setup" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/RunOnLighttpd">Lighttpd uwsgi module</a> is
+still experimental.</p>
+</div>
+</div>
+<div class="section" id="s-troubleshooting">
+<span id="troubleshooting"></span><h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>As usual, the first thing to do is to check the logs. This implies:</p>
+<ul class="simple">
+<li>the web server log, which will indicate if it couldn&#8217;t connect to the uWSGI
+process,</li>
+<li>the uWSGI log, which will indicate if an exception was thrown.</li>
+</ul>
+<p>Typical gotchas:</p>
+<ul class="simple">
+<li>If the socket is a file, the Web server process should have read, write and
+execute permissions on the socket file. The <tt class="docutils literal"><span class="pre">--chmod-socket</span></tt> option can do
+it.</li>
+<li>In some cases, for instance if uWSGI was started without <tt class="docutils literal"><span class="pre">--vacuum</span></tt> or
+killed with <tt class="docutils literal"><span class="pre">SIGKILL</span></tt>, it won&#8217;t remove the socket and pidfile when it is
+interrupted. It is safe to remove them manually and to start uWSGI again in
+that case.</li>
+<li>uWSGI can start the process in the foreground, this will make errors easily
+visible to the system administrator.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>         
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to use Django with uWSGI</a><ul>
+<li><a class="reference internal" href="#prerequisite-uwsgi">Prerequisite: uWSGI</a></li>
+<li><a class="reference internal" href="#prerequisite-general-concept">Prerequisite: general concept</a><ul>
+<li><a class="reference internal" href="#uwsgi-model">uWSGI model</a></li>
+<li><a class="reference internal" href="#configuring-the-uwsgi-server">Configuring the uWSGI server</a></li>
+<li><a class="reference internal" href="#managing-the-uwsgi-server">Managing the uWSGI server</a></li>
+<li><a class="reference internal" href="#starting-the-server">Starting the server</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#managing-uwsgi">Managing uWSGI</a><ul>
+<li><a class="reference internal" href="#id1">Starting the server</a></li>
+<li><a class="reference internal" href="#reloading-the-daemon">Reloading the daemon</a></li>
+<li><a class="reference internal" href="#patching-the-daemon">Patching the daemon</a></li>
+<li><a class="reference internal" href="#stopping-the-daemon">Stopping the daemon</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#http-server-configuration">HTTP server configuration</a><ul>
+<li><a class="reference internal" href="#nginx-setup">Nginx setup</a></li>
+<li><a class="reference internal" href="#cherokee-setup">Cherokee setup</a></li>
+<li><a class="reference internal" href="#lighttpd-setup">Lighttpd setup</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="gunicorn.html">How to use Django with Gunicorn</a></li>
+    
+    
+      <li>Next: <a href="../fastcgi.html">How to use Django with FastCGI, SCGI, or AJP</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../../../index.html">Django 1.4 alpha 1 documentation</a>
+        
+          <ul><li><a href="../../index.html">&#8220;How-to&#8221; guides</a>
+        
+          <ul><li><a href="../index.html">Deploying Django</a>
+        
+          <ul><li><a href="index.html">How to deploy with WSGI</a>
+        
+        <ul><li>How to use Django with uWSGI</li></ul>
+        </li></ul></li></ul></li></ul>
+      </li>
+  </ul>  
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/howto/deployment/wsgi/uwsgi.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Jan 29, 2012</p>
+          </div> 
+        
+      
+    </div>
+    
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="gunicorn.html" title="How to use Django with Gunicorn">previous</a> 
+     |
+    <a href="../../index.html" title="&amp;#8220;How-to&amp;#8221; guides" accesskey="U">up</a>
+   |
+    <a href="../fastcgi.html" title="How to use Django with FastCGI, SCGI, or AJP">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<h1>Place your bet.</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="" method="post">
+{% csrf_token %}
+<h2>What's the issue?</h2>
+<input type="text" name="itemOfDispute" id="itemOfDispute" value="{{ bet.itemOfDispute }}" /><br />
+<h2>What's your take on it?</h2>
+<input type="text" name="position" id="position" value="{{ bet.personBet.position }}" /><br />
+<h2>How much are you willing to risk?</h2>
+<input type="text" name="wager" id="wager" value="{{ bet.personBet.wager }}" /><br />
+<input type="submit" value="Place Bet" />
+</form>
+
+<br />
+<a href="/bets/">View All Bets</a>

@@ -1,0 +1,357 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head lang="en">
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<title>Dynam!co - Documentation </title>
+	<!-- Framework CSS -->
+	<link rel="stylesheet" href="assets/blueprint-css/screen.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="assets/blueprint-css/print.css" type="text/css" media="print">
+	<!--[if lt IE 8]><link rel="stylesheet" href="assets/blueprint-css/ie.css" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="assets/blueprint-css/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+	<style type="text/css" media="screen">
+		p, table, hr, .box { margin-bottom:25px; }
+		.box p { margin-bottom:10px; }
+	</style>
+</head>
+
+
+<body>
+	<div class="container">
+	
+		<h3 class="center alt">&ldquo;Dynam!co &rdquo; Documentation by &ldquo;Catalin Pinte&rdquo; v1.0</h3>
+		
+		<hr>
+		
+		<h1 class="center">&ldquo;Dynam!co &rdquo;</h1>
+		
+		<div class="borderTop">
+			<div class="span-6 colborder info prepend-1">
+				<p class="prepend-top">
+					<strong>
+					Created:09/09/2011<br>
+					By: Catalin Pinte<br>
+					Email: <a href="mailto:pinte_catalin@yahoo.com">pinte_catalin@yahoo.com</a>
+					</strong>
+				</p>
+			</div><!-- end div .span-6 -->		
+	
+			<div class="span-12 last">
+				<p class="prepend-top append-0">Thank you for purchasing my theme. If you have any questions that are beyond the scope of this help file, please feel free to email via my user page contact form <a href="http://themeforest.net/user/cond0r">here</a>. Thanks so much!</p>
+			</div>
+		</div><!-- end div .borderTop -->
+		
+		<hr>
+		
+		<h2 id="toc" class="alt">Table of Contents</h2>
+		<ol class="alpha">
+			<li><a href="#htmlStructure">HTML Structure</a></li>
+			<li><a href="#cssFiles">CSS Files and Structure</a></li>
+			<li><a href="#javascript">JavaScript</a></li>
+			<li><a href="#psdFiles">PSD Files</a></li>
+			<li><a href="#phpFiles">PHP Files</a></li>
+			<li><a href="#credits">Sources and Credits</a></li>
+		</ol>
+		
+		<hr>
+		
+		<h3 id="htmlStructure"><strong>A) HTML Structure</strong> - <a href="#toc">top</a></h3>
+		<p>
+           Structure of theme is validated and successfully checked as HTML5 ! 
+           I've tried to comment all sections in html and css source, and make is readable as possible.
+        </p>
+<pre>
+body 
+     #logo-menu 
+          #logo
+          #menu 
+          
+     #pageSlider
+          ul
+            li  - each list element should have an ID page name (ex: id="index". id="about")
+                ul.page 
+                    li.top ( top rounded corners)
+                       div.ribbon
+                          h2 – Page Name
+                          ul.sidemenu - (if you use subpages)
+                       
+                    li.middle
+                       ul.subPages
+                          li - each list element page should have an ID (ex: id="education", id="webdesign", or emtpty if you have only one subpage)
+                          HERE YOU HAVE TO PUT PAGE CONTENT 
+                        
+                    li.bottom ( bottom rounded corners)
+            li#about 
+            li#portfolio
+            ... 
+       
+       #footer
+          ul.footer_controls</pre>
+	<hr>
+		<h3>To change the Logo, you have to follow next steps:</h3>
+		<ol>
+			<li>In PSD folder you will find "logo.psd" and "logo2.psd", open and edit each.</li> 
+		    <li>After you created you own version, save it over logo.png and logo2.png from img folder.</li>
+            <li>If you use "extensible" menu (by putting class="ah" to #logo-menu list, or set it from settings panel): in <b>js</b> folder you will find <b>custom.js</b>.At line 13 you will find "miniLogoWidth", here you can set the default width fo the logo. (Now it's 30, and on mouse over it will animate and shows all logo. If you want to show entire logo on pageload put 'auto' as value).
+            </li>
+    	 </ol>
+		
+		<h3>To add a simple page, you have to follow next steps:</h3>
+
+		<ol>
+		    <li> Open <b>index.html</b> file with a html code editor</li>
+		    <li> Let's say you want to add "Services" page, between About Us and Portfolio.
+		    <br> - First you have to add "Services" link to the menu. <br>
+		       &nbsp; &nbsp; &nbsp;  Go to line 31 (from index.html), to add a new list element for menu list. -> Add following code)<pre>
+    &#60;li&#62;
+       &#60;a href="#services"&#62;SERVICES&#60;/a&#62; 
+    &#60;/li&#62;
+</pre>
+		    </li>
+		    
+		    
+		    
+		    <li>Scroll until you will find " <&#33;-- End of About US --> " comment, and add following code; 
+<pre>
+<&#33;-- End of About US -->
+     
+     <b><&#33;-- Begin of Services" --></b>	
+     &#60;li id="services"&#62; <&#33;-- ID of the page has to be same with href value from the SERVICES link  -->
+	  
+	 &#60;ul class="page"&#62; 
+ 	      &#60;li class="top"&#62;
+ 	       	&#60;div class="ribbon" &#62;
+ 	       	      &#60;span class="arrow" &#62; &amp;nbsp; &#60;/span &#62;
+ 	       	      &#60;h2 style="float:left;"&#62;Services&#60;/h2&#62; 
+                 &#60;/div>
+ 	      &#60;/li&#62;
+              &#60;li class="middle"&#62;
+                  <&#33;-- Bein of SubPages list-->
+              	  &#60;ul class="subPages"&#62;
+                      &#60;li&#62;  
+                          HERE YOU PUT CONTENT !!!  
+                      &#60;li&#62;
+                  &#60;/ul&#62;
+                  <&#33;-- End of SubPages list -->                
+ 	      &#60;/li&#62;
+	      &#60;li class="bottom"&#62;&#38;nbsp;&#60;/li&#62;
+         &#60;/ul&#62;      	                     
+      &#60;/li&#62;
+      <b><&#33;-- End of Services --></b>		 
+		 
+<&#33;-- Begin of Portfolio -->
+</pre>
+		    
+		    </li>
+		    
+		    
+        </ol>
+	<hr>
+		<h3>To add a page with subpages, you have to follow next steps:</h3>
+
+		<ol>
+		    <li> Open <b>index.html</b> file with a html code editor</li>
+		    <li> Let's say you want to add "Services" page, between About Us and Portfolio.
+		    <br> - First you have to add "Services" link to the menu. <br>
+		       &nbsp; &nbsp; &nbsp;  Go to line 31 (from index.html), to add a new list element for menu list. -> Add following code)<pre>
+    &#60;li&#62;
+       &#60;a href="#services"&#62;SERVICES&#60;/a&#62; 
+          &#60;ul&#62; 
+             <&#33;-- The subPage link has to be like this: #services(page id)/webdesign(subpageid) -->
+              &#60;li&#62; &#60;a href="#services/webdesign"&#62;Web Design&#60;/a&#62; &#60;/li&#62; <&#33;--  menu -->
+              &#60;li&#62; &#60;a href="#services/webdevelopment"&#62;Web Development&#60;/a&#62; &#60;/li&#62;
+              &#60;li&#62; &#60;a href="#services/graphics"&#62;Graphics&#60;/a&#62; &#60;/li&#62;
+          &#60;/ul&#62; 
+    &#60;/li&#62;
+</pre>
+		    </li>
+
+		    <li>Scroll until you will find " <&#33;-- End of About US --> " comment, and add following code; 
+<pre>
+<&#33;-- End of About US -->
+     
+     <b><&#33;-- Begin of Services" --></b>	
+     &#60;li id="services"&#62; <&#33;-- ID of the page has to be same with href value from the SERVICES link  -->
+	  
+	 &#60;ul class="page"&#62; 
+ 	      &#60;li class="top"&#62;
+ 	       	&#60;div class="ribbon" &#62;
+ 	       	      &#60;span class="arrow" &#62; &amp;nbsp; &#60;/span &#62;
+ 	       	      &#60;h2 style="float:left;"&#62;Services&#60;/h2&#62;
+ 	       	      &#60;ul class="sidemenu"&#62;<&#33;-- Side Menu  -->
+ 	       	            <&#33;-- Here, subPage link has to be like this: #webdesign(subpageid)   -->
+ 		             &#60;li class="active"&#62;&#60;a href="#webdesign"&#62;Web design&#60;/a&#62;&#60;/li&#62;
+ 		             &#60;li>&#60;a href="#webdevelopment"&#62;Web development&#60;/a&#62;&#60;/li&#62;
+ 		             &#60;li>&#60;a href="#graphics"&#62;Graphics&#60;/a&#62;&#60;/li&#62;
+ 		      &#60;/ul&#62;	
+                 &#60;/div>
+ 	      &#60;/li&#62;
+              &#60;li class="middle"&#62;
+                  <&#33;-- Bein of SubPages list-->
+              	  &#60;ul class="subPages"&#62;
+                      &#60;li id="webdesign"&#62;  
+                          HERE YOU PUT CONTENT FOR <b>WEB DESIGN</b> !!!  
+                      &#60;li&#62;
+                      &#60;li id="webdevelopment"&#62;  
+                          HERE YOU PUT CONTENT FOR <b>WEB DEVELOPMENT</b> !!! 
+                      &#60;li&#62;
+                      &#60;li id="graphics"&#62;  
+                          HERE YOU PUT CONTENT FOR <b>GRAPHICS</b> !!! 
+                      &#60;li&#62;
+                  &#60;/ul&#62;
+                  <&#33;-- End of SubPages list -->                
+ 	      &#60;/li&#62;
+	      &#60;li class="bottom"&#62;&#38;nbsp;&#60;/li&#62;
+         &#60;/ul&#62;      	                     
+      &#60;/li&#62;
+      <b><&#33;-- End of Services --></b>		 
+
+		 
+<&#33;-- Begin of Portfolio -->
+</pre>
+		    
+		    </li>		    
+        </ol>
+        <hr>
+		<h3 id="cssFiles">To personalise portfolio and blog pages, follow next steps </h3>
+
+		Every list item from projects list has a <b>class</b> attribute with the name of category ( Ex: class="webdesign", class="webdevelopment" ...) 
+		and <b>data-id</b> ( here you have to put an increment ID number  ). When a user press on a .sidemenu link, 
+		script will analyse each .projects list element and it will hide or show, if the list "class" attribute is equal with "data-value" from clicked link. <br><br> 
+		To change categories, first you have to change the <b>data-value</b> attribute value, for each ".sidemenu list" link with the new category (at line 284).
+		After that, you have set the category for each list element from .projects list (Ex &#60;li data-id="ID" class="CATEGORY_NAME"&#62;).
+		
+		<br><br>The sorting system works automatically by reading some elements from .projects list items:  <b>H3</b> element for sort by title , <b>data-id</b> attribute for sort by ID, and <b>div.price->span</b> number for sort by price.
+		
+		<br>IMPORTANT - If you want to change this sort type, for example by sales or views, don't change the value "price" from class attribute, change olny the PRICE text. <b>EXAMPLE:</b> &#60;div class="<b>price</b>"&#62; SALES:&nbsp; &#60;span&#62;10&#60;/span&#62; &#60;/div&#62;
+	    <br>Don't forget to change the PRICE text from portfolio_sort list, at line 303 and leave data-value="price" unchanged. 
+		
+ 		<br><br>These steps are available for BLOG page too.
+
+		<br><br>		
+        <hr>
+		<h3 id="cssFiles"><strong>B) CSS Files and Structure</strong> - <a href="#toc">top</a></h3>
+
+		<p>The CSS file contains all of the specific stylings for the page with a reset style. Many browser interpret the default behavior of html elements differently. By using a general reset CSS file, we can work round this. </p> 
+		<p>The main CSS file is well documented and named, so you will not have problems to change or add something. CSS file structure looks like this :</p>  
+<pre>	 
+
+/* RESET & BASIC */
+
+/* LOGO & MENU */
+
+/* PAGE SLIDER */
+
+/* PAGE */
+
+/* SUBPAGE */
+
+/* Contact form */
+
+/* The Nivo Slider styles */
+
+/* LIST TYPE */
+
+/* PORTFOLIO & BLOG */
+
+/* BUTTONS */
+
+/* BODY.light STYLE */
+
+/* FANCYBOX */
+
+</pre>
+		
+		<p>If you would like to edit a specific section of the site, simply find the appropriate label in the CSS file, and then scroll down until you find the appropriate style that needs to be edited.</p> 
+
+<pre>#logo-menu {
+	change styles here
+}
+</pre>
+
+
+
+    <hr>
+		
+		<h3 id="javascript"><strong>C) JavaScript</strong> - <a href="#toc">top</a></h3>
+		
+		<p>This theme imports some Javascript files.</p>
+		
+		<ol>
+			<li>jQuery</li>
+			<li>Plugins</li>
+			<li>My custom scripts</li>
+		</ol>
+		  
+		<ol>
+			<li>jQuery is a Javascript library that greatly reduces the amount of code that you must write.</li>
+			<li>We are using plugins  for contact form validaton, Fancy Box (lightbox), slider, quickSand easing etc.</li>
+			<li>Most of the animation from this site is carried out from the customs scripts. 
+	<br><br>
+              <b>custom.js</b> - Here are all javascript functions for menu animations, form validation, sort and filter for portfolio and blog, page aligment and more etc.<br>
+              On the begining of the file you can find <b>CONFIGURATIONS</b> for scripts. 
+              There you can set speeds for animations, easing styles, set the twitter account, fancyBox, Slider and more.
+              <br><br>
+              <br> /* FancyBox */
+              <br> /* Page Slider */
+              <br> /* Subpage Slider */
+              <br> /* NivoSlider (Project Slider) */
+              <br> /* Twitter Feed  */
+	</li>
+		</ol>
+		
+		If you want to paginate a list (like that from About Us page) you have to use this code <br> $("LIST").paginate({ limit: ELEMENTS_PER_PAGE, content: 'li' }); 
+		You can find the example at line 140 in custom.js file.
+		<br>At line 144 from same file you can set the settings for Contact form (More info at <a href="http://docs.jquery.com/Plugins/validation">http://docs.jquery.com/Plugins/validation</a>).
+		<br><br>
+		
+		<hr>
+		
+		<h3 id="psdFiles"><strong>D) PSD Files</strong> - <a href="#toc">top</a></h3>
+     	I've included 10 PSD files with this theme.
+         <br> Let's say you want to change the transparency or color for page holder (dark version).
+         <ol>  
+             <li>Open content.psd file, and edit shape1 style, after that right click (on the layer), and click on copy layer style</li>
+             <li>Open content-top.psd, content-middle.psd, content-bottom.psd -> riht click on the layer and press on paste layer style (do this for each).</li>
+             <li>Overwrite to the existing .png files on images folder, and you are done</li>
+          </ol>   
+         
+             <li>
+             
+         
+		<hr>
+        
+        <h3 id="phpFiles"><strong>E) PHP File</strong> - <a href="#toc">top</a></h3>
+		
+		<p>I've included one php file with this theme:</p>
+	    <p><b><em>process_form.php</em></b> - where you have to change "$to" variable with your email address ( at this address php script will send contact messages )<br /> E.g  $to = "youraddres@email.com"; <br /> 
+      </p>
+  <hr>
+        
+		
+		<h3 id="credits"><strong>F) Sources and Credits</strong> - <a href="#toc">top</a></h3>
+		
+		<p>I've used the following images, icons or other files as listed.
+		
+		<ul>
+			<li>Icons from http://www.iconfinder.com/</li>
+			<li>jQuery easing plugin  (from  http://gsgd.co.uk/sandbox/jquery/easing/ )</li>
+			<li>jQuery  http://jquery.com/</li>
+			<li>jQuery validate plugin </li>
+            <li>jQuery cookie plugin </li>
+            <li>FancyBox - http://fancybox.net/ </li>
+            <li>Cufon text replacement - http://cufon.shoqolate.com/ </li>
+            <li>QuickSand plugin</li>
+            <li>NivoSlider plugin</li>
+		</ul>
+		<BR><BR>
+    <hr>
+		
+		<p>Once again, thank you so much for purchasing this theme. As I said at the beginning, I'd be glad to help you if you have any questions relating to this theme. No guarantees, but I'll do my best to assist. If you have a more general question relating to the themes on ThemeForest, you might consider visiting the forums and asking your question in the "Item Discussion" section.</p> 
+		
+		<h4><strong>If you need customizations or you will not be able to personalize this theme, send me an e-mail (You will have to pay hourly).</strong></h4>
+		<p class="append-bottom alt large"><strong>Catalin Pinte</strong></p>
+		<p><a href="#toc">Go To Table of Contents</a></p>
+		
+		<hr class="space">
+	</div><!-- end div .container -->
+</body>
+</html>

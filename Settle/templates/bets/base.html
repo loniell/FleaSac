@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta  charset="UTF-8" />
+	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=9" /><![endif]-->
+	<title>{% block title %}theSettle{% endblock %}</title>
+	<link rel="stylesheet" href="{{ MEDIA_URL }}css/main.css?last" type="text/css" media="screen" />
+	<link rel="icon" type="image/vnd.microsoft.icon" href="{{ MEDIA_URL }}images/favicon.png">
+	<!--[if IE]> <link rel="stylesheet" href="{{ MEDIA_URL }}css/ie.css?20100608" type="text/css" media="screen" />  <![endif]-->
+    <noscript>
+       <link rel="stylesheet" href="{{ MEDIA_URL }}css/noscript.css" type="text/css" media="screen" />
+    </noscript>
+  </head>
+<body class="blue">
+	    <div id="preloader">&nbsp;</div>
+
+		<ul id="logo-menu">
+		  <li class="arrow">&nbsp;</li>
+		  <li id="logo" > <img src="{{ MEDIA_URL }}images/logo.png" alt="theSettle"/> </li>
+		  {%if user.is_authenticated %}
+		  <li id="menu">
+			     <ul>
+			     <li><a href="#index">HOME</a></li>
+			    <li>
+				 <a href="#about">PROFILE</a>
+				 <ul>
+				     <li><a href="#about/overview">Profile</a></li>
+				     <li><a href="#about/technical-skills">Open Bets</a></li>
+				     <li><a href="#about/education">Closed Bets</a></li>
+				 </ul>
+			    </li>
+			     <!--<li><a href="#portfolio">FRIENDS</a></li>-->
+				     <!--<li>
+					  <a href="#blog">BLOG</a>
+					  <ul>
+					      <li><a href="#blog/all">Everything</a></li>
+					      <li><a href="#blog/webdesign">Web Design</a></li>
+					      <li><a href="#blog/webdevelopment">Web Development</a></li>
+					  </ul>
+				     </li>-->
+			    <li><a href="#contact">PLACE A BET</a></li>
+			     </ul>
+			 </li>
+	     {%else%}
+	     {%endif%}
+			 <li id="extra"> <img width="6" src="{{ MEDIA_URL }}images/a.png" alt=""> </li>
+		</ul><!-- End of Logo & Menu -->
+
+
+		<!-- Begin of Page Slider -->
+	<div id="pageSlider">
+		<ul>
+		  {%if user.is_authenticated %}
+		  <!--Home page when LOGGED in! -->
+			  <!-- Begin of INDEX Page -->
+		
+		  <li id="index_logged_in">
+			      <ul class="page">
+				 <li class="top">&nbsp;</li>
+			 <div class="ribbon"><span class="arrow">&nbsp;</span>
+			      <h2 style="float:left;"> Welcome {% block user_first_name%} {% endblock %}! </h2>
+			 </div>
+				 <li class="middle">
+				    <ul class="subPages">
+				      <li id="overview_index">
+					    <ul class="columns">
+						<!--First Column-->
+						<li>
+						<ul class="rows">
+						 <!--first row of first column-->
+						 <li>
+						 <h3 style="float:left;"> Place a Bet! </h3><br /><br/>
+						 <span style="color:red">{% block place_bet_error %}{% endblock %}</span>
+						 <form action="" method="post" name="place_bet">
+						    {% csrf_token %}
+						    <label>Your Issue: </label> <input type="text" name="itemOfDispute" value="" id="itemOfDispute" /><br/>
+						    <label>Wager: </label>
+						    <select name="wager" id="wager">
+							<option selected="selected">1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+							<option>6</option>
+							<option>7</option>
+							<option>8</option>
+							<option>9</option>
+							<option>10</option>
+						    </select> <br>
+
+						    <input type="submit" name="submit" value="Place Bet" id="submit" class="button medium"/>
+						    <input type="hidden" name="name" value="place_bet" id="place_bet"/>
+
+						 </form>
+					       </li> <!--end first row first column-->
+					       <li> <!--second row first column-->
+						       <h3> SCOREBOARD </h3><br />
+						       <p>{% block scoreboard %}NO USERS.{% endblock %}</p>
+					       </li> <!--end second row first column-->
+					       </ul> <!--End rows-->
+					       </li> <!--end first column-->
+					       <li> <!--beginning of second column-->
+						<h2 style="float:left;"> Running Bets </h2>
+						<br/>
+						<br/>
+						<p>
+						{% block list_of_bets %}No bets.{% endblock %}
+						</p>
+					       </li> <!--end second column-->
+
+					      </ul>
+
+					</li>
+				    </ul>
+
+			 </li>
+			 <li class="bottom">&nbsp;</li>
+		      </ul>
+
+		  </li>
+		  <!-- End of Index page -->
+		  <!--End home page when LOGGED in! -->
+		  {%else%}
+		  <!--Home page when NOT logged in! -->
+			  <!-- Begin of INDEX Page -->
+		  <li id="index">
+
+			      <ul class="page">
+				 <li class="top">&nbsp;</li>
+				 <li class="middle">
+
+					<div id="prevButton"> <span class="arrow">&nbsp;</span> <a href="#" class="nivo-prevNav"> <img src="{{ MEDIA_URL }}images/prev.png" alt="Previous" /> </a></div>
+					<div id="nextButton"> <span class="arrow">&nbsp;</span> <a href="#" class="nivo-nextNav"> <img src="{{ MEDIA_URL }}images/next.png" alt="Next" /> </a></div>
+
+							   <ul class="subPages">
+							       <li>
+								 <div id="slider">
+								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-1.jpg"></a>
+								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" title="This is an example with caption" src="{{ MEDIA_URL }}images/projects/featured-2.jpg"></a>
+								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-3.jpg"></a>
+								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-4.jpg"></a>
+								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-5.jpg"></a>
+								 </div>
+
+					      <ul class="columns">
+					      <li>
+						<h3>Already Registered? Log in!</h3>
+						    <span style="color:red">{% block logon_error %}{% endblock %}</span>
+						    <form action="" method="post" name="logon">
+							{% csrf_token %}
+							<label>Username: </label> <input type="text" name="username" value="" id="username" /><br />
+							<label>Password: </label> <input type="password" name="password" value="" id="password" /><br />
+							<input type="submit" name="submit" value="Login" id="submit" class="button small"/>
+							<input type="hidden" name="name" value="logon" id="logon"/>
+						    </form>
+					      </li>
+									  <li>
+						    <div>
+							<h3>Latest Tweet:</h3>
+							<div class='tweet'></div>
+						    </div>
+					      </li>
+					      <li>
+									  <h3>not a member? sign up!</h3>
+						  <form name="contact_form" id="contact_form">
+						    <label for="email">Email: </label> <input type="text" name="email" value="" id="email" /><br />
+						    <input type="submit" name="submit" value="Sign Up!" id="submit" class="button small"/>
+						  </form>
+					      </li>
+
+					  </ul>
+				       </li>
+							   </ul>
+			 </li>
+			 <li class="bottom">&nbsp;</li>
+		      </ul>
+
+		  </li>
+
+		  <!-- End of Index page -->
+		  <!--End home page when NOT LOGGED IN! -->
+		  {%endif%}
+
+
+		 <!-- Begin of Profile page -->
+			  <li id="about">
+			      <ul class="page">
+				 <li class="top">
+				     <div class="ribbon"><span class="arrow">&nbsp;</span>
+						  <h2 style="float:left;">Profile </h2>
+						  <ul class="sidemenu">
+						    <li class="active"><a href="#overview">Profile</a></li>
+						    <li><a href="#technical-skills">Open Bets</a></li>
+						    <li><a href="#education">Closed Bets</a></li>
+						  </ul>
+					       </div>
+				 </li>
+				 <li class="middle">
+				    <ul class="subPages">
+					<li id="overview_profile">
+					    <ul class="columns">
+						<!--First Column-->
+						<li>
+						<ul class="rows">
+						 <!--first row of first column-->
+						 <li>
+						 <img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />
+						 <p>
+						 <strong>Name:</strong> {% block user_name_profile %} Anon Ymous {% endblock %}<br />
+						 <strong>Birth Date:</strong> {% block user_dob_profile %} 09/09/1999 {% endblock %}<br />
+						 <strong>Email:</strong> {% block user_email_profile %} anon@email.com {% endblock %}<br />
+						 <strong>Location:</strong> {% block user_loc_profile %} City, ST {% endblock %}<br />
+						 </p>
+					       </li>
+						 <!--end first row first column-->
+					       <!--second row first column-->
+					       <li> 
+						       <h3> My Score </h3><br />
+						       <p> <h1>{% block my_score_profile %}NONE.{% endblock %}</h1>
+						       </p>
+					       </li>
+						<!--end second row first column-->
+					       </ul>
+						<!--End rows-->
+					       </li> <!--end first column-->
+					       <li> <!--beginning of second column-->
+						<h3>Running Bets</h3>
+						<p>{% block list_of_bets_profile %}No bets.{% endblock %}</p>
+					       </li> <!--end second column-->
+
+					    </ul>
+
+					</li>
+
+					<!-- Begin of OPEN bets -->
+					<li id="technical-skills">
+					  <ul class="columns">
+						<!--First Column-->
+						<li>
+						<ul class="rows">
+						 <!--first row of first column-->
+						 <li>
+						  <img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />
+						  <p>
+						    <strong>Name:</strong>{% block user_name_open %} Anon Ymous {% endblock %}<br />
+						    <strong>Birth Date:</strong>{% block user_dob_open %} 09/09/1999 {% endblock %}<br />
+						    <strong>Email:</strong> {% block user_email_open %} anon@email.com {% endblock %}<br />
+						    <strong>Location:</strong>{% block user_loc_open %} City, ST {% endblock %}<br />
+						  </p>
+					         </li> <!--end first row first column-->
+					       <li> <!--second row first column-->
+						       <h3> My Score </h3><br />
+						       <p> <h1>{% block my_score_profile_open %}NONE.{% endblock %}</h1>
+						       </p>
+					       </li> <!--end second row first column-->
+					       </ul> <!--End rows-->
+					       </li> <!--end first column-->
+					       <li> <!--beginning of second column-->
+						<h3>Open Bets</h3>
+						<p>{% block list_of_bets_profile_open %}No bets.{% endblock %}</p>
+					       </li> <!--end second column-->
+
+					      </ul>
+					</li>
+					<!-- End of Open Bets -->
+
+					<!-- Begin of Closed Bets  -->
+					<li id="education">
+					   <ul class="columns">
+						<!--First Column-->
+						<li>
+						<ul class="rows">
+						 <!--first row of first column-->
+						 <li>
+						    <img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />
+						    <p>
+						      <strong>Name:</strong>{% block user_name_closed %} Anon Ymous {% endblock %}<br />
+						      <strong>Birth Date:</strong>{% block user_dob_closed %} 09/09/1999 {% endblock %}<br />
+						      <strong>Email:</strong> {% block user_email_closed %} anon@email.com {% endblock %}<br />
+						      <strong>Location:</strong>{% block user_loc_closed %} City, ST {% endblock %}<br />
+						    </p>
+						 </li> <!--end first row first column-->
+					       <li> <!--second row first column-->
+						       <h3> My Score </h3><br />
+						       <p> <h1>{% block my_score_profile_closed %}NONE.{% endblock %}</h1>
+						       </p>
+					       </li> <!--end second row first column-->
+					       </ul> <!--End rows-->
+					       </li> <!--end first column-->
+					       <li> <!--beginning of second column-->
+						<h3>Closed Bets</h3>
+						<p>{% block list_of_bets_profile_closed %}No bets.{% endblock %}</p>
+					       </li> <!--end second column-->
+
+					      </ul> <!--end columns-->
+					  </li> <!-- End of Closed Bets -->
+
+					</ul> <!--end sub pages-->
+
+
+				    </li> <!--end middle-->
+				    <li class="bottom">&nbsp;</li>
+				</ul> <!--end id="page"-->
+		    </li>
+		    <!-- End of Profile page -->
+		    
+		<!-- Settings Page -->
+		<!--<li id="blog">
+		  <ul class="page">
+		    <li class="top">&nbsp;</li>
+		    <li class="middle">&nbsp;</li>
+		    <li class="bottom">&nbsp;</li>
+		  </ul>
+		</li>-->
+		<!--End Settings Page-->
+		
+	    <!-- Begin of Place a Bet -->
+		    <li id="contact">
+			 <ul class="page">
+			     <li class="top">
+				 <div class="ribbon"><span class="arrow">&nbsp;</span>
+					 <h2 style="float:left;">Place a bet</h2>
+				 </div>
+			     </li>
+			     <!-- Begin of Content -->
+			     <li class="middle">
+					  <ul class="subPages">
+					    <li>
+
+					      <ul class="columns">
+						<li>
+						  <form action="" method="post" name="place_bet_main">
+						    {% csrf_token %}
+						    <span>Issue:</span>
+							<textarea name="itemOfDispute_main" id="itemOfDispute_main" rows="2" cols="2"></textarea><br/><br/>
+	
+						    <label for="wager_main"> Wager: </label>
+	
+						    <select name="wager_main" id="wager_main">
+							<option selected="selected">1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+							<option>6</option>
+							<option>7</option>
+							<option>8</option>
+							<option>9</option>
+							<option>10</option>
+						    </select> <br>
+	
+						    <input type="submit" name="submit" value="Place Bet" id="submit" class="button medium"/>
+						    <input type="hidden" name="name" value="place_bet_main" id="place_bet_main"/>
+
+      
+						  </form>
+				     </li>
+				     <li> <!--beginning of second column-->
+						<h3>Running Bets</h3>
+						<p>{% block list_of_bets_place_a_bet %}{% endblock %}</p>
+				     </li> <!--end second column-->
+
+
+							     </ul>
+						 </li>
+						 </ul>
+
+				    </li>
+				    <li class="bottom">&nbsp;</li>
+			  </ul>
+		    </li>
+	    <!-- End of Place a Bet -->
+		 </ul>
+     </div> <!-- END pageSlider -->
+
+
+	 <div id="footer" class="visible">
+	       <div><div>
+	       <ul class="footer_controls">
+	     {%if user.is_authenticated %}
+	     <li>Hey, {{user.username}}!</li>
+	     <li>
+		<!--<a href="#/blog" class="sprite-settings" span="Settings" title="Settings">&nbsp;</a>-->
+		<form action="" method="post" name="settings">
+		    {% csrf_token %}
+		    <input type="submit" name="submit" value="Settings" id="submit" class="button small"/>
+		    <input type="hidden" name="name" value="settings" id="settings"/>
+		</form>
+	     </li>
+	     <li>
+		<form action="" method="post" name="logout">
+		    {% csrf_token %}
+		    <input type="submit" name="submit" value="Logout" id="submit" class="button small"/>
+		    <input type="hidden" name="name" value="logout" id="logout"/>
+		</form>
+	     </li>
+	     <li>
+		     <a href="#" class="sprite-settings" title="Settings">&nbsp;</a>
+		     <div><a href="#" class="close">&nbsp;</a>
+
+		     <ul class="settings">
+			 <li>
+			     <h3>Background:</h3>
+			     <ul id="background_chooser">
+				 <li><img alt="Background1" src="{{ MEDIA_URL }}images/wood_thumb.jpg"></li>
+				 <li><img alt="Background2" src="{{ MEDIA_URL }}images/wood2_thumb.jpg"></li>
+				 <li><img alt="Background3" src="{{ MEDIA_URL }}images/pattern_thumb.jpg"></li>
+				 <li><img alt="Background4" src="{{ MEDIA_URL }}images/pattern2_thumb.jpg"></li>
+			     </ul>
+			 </li>
+			 <li>
+			     <b style="float:left; margin:2px 20px 0 0;">Logo &amp; buttons color:</b>
+			     <ul id="color_chooser">
+				  <li class="blue active">&nbsp;</li>
+				  <li class="gray">&nbsp;</li>
+			     </ul>
+			  </li>
+			 <li>  <b style="float:left; margin:2px 20px 0 0;">Page slider:</b> &nbsp;
+			 <br>       <br>
+			 <span class="switch">
+			      <input type="radio" id="pageSliderVariant1" name="pageSliderVariant" value="vertical" />
+			      <input type="radio" id="pageSliderVariant2" name="pageSliderVariant" value="horisontal" />
+			      <input type="radio" id="pageSliderVariant3" name="pageSliderVariant" value="none" />
+
+			      <label for="pageSliderVariant1" class="cb-enabled"><span>Vertical</span></label>
+			  <label for="pageSliderVariant2" class="cb-middle"><span>Horizontal</span></label>
+			  <label for="pageSliderVariant3" class="cb-disabled"><span>None</span></label>
+		     </span>
+
+
+		     </li>
+
+			 <li> <b style="float:left; margin:2px 20px 0 0;">Style:</b>
+			 <span class="switch">
+			      <input type="radio" id="pageStyleVariant1" name="pageStyleVariant" value="dark" />
+			      <input type="radio" id="pageStyleVariant2" name="pageStyleVariant" value="light" />
+			      <label for="pageStyleVariant1" class="cb-enabled"><span>Dark</span></label>
+			  <label for="pageStyleVariant2" class="cb-disabled"><span>Light</span></label>
+		     </span>
+		     </li>
+			 <li> <b style="float:left; margin:2px 20px 0 0;">Menu style:</b>
+			 <span class="switch">
+			      <input type="radio" id="menuStyleVariant1" name="menuStyleVariant" value="fixed" />
+			      <input type="radio" id="menuStyleVariant2" name="menuStyleVariant" value="extensible" />
+			      <label for="menuStyleVariant1" class="cb-enabled"><span>Fixed</span></label>
+			  <label for="menuStyleVariant2" class="cb-disabled"><span>Extensible</span></label>
+		     </span>
+		     </li>
+
+		     </ul>
+
+
+
+			     <span class="arrow">&nbsp;</span></div>
+		 </li>
+	     {%else%}
+	     {%endif%}
+		 <!--<li>
+		     <a href="#" class="sprite-social-connect" title="Social">&nbsp;</a>
+		     <div><a href="#" class="close">&nbsp;</a>
+
+			<ul class="socials">
+						<li><a href="#"><img src="{{ MEDIA_URL }}images/1286539929_facebook_02.png" alt="Social" /></a></li>
+						<li><a href="#"><img src="{{ MEDIA_URL }}images/1286539924_myspace_01.png" alt="Social" /></a></li>
+						<li><a href="#"><img src="{{ MEDIA_URL }}images/1286539976_twitter_01.png" alt="Social" /></a></li>
+				    <li><a href="#"><img src="{{ MEDIA_URL }}images/1286539962_technorati_02.png" alt="Social" /></a></li>
+						<li><a href="#"><img src="{{ MEDIA_URL }}images/1286539933_delicious.png" alt="Social" /></a></li>
+				    <li><a href="#"><img src="{{ MEDIA_URL }}images/1286539986_RSS_02.png" alt="Social" /></a></li>
+				  </ul>
+
+			     <span class="arrow">&nbsp;</span></div>
+		 </li>
+		 <li>
+		     <a href="#" class="sprite-twitterPosts" title="Latest Tweets">&nbsp;</a>
+		     <div><a href="#" class="close">&nbsp;</a>
+		      <h3>Latest Tweets:</h3>
+			    <div class='tweet'></div>
+
+			     <span class="arrow">&nbsp;</span></div>
+
+		  </li>
+		 <li>
+		     <a href="#contact" class="sprite-contact-me" title="Contact Us">&nbsp;</a>
+		 </li>
+	     <li><a href="#" class="sprite-hide_tool" title="Show / Hide Bar">&nbsp;</a>
+	     </li>-->
+	       </ul>
+		  <!--<a href="#" id="showTool">&nbsp;</a>-->
+		  </div></div>
+	</div>
+
+
+
+	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/plugins.js"></script>
+    <script src="{{ MEDIA_URL }}js/custom.js?20100608"></script>
+    <!--[if gte IE 8]><script type="text/javascript"> Cufon.set('engine', 'canvas');</script><![endif]-->
+	</body>
+</html>

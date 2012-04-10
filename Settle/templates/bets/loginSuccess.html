@@ -1,0 +1,8 @@
+<h1>Hey, {{user.get_full_name}}! Welcome back!</h1>
+
+<h2>{{request.user.is_authenticated}}</h2>
+<h2>{{request.body}}</h2>
+
+<a href="/bets/placebet/">Place a new Bet</a> <br />
+<a href="/bets/selectBetToWager/">Wager an existing Bet</a><br />
+<a href="/bets/">View All Bets</a> <br />

@@ -1,0 +1,48 @@
+{% block content %}
+    <h1>Join us. </h1>
+ 
+    <form action="" method="post">
+    {% csrf_token %}
+    <div>
+        {{ form.username.errors }}
+        <label for="id_username">Username: </label>
+        {{ form.username }}
+    </div>
+    <div>
+        {{ form.password1.errors }}
+        <label for="id_password1">Password: </label>
+        {{ form.password1 }}
+    </div>
+    <div>
+        {{ form.password2.errors }}
+        <label for="id_password2">Repeat password: </label>
+        {{ form.password2 }}
+    </div>
+    <div>
+        {{ form.email.errors }}
+        <label for="id_email">E-Mail: </label>
+        {{ form.email }}
+    </div>
+    <div>
+        {{ form.firstName.errors }}
+        <label for="id_firstName">First Name: </label>
+        {{ form.firstName }}
+    </div>
+    <div>
+        {{ form.lastName.errors }}
+        <label for="id_lastName">Last Name: </label>
+        {{ form.lastName }}
+    </div>
+    <div>
+        {{ form.gender.errors }}
+        <label for="id_gender">Gender: </label>
+        {{ form.gender }}
+    </div>
+    <div>
+        {{ form.dateOfBirth.errors }}
+        <label for="id_dateOfBirth">Date Of Birth: </label>
+        {{ form.dateOfBirth }}
+    </div>
+    <input type="submit" value="Register" />
+    </form>
+{% endblock %}

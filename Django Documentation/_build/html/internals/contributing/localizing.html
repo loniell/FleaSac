@@ -1,0 +1,234 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Localizing Django &mdash; Django 1.4 alpha 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.4 alpha 1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Django 1.4 alpha 1 documentation" href="../../index.html" />
+    <link rel="up" title="Contributing to Django" href="index.html" />
+    <link rel="next" title="Committing code" href="committing-code.html" />
+    <link rel="prev" title="Writing documentation" href="writing-documentation.html" />
+ 
+<script type="text/javascript" src="../../templatebuiltins.js"></script>
+<script type="text/javascript">
+(function($) {
+    if (!django_template_builtins) {
+       // templatebuiltins.js missing, do nothing.
+       return;
+    }
+    $(document).ready(function() {
+        // Hyperlink Django template tags and filters
+        var base = "../../ref/templates/builtins.html";
+        if (base == "#") {
+            // Special case for builtins.html itself
+            base = "";
+        }
+        // Tags are keywords, class '.k'
+        $("div.highlight\\-html\\+django span.k").each(function(i, elem) {
+             var tagname = $(elem).text();
+             if ($.inArray(tagname, django_template_builtins.ttags) != -1) {
+                 var fragment = tagname.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + tagname + "</a>");
+             }
+        });
+        // Filters are functions, class '.nf'
+        $("div.highlight\\-html\\+django span.nf").each(function(i, elem) {
+             var filtername = $(elem).text();
+             if ($.inArray(filtername, django_template_builtins.tfilters) != -1) {
+                 var fragment = filtername.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + filtername + "</a>");
+             }
+        });
+    });
+})(jQuery);
+</script>
+
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../../index.html">Django 1.4 alpha 1 documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../../index.html">Home</a>  |
+        <a title="Table of contents" href="../../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../../genindex.html">Index</a>  |
+        <a title="Module index" href="../../py-modindex.html">Modules</a>
+      </div>
+      <div class="nav">
+    &laquo; <a href="writing-documentation.html" title="Writing documentation">previous</a> 
+     |
+    <a href="../index.html" title="Django internals" accesskey="U">up</a>
+   |
+    <a href="committing-code.html" title="Committing code">next</a> &raquo;</div>
+    </div>
+    
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="internals-contributing-localizing">
+            
+  <div class="section" id="s-localizing-django">
+<span id="localizing-django"></span><h1>Localizing Django<a class="headerlink" href="#localizing-django" title="Permalink to this headline">¶</a></h1>
+<p>Various parts of Django, such as the admin site and validation error messages,
+are internationalized. This means they display differently depending on each
+user&#8217;s language or country. For this, Django uses the same internationalization
+and localization infrastructure available to Django applications, described in
+the <a class="reference internal" href="../../topics/i18n/index.html"><em>i18n documentation</em></a>.</p>
+<div class="section" id="s-translations">
+<span id="translations"></span><h2>Translations<a class="headerlink" href="#translations" title="Permalink to this headline">¶</a></h2>
+<p>Translations are contributed by Django users worldwide. The translation work is
+coordinated at <a class="reference external" href="http://www.transifex.net/">Transifex</a>.</p>
+<p>If you find an incorrect translation or want to discuss specific translations,
+go to the <a class="reference external" href="http://www.transifex.net/projects/p/django/teams/">translation team</a> page for that language. If you would like to help
+out with translating or add a language that isn&#8217;t yet translated, here&#8217;s what to
+do:</p>
+<ul>
+<li><p class="first">Join the <a class="reference external" href="http://groups.google.com/group/django-i18n/">Django i18n mailing list</a> and introduce yourself.</p>
+</li>
+<li><p class="first">Make sure you read the notes about <a class="reference internal" href="../../topics/i18n/translation.html#specialties-of-django-i18n"><em>Specialties of Django translation</em></a>.</p>
+</li>
+<li><p class="first">Signup at <a class="reference external" href="http://www.transifex.net/">Transifex</a> and visit the <a class="reference external" href="http://www.transifex.net/projects/p/django/">Django project page</a>.</p>
+</li>
+<li><p class="first">On the <a class="reference external" href="http://www.transifex.net/projects/p/django/teams/">translation teams</a> page, choose the language team you want
+to work with, <strong>or</strong> &#8211; in case the language team doesn&#8217;t exist yet &#8211;
+request a new team by clicking on the &#8220;Request a new team&#8221; button
+and select the appropriate language.</p>
+</li>
+<li><p class="first">Then, click the &#8220;Join this Team&#8221; button to become a member of this team.
+Every team has at least one coordinator who is responsible to review
+your membership request. You can of course also contact the team
+coordinator to clarify procedural problems and handle the actual
+translation process.</p>
+</li>
+<li><p class="first">Once you are a member of a team choose the translation resource you
+want to update on the team page. For example the &#8220;core&#8221; resource refers
+to the translation catalogue that contains all non-contrib translations.
+Each of the contrib apps also have a resource (prefixed with &#8220;contrib&#8221;).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For more information about how to use Transifex, read the
+<a class="reference external" href="http://help.transifex.net/">Transifex User Guide</a>.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="s-formats">
+<span id="formats"></span><h2>Formats<a class="headerlink" href="#formats" title="Permalink to this headline">¶</a></h2>
+<p>You can also review <tt class="docutils literal"><span class="pre">conf/locale/&lt;locale&gt;/formats.py</span></tt>. This file describes
+the date, time and numbers formatting particularities of your locale. See
+<a class="reference internal" href="../../topics/i18n/formatting.html#format-localization"><em>Format localization</em></a> for details.</p>
+<p>The format files aren&#8217;t managed by the use of Transifex. To change them, you
+must <a class="reference internal" href="writing-code/submitting-patches.html"><em>create a patch</em></a> against the Django source tree, as for any code change:</p>
+<ul class="simple">
+<li>Create a diff against the current Subversion trunk.</li>
+<li>Open a ticket in Django&#8217;s ticket system, set its <tt class="docutils literal"><span class="pre">Component</span></tt> field to
+<tt class="docutils literal"><span class="pre">Translations</span></tt>, and attach the patch to it.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>         
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Localizing Django</a><ul>
+<li><a class="reference internal" href="#translations">Translations</a></li>
+<li><a class="reference internal" href="#formats">Formats</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="writing-documentation.html">Writing documentation</a></li>
+    
+    
+      <li>Next: <a href="committing-code.html">Committing code</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../../index.html">Django 1.4 alpha 1 documentation</a>
+        
+          <ul><li><a href="../index.html">Django internals</a>
+        
+          <ul><li><a href="index.html">Contributing to Django</a>
+        
+        <ul><li>Localizing Django</li></ul>
+        </li></ul></li></ul>
+      </li>
+  </ul>  
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/internals/contributing/localizing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Jan 29, 2012</p>
+          </div> 
+        
+      
+    </div>
+    
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="writing-documentation.html" title="Writing documentation">previous</a> 
+     |
+    <a href="../index.html" title="Django internals" accesskey="U">up</a>
+   |
+    <a href="committing-code.html" title="Committing code">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

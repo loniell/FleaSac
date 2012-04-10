@@ -1,0 +1,13 @@
+<h1>Select a Bet Below to Determine the Outcome</h1>
+
+{% if list_of_bets %}
+    <ul>
+    {% for bet in list_of_bets %}
+        <li><a href="/bets/{{ bet.id }}/decide">{{ bet.itemOfDispute }}</a></li>
+    {% endfor %}
+    </ul>
+    <a href="/bets/placebet/">Place a new Bet</a> <br />
+    <a href="/bets/">Back to View All Bets</a>
+{% else %}
+    <p>No bets are available.</p>
+{% endif %}

@@ -1,0 +1,346 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reporting bugs and requesting features &mdash; Django 1.4 alpha 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.4 alpha 1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Django 1.4 alpha 1 documentation" href="../../index.html" />
+    <link rel="up" title="Contributing to Django" href="index.html" />
+    <link rel="next" title="Triaging tickets" href="triaging-tickets.html" />
+    <link rel="prev" title="Advice for new contributors" href="new-contributors.html" />
+ 
+<script type="text/javascript" src="../../templatebuiltins.js"></script>
+<script type="text/javascript">
+(function($) {
+    if (!django_template_builtins) {
+       // templatebuiltins.js missing, do nothing.
+       return;
+    }
+    $(document).ready(function() {
+        // Hyperlink Django template tags and filters
+        var base = "../../ref/templates/builtins.html";
+        if (base == "#") {
+            // Special case for builtins.html itself
+            base = "";
+        }
+        // Tags are keywords, class '.k'
+        $("div.highlight\\-html\\+django span.k").each(function(i, elem) {
+             var tagname = $(elem).text();
+             if ($.inArray(tagname, django_template_builtins.ttags) != -1) {
+                 var fragment = tagname.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + tagname + "</a>");
+             }
+        });
+        // Filters are functions, class '.nf'
+        $("div.highlight\\-html\\+django span.nf").each(function(i, elem) {
+             var filtername = $(elem).text();
+             if ($.inArray(filtername, django_template_builtins.tfilters) != -1) {
+                 var fragment = filtername.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + filtername + "</a>");
+             }
+        });
+    });
+})(jQuery);
+</script>
+
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../../index.html">Django 1.4 alpha 1 documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../../index.html">Home</a>  |
+        <a title="Table of contents" href="../../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../../genindex.html">Index</a>  |
+        <a title="Module index" href="../../py-modindex.html">Modules</a>
+      </div>
+      <div class="nav">
+    &laquo; <a href="new-contributors.html" title="Advice for new contributors">previous</a> 
+     |
+    <a href="../index.html" title="Django internals" accesskey="U">up</a>
+   |
+    <a href="triaging-tickets.html" title="Triaging tickets">next</a> &raquo;</div>
+    </div>
+    
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="internals-contributing-bugs-and-features">
+            
+  <div class="section" id="s-reporting-bugs-and-requesting-features">
+<span id="reporting-bugs-and-requesting-features"></span><h1>Reporting bugs and requesting features<a class="headerlink" href="#reporting-bugs-and-requesting-features" title="Permalink to this headline">¶</a></h1>
+<p>Before reporting a bug or requesting a new feature, please consider these
+general points:</p>
+<ul class="simple">
+<li>Check that someone hasn&#8217;t already filed the bug or feature request by
+<a class="reference external" href="http://code.djangoproject.com/search">searching</a> or running <a class="reference external" href="https://code.djangoproject.com/query">custom queries</a> in the ticket tracker.</li>
+<li>Don&#8217;t use the ticket system to ask support questions. Use the
+<a class="reference external" href="http://groups.google.com/group/django-users">django-users</a> list or the <a class="reference external" href="irc://irc.freenode.net/django">#django</a> IRC channel for that.</li>
+<li>Don&#8217;t reopen issues that have been marked &#8220;wontfix&#8221; by a core developer.
+This mark means that the decision has been made that we can&#8217;t or won&#8217;t fix
+this particular issue. If you&#8217;re not sure why, please ask
+on <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a>.</li>
+<li>Don&#8217;t use the ticket tracker for lengthy discussions, because they&#8217;re
+likely to get lost. If a particular ticket is controversial, please move the
+discussion to <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a>.</li>
+</ul>
+<div class="section" id="s-reporting-bugs">
+<span id="s-id1"></span><span id="reporting-bugs"></span><span id="id1"></span><h2>Reporting bugs<a class="headerlink" href="#reporting-bugs" title="Permalink to this headline">¶</a></h2>
+<p>Well-written bug reports are <em>incredibly</em> helpful. However, there&#8217;s a certain
+amount of overhead involved in working with any bug tracking system so your
+help in keeping our ticket tracker as useful as possible is appreciated. In
+particular:</p>
+<ul class="simple">
+<li><strong>Do</strong> read the <a class="reference internal" href="../../faq/index.html"><em>FAQ</em></a> to see if your issue might
+be a well-known question.</li>
+<li><strong>Do</strong> ask on <a class="reference external" href="http://groups.google.com/group/django-users">django-users</a> or <a class="reference external" href="irc://irc.freenode.net/django">#django</a> <em>first</em> if you&#8217;re not sure if
+what you&#8217;re seeing is a bug.</li>
+<li><strong>Do</strong> write complete, reproducible, specific bug reports. You must
+include a clear, concise description of the problem, and a set of
+instructions for replicating it. Add as much debug information as you can:
+code snippets, test cases, exception backtraces, screenshots, etc. A nice
+small test case is the best way to report a bug, as it gives us an easy
+way to confirm the bug quickly.</li>
+<li><strong>Don&#8217;t</strong> post to <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a> just to announce that you have
+filed a bug report. All the tickets are mailed to another list,
+<a class="reference external" href="http://groups.google.com/group/django-updates">django-updates</a>, which is tracked by developers and interested
+community members; we see them as they are filed.</li>
+</ul>
+<p>To understand the lifecycle of your ticket once you have created it, refer to
+<a class="reference internal" href="triaging-tickets.html"><em>Triaging tickets</em></a>.</p>
+</div>
+<div class="section" id="s-reporting-security-issues">
+<span id="s-id2"></span><span id="reporting-security-issues"></span><span id="id2"></span><h2>Reporting security issues<a class="headerlink" href="#reporting-security-issues" title="Permalink to this headline">¶</a></h2>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Please report security issues <strong>only</strong> to <a class="reference external" href="mailto:security&#37;&#52;&#48;djangoproject&#46;com">security<span>&#64;</span>djangoproject<span>&#46;</span>com</a>.
+This is a private list only open to long-time, highly trusted Django
+developers, and its archives are not publicly readable.</p>
+</div>
+<p>In the event of a confirmed vulnerability in Django itself, we will take the
+following actions:</p>
+<ul class="simple">
+<li>Acknowledge to the reporter that we&#8217;ve received the report and that a
+fix is forthcoming. We&#8217;ll give a rough timeline and ask the reporter
+to keep the issue confidential until we announce it.</li>
+<li>Focus on developing a fix as quickly as possible and produce patches
+against the current and two previous releases.</li>
+<li>Determine a go-public date for announcing the vulnerability and the fix.
+To try to mitigate a possible &#8220;arms race&#8221; between those applying the
+patch and those trying to exploit the hole, we will not announce
+security problems immediately.</li>
+<li>Pre-notify third-party distributors of Django (&#8220;vendors&#8221;). We will send
+these vendor notifications through private email which will include
+documentation of the vulnerability, links to the relevant patch(es), and
+a request to keep the vulnerability confidential until the official
+go-public date.</li>
+<li>Publicly announce the vulnerability and the fix on the pre-determined
+go-public date. This will probably mean a new release of Django, but
+in some cases it may simply be patches against current releases.</li>
+</ul>
+</div>
+<div class="section" id="s-reporting-user-interface-bugs-and-features">
+<span id="reporting-user-interface-bugs-and-features"></span><h2>Reporting user interface bugs and features<a class="headerlink" href="#reporting-user-interface-bugs-and-features" title="Permalink to this headline">¶</a></h2>
+<p>If your bug or feature request touches on anything visual in nature, there
+are a few additional guidelines to follow:</p>
+<ul class="simple">
+<li>Include screenshots in your ticket which are the visual equivalent of a
+minimal testcase. Show off the issue, not the crazy customizations
+you&#8217;ve made to your browser.</li>
+<li>If the issue is difficult to show off using a still image, consider
+capturing a <em>brief</em> screencast. If your software permits it, capture only
+the relevant area of the screen.</li>
+<li>If you&#8217;re offering a patch which changes the look or behavior of Django&#8217;s
+UI, you <strong>must</strong> attach before <em>and</em> after screenshots/screencasts.
+Tickets lacking these are difficult for triagers and core developers to
+assess quickly.</li>
+<li>Screenshots don&#8217;t absolve you of other good reporting practices. Make sure
+to include URLs, code snippets, and step-by-step instructions on how to
+reproduce the behavior visible in the screenshots.</li>
+<li>Make sure to set the UI/UX flag on the ticket so interested parties can
+find your ticket.</li>
+</ul>
+</div>
+<div class="section" id="s-requesting-features">
+<span id="requesting-features"></span><h2>Requesting features<a class="headerlink" href="#requesting-features" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;re always trying to make Django better, and your feature requests are a key
+part of that. Here are some tips on how to make a request most effectively:</p>
+<ul class="simple">
+<li>Make sure the feature actually requires changes in Django&#8217;s core. If your
+idea can be developed as an independent application or module — for
+instance, you want to support another database engine — we&#8217;ll probably
+suggest that you to develop it independently. Then, if your project
+gathers sufficient community support, we may consider it for inclusion in
+Django.</li>
+<li>First request the feature on the <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a> list, not in the
+ticket tracker. It&#8217;ll get read more closely if it&#8217;s on the mailing list.
+This is even more important for large-scale feature requests. We like to
+discuss any big changes to Django&#8217;s core on the mailing list before
+actually working on them.</li>
+<li>Describe clearly and concisely what the missing feature is and how you&#8217;d
+like to see it implemented. Include example code (non-functional is OK)
+if possible.</li>
+<li>Explain <em>why</em> you&#8217;d like the feature. In some cases this is obvious, but
+since Django is designed to help real developers get real work done,
+you&#8217;ll need to explain it, if it isn&#8217;t obvious why the feature would be
+useful.</li>
+</ul>
+<p>If core developers agree on the feature, then it&#8217;s appropriate to create a
+ticket. Include a link the discussion on <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a> in the ticket
+description.</p>
+<p>As with most open-source projects, code talks. If you are willing to write the
+code for the feature yourself or, even better, if you&#8217;ve already written it,
+it&#8217;s much more likely to be accepted. If it&#8217;s a large feature that might need
+multiple developers, we&#8217;re always happy to give you an experimental branch in
+our repository; see the <a class="reference internal" href="writing-code/branch-policy.html"><em>Branch policy</em></a>.</p>
+<p>See also: <a class="reference internal" href="writing-documentation.html#documenting-new-features"><em>Documenting new features</em></a>.</p>
+</div>
+<div class="section" id="s-how-we-make-decisions">
+<span id="s-id3"></span><span id="how-we-make-decisions"></span><span id="id3"></span><h2>How we make decisions<a class="headerlink" href="#how-we-make-decisions" title="Permalink to this headline">¶</a></h2>
+<p>Whenever possible, we strive for a rough consensus. To that end, we&#8217;ll often
+have informal votes on <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a> about a feature. In these votes we
+follow the voting style invented by Apache and used on Python itself, where
+votes are given as +1, +0, -0, or -1. Roughly translated, these votes mean:</p>
+<ul class="simple">
+<li>+1: &#8220;I love the idea and I&#8217;m strongly committed to it.&#8221;</li>
+<li>+0: &#8220;Sounds OK to me.&#8221;</li>
+<li>-0: &#8220;I&#8217;m not thrilled, but I won&#8217;t stand in the way.&#8221;</li>
+<li>-1: &#8220;I strongly disagree and would be very unhappy to see the idea turn
+into reality.&#8221;</li>
+</ul>
+<p>Although these votes on <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a> are informal, they&#8217;ll be taken very
+seriously. After a suitable voting period, if an obvious consensus arises we&#8217;ll
+follow the votes.</p>
+<p>However, consensus is not always possible. If consensus cannot be reached, or
+if the discussion towards a consensus fizzles out without a concrete decision,
+we use a more formal process.</p>
+<p>Any <a class="reference internal" href="../committers.html"><em>core committer</em></a> may call for a formal vote
+using the same voting mechanism above. A proposition will be considered carried
+by the core team if:</p>
+<ul class="simple">
+<li>There are three &#8220;+1&#8221; votes from members of the core team.</li>
+<li>There is no &#8220;-1&#8221; vote from any member of the core team.</li>
+<li>The <a class="reference internal" href="../committers.html#django-bdfls"><em>BDFLs</em></a> haven&#8217;t stepped in and executed their
+positive or negative veto.</li>
+</ul>
+<p>When calling for a vote, the caller should specify a deadline by which
+votes must be received. One week is generally suggested as the minimum
+amount of time.</p>
+<p>Since this process allows any core committer to veto a proposal, any &#8220;-1&#8221;
+votes (or BDFL vetos) should be accompanied by an explanation that explains
+what it would take to convert that &#8220;-1&#8221; into at least a &#8220;+0&#8221;.</p>
+<p>Whenever possible, these formal votes should be announced and held in
+public on the <a class="reference external" href="http://groups.google.com/group/django-developers">django-developers</a> mailing list. However, overly sensitive
+or contentious issues &#8211; including, most notably, votes on new core
+committers &#8211; may be held in private.</p>
+</div>
+</div>
+
+
+          </div>         
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Reporting bugs and requesting features</a><ul>
+<li><a class="reference internal" href="#reporting-bugs">Reporting bugs</a></li>
+<li><a class="reference internal" href="#reporting-security-issues">Reporting security issues</a></li>
+<li><a class="reference internal" href="#reporting-user-interface-bugs-and-features">Reporting user interface bugs and features</a></li>
+<li><a class="reference internal" href="#requesting-features">Requesting features</a></li>
+<li><a class="reference internal" href="#how-we-make-decisions">How we make decisions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="new-contributors.html">Advice for new contributors</a></li>
+    
+    
+      <li>Next: <a href="triaging-tickets.html">Triaging tickets</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../../index.html">Django 1.4 alpha 1 documentation</a>
+        
+          <ul><li><a href="../index.html">Django internals</a>
+        
+          <ul><li><a href="index.html">Contributing to Django</a>
+        
+        <ul><li>Reporting bugs and requesting features</li></ul>
+        </li></ul></li></ul>
+      </li>
+  </ul>  
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/internals/contributing/bugs-and-features.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Jan 29, 2012</p>
+          </div> 
+        
+      
+    </div>
+    
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="new-contributors.html" title="Advice for new contributors">previous</a> 
+     |
+    <a href="../index.html" title="Django internals" accesskey="U">up</a>
+   |
+    <a href="triaging-tickets.html" title="Triaging tickets">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

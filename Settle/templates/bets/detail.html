@@ -1,0 +1,22 @@
+<h1>{{ bet }}</h1>
+
+<h2>Due Date:</h2>
+{{bet.dueDate}}
+
+<h2>Status:</h2>
+{{bet.status}}
+
+<h2>Participants</h2>
+<ul>
+{% for personBet in bet.personBets.all %}
+    <li>{{personBet.person.demographics.firstName }} {{personBet.person.demographics.lastName}} has the position "{{personBet.position}}" and has wagered {{personBet.wager}} points.</li>
+{% endfor %}
+</ul>
+
+
+<h2>Categories: </h2>
+<ul>
+{% for category in bet.categories.all %}
+    <li>{{category.category}}</li>
+{% endfor %}
+</ul>

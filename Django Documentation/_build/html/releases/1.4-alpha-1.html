@@ -1,0 +1,1212 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Django 1.4 alpha release notes &mdash; Django 1.4 alpha 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4 alpha 1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Django 1.4 alpha 1 documentation" href="../index.html" />
+    <link rel="up" title="Release notes" href="index.html" />
+    <link rel="next" title="Django 1.3 beta 1 release notes" href="1.3-beta-1.html" />
+    <link rel="prev" title="Django version 0.95 release notes" href="0.95.html" />
+ 
+<script type="text/javascript" src="../templatebuiltins.js"></script>
+<script type="text/javascript">
+(function($) {
+    if (!django_template_builtins) {
+       // templatebuiltins.js missing, do nothing.
+       return;
+    }
+    $(document).ready(function() {
+        // Hyperlink Django template tags and filters
+        var base = "../ref/templates/builtins.html";
+        if (base == "#") {
+            // Special case for builtins.html itself
+            base = "";
+        }
+        // Tags are keywords, class '.k'
+        $("div.highlight\\-html\\+django span.k").each(function(i, elem) {
+             var tagname = $(elem).text();
+             if ($.inArray(tagname, django_template_builtins.ttags) != -1) {
+                 var fragment = tagname.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + tagname + "</a>");
+             }
+        });
+        // Filters are functions, class '.nf'
+        $("div.highlight\\-html\\+django span.nf").each(function(i, elem) {
+             var filtername = $(elem).text();
+             if ($.inArray(filtername, django_template_builtins.tfilters) != -1) {
+                 var fragment = filtername.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + filtername + "</a>");
+             }
+        });
+    });
+})(jQuery);
+</script>
+
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Django 1.4 alpha 1 documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+        <a title="Module index" href="../py-modindex.html">Modules</a>
+      </div>
+      <div class="nav">
+    &laquo; <a href="0.95.html" title="Django version 0.95 release notes">previous</a> 
+     |
+    <a href="index.html" title="Release notes" accesskey="U">up</a>
+   |
+    <a href="1.3-beta-1.html" title="Django 1.3 beta 1 release notes">next</a> &raquo;</div>
+    </div>
+    
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="releases-1.4-alpha-1">
+            
+  <div class="section" id="s-django-1-4-alpha-release-notes">
+<span id="django-1-4-alpha-release-notes"></span><h1>Django 1.4 alpha release notes<a class="headerlink" href="#django-1-4-alpha-release-notes" title="Permalink to this headline">¶</a></h1>
+<p>December 22, 2011.</p>
+<p>Welcome to Django 1.4 alpha!</p>
+<p>This is the first in a series of preview/development releases leading up to
+the eventual release of Django 1.4, scheduled for March 2012. This release is
+primarily targeted at developers who are interested in trying out new features
+and testing the Django codebase to help identify and resolve bugs prior to the
+final 1.4 release.</p>
+<p>As such, this release is <em>not</em> intended for production use, and any such use
+is discouraged.</p>
+<p>Django 1.4 alpha includes various <a class="reference internal" href="#what-s-new-in-django-1-4">new features</a> and some minor <a class="reference internal" href="#backwards-incompatible-changes-in-1-4">backwards
+incompatible changes</a>. There are also some features that have been dropped,
+which are detailed in <a class="reference internal" href="../internals/deprecation.html"><em>our deprecation plan</em></a>,
+and we&#8217;ve <a class="reference internal" href="#features-deprecated-in-1-4">begun the deprecation process for some features</a>.</p>
+<div class="section" id="s-python-compatibility">
+<span id="python-compatibility"></span><h2>Python compatibility<a class="headerlink" href="#python-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>While not a new feature, it&#8217;s important to note that Django 1.4 introduces the
+second shift in our Python compatibility policy since Django&#8217;s initial public
+debut. Django 1.2 dropped support for Python 2.3; now Django 1.4 drops support
+for Python 2.4. As such, the minimum Python version required for Django is now
+2.5, and Django is tested and supported on Python 2.5, 2.6 and 2.7.</p>
+<p>This change should affect only a small number of Django users, as most
+operating-system vendors today are shipping Python 2.5 or newer as their default
+version. If you&#8217;re still using Python 2.4, however, you&#8217;ll need to stick to
+Django 1.3 until you can upgrade; per <a class="reference internal" href="../internals/release-process.html"><em>our support policy</em></a>, Django 1.3 will continue to receive security
+support until the release of Django 1.5.</p>
+<p>Django does not support Python 3.x at this time. A document outlining our full
+timeline for deprecating Python 2.x and moving to Python 3.x will be published
+before the release of Django 1.4.</p>
+</div>
+<div class="section" id="s-what-s-new-in-django-1-4">
+<span id="what-s-new-in-django-1-4"></span><h2>What&#8217;s new in Django 1.4<a class="headerlink" href="#what-s-new-in-django-1-4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="s-support-for-in-browser-testing-frameworks">
+<span id="support-for-in-browser-testing-frameworks"></span><h3>Support for in-browser testing frameworks<a class="headerlink" href="#support-for-in-browser-testing-frameworks" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 now supports integration with in-browser testing frameworks such
+as <a class="reference external" href="http://seleniumhq.org/">Selenium</a> or <a class="reference external" href="http://www.getwindmill.com/">Windmill</a> thanks to the <a class="reference internal" href="../topics/testing.html#django.test.LiveServerTestCase" title="django.test.LiveServerTestCase"><tt class="xref py py-class docutils literal"><span class="pre">django.test.LiveServerTestCase</span></tt></a>
+base class, allowing you to test the interactions between your site&#8217;s front and
+back ends more comprehensively. See the
+<a class="reference internal" href="../topics/testing.html#django.test.LiveServerTestCase" title="django.test.LiveServerTestCase"><tt class="xref py py-class docutils literal"><span class="pre">documentation</span></tt></a> for more details and
+concrete examples.</p>
+</div>
+<div class="section" id="s-select-for-update-support">
+<span id="select-for-update-support"></span><h3><tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">FOR</span> <span class="pre">UPDATE</span></tt> support<a class="headerlink" href="#select-for-update-support" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 now includes a <a class="reference internal" href="../ref/models/querysets.html#django.db.models.query.QuerySet.select_for_update" title="django.db.models.query.QuerySet.select_for_update"><tt class="xref py py-meth docutils literal"><span class="pre">QuerySet.select_for_update()</span></tt></a> method which generates a
+<tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">...</span> <span class="pre">FOR</span> <span class="pre">UPDATE</span></tt> SQL query. This will lock rows until the end of the
+transaction, meaning that other transactions cannot modify or delete rows
+matched by a <tt class="docutils literal"><span class="pre">FOR</span> <span class="pre">UPDATE</span></tt> query.</p>
+<p>For more details, see the documentation for
+<a class="reference internal" href="../ref/models/querysets.html#django.db.models.query.QuerySet.select_for_update" title="django.db.models.query.QuerySet.select_for_update"><tt class="xref py py-meth docutils literal"><span class="pre">select_for_update()</span></tt></a>.</p>
+</div>
+<div class="section" id="s-model-objects-bulk-create-in-the-orm">
+<span id="model-objects-bulk-create-in-the-orm"></span><h3><tt class="docutils literal"><span class="pre">Model.objects.bulk_create</span></tt> in the ORM<a class="headerlink" href="#model-objects-bulk-create-in-the-orm" title="Permalink to this headline">¶</a></h3>
+<p>This method allows for more efficient creation of multiple objects in the ORM.
+It can provide significant performance increases if you have many objects.
+Django makes use of this internally, meaning some operations (such as database
+setup for test suites) have seen a performance benefit as a result.</p>
+<p>See the <a class="reference internal" href="../ref/models/querysets.html#django.db.models.query.QuerySet.bulk_create" title="django.db.models.query.QuerySet.bulk_create"><tt class="xref py py-meth docutils literal"><span class="pre">bulk_create()</span></tt></a> docs for more
+information.</p>
+</div>
+<div class="section" id="s-queryset-prefetch-related">
+<span id="queryset-prefetch-related"></span><h3><tt class="docutils literal"><span class="pre">QuerySet.prefetch_related</span></tt><a class="headerlink" href="#queryset-prefetch-related" title="Permalink to this headline">¶</a></h3>
+<p>Similar to <a class="reference internal" href="../ref/models/querysets.html#django.db.models.query.QuerySet.select_related" title="django.db.models.query.QuerySet.select_related"><tt class="xref py py-meth docutils literal"><span class="pre">select_related()</span></tt></a> but with a
+different strategy and broader scope,
+<a class="reference internal" href="../ref/models/querysets.html#django.db.models.query.QuerySet.prefetch_related" title="django.db.models.query.QuerySet.prefetch_related"><tt class="xref py py-meth docutils literal"><span class="pre">prefetch_related()</span></tt></a> has been added to
+<a class="reference internal" href="../ref/models/querysets.html#django.db.models.query.QuerySet" title="django.db.models.query.QuerySet"><tt class="xref py py-class docutils literal"><span class="pre">QuerySet</span></tt></a>. This method returns a new
+<tt class="docutils literal"><span class="pre">QuerySet</span></tt> that will prefetch each of the specified related lookups in a
+single batch as soon as the query begins to be evaluated. Unlike
+<tt class="docutils literal"><span class="pre">select_related</span></tt>, it does the joins in Python, not in the database, and
+supports many-to-many relationships,
+<a class="reference internal" href="../ref/contrib/contenttypes.html#django.contrib.contenttypes.generic.GenericForeignKey" title="django.contrib.contenttypes.generic.GenericForeignKey"><tt class="xref py py-class docutils literal"><span class="pre">GenericForeignKey</span></tt></a> and more. This
+allows you to fix a very common performance problem in which your code ends up
+doing O(n) database queries (or worse) if objects on your primary <tt class="docutils literal"><span class="pre">QuerySet</span></tt>
+each have many related objects that you also need.</p>
+</div>
+<div class="section" id="s-improved-password-hashing">
+<span id="improved-password-hashing"></span><h3>Improved password hashing<a class="headerlink" href="#improved-password-hashing" title="Permalink to this headline">¶</a></h3>
+<p>Django&#8217;s auth system (<tt class="docutils literal"><span class="pre">django.contrib.auth</span></tt>) stores passwords using a one-way
+algorithm. Django 1.3 uses the <a class="reference external" href="http://en.wikipedia.org/wiki/SHA1">SHA1</a> algorithm, but increasing processor speeds
+and theoretical attacks have revealed that SHA1 isn&#8217;t as secure as we&#8217;d like.
+Thus, Django 1.4 introduces a new password storage system: by default Django now
+uses the <a class="reference external" href="http://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> algorithm (as recommended by <a class="reference external" href="http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf">NIST</a>). You can also easily choose
+a different algorithm (including the popular <a class="reference external" href="http://en.wikipedia.org/wiki/Bcrypt">bcrypt</a> algorithm). For more
+details, see <a class="reference internal" href="../topics/auth.html#auth-password-storage"><em>How Django stores passwords</em></a>.</p>
+</div>
+<div class="section" id="s-html5-doctype">
+<span id="html5-doctype"></span><h3>HTML5 Doctype<a class="headerlink" href="#html5-doctype" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;ve switched the admin and other bundled templates to use the HTML5
+doctype. While Django will be careful to maintain compatibility with older
+browsers, this change means that you can use any HTML5 features you need in
+admin pages without having to lose HTML validity or override the provided
+templates to change the doctype.</p>
+</div>
+<div class="section" id="s-list-filters-in-admin-interface">
+<span id="list-filters-in-admin-interface"></span><h3>List filters in admin interface<a class="headerlink" href="#list-filters-in-admin-interface" title="Permalink to this headline">¶</a></h3>
+<p>Prior to Django 1.4, the <a class="reference internal" href="../ref/contrib/admin/index.html#module-django.contrib.admin" title="django.contrib.admin: Django's admin site."><tt class="xref py py-mod docutils literal"><span class="pre">admin</span></tt></a> app allowed you to specify
+change list filters by specifying a field lookup, but didn&#8217;t allow you to create
+custom filters. This has been rectified with a simple API (previously used
+internally and known as &#8220;FilterSpec&#8221;). For more details, see the documentation
+for <a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.list_filter" title="django.contrib.admin.ModelAdmin.list_filter"><tt class="xref py py-attr docutils literal"><span class="pre">list_filter</span></tt></a>.</p>
+</div>
+<div class="section" id="s-multiple-sort-in-admin-interface">
+<span id="multiple-sort-in-admin-interface"></span><h3>Multiple sort in admin interface<a class="headerlink" href="#multiple-sort-in-admin-interface" title="Permalink to this headline">¶</a></h3>
+<p>The admin change list now supports sorting on multiple columns. It respects all
+elements of the <a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.ordering" title="django.contrib.admin.ModelAdmin.ordering"><tt class="xref py py-attr docutils literal"><span class="pre">ordering</span></tt></a> attribute, and
+sorting on multiple columns by clicking on headers is designed to mimic the
+behavior of desktop GUIs. The
+<a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.get_ordering" title="django.contrib.admin.ModelAdmin.get_ordering"><tt class="xref py py-meth docutils literal"><span class="pre">get_ordering()</span></tt></a> method for specifying the
+ordering dynamically (e.g. depending on the request) has also been added.</p>
+</div>
+<div class="section" id="s-new-modeladmin-methods">
+<span id="new-modeladmin-methods"></span><h3>New <tt class="docutils literal"><span class="pre">ModelAdmin</span></tt> methods<a class="headerlink" href="#new-modeladmin-methods" title="Permalink to this headline">¶</a></h3>
+<p>A new <a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.save_related" title="django.contrib.admin.ModelAdmin.save_related"><tt class="xref py py-meth docutils literal"><span class="pre">save_related()</span></tt></a> method was added to
+<a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin" title="django.contrib.admin.ModelAdmin"><tt class="xref py py-mod docutils literal"><span class="pre">ModelAdmin</span></tt></a> to ease customization of how
+related objects are saved in the admin.</p>
+<p>Two other new methods,
+<a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.get_list_display" title="django.contrib.admin.ModelAdmin.get_list_display"><tt class="xref py py-meth docutils literal"><span class="pre">get_list_display()</span></tt></a> and
+<a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.get_list_display_links" title="django.contrib.admin.ModelAdmin.get_list_display_links"><tt class="xref py py-meth docutils literal"><span class="pre">get_list_display_links()</span></tt></a>
+were added to <a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin" title="django.contrib.admin.ModelAdmin"><tt class="xref py py-class docutils literal"><span class="pre">ModelAdmin</span></tt></a> to enable the dynamic
+customization of fields and links displayed on the admin change list.</p>
+</div>
+<div class="section" id="s-admin-inlines-respect-user-permissions">
+<span id="admin-inlines-respect-user-permissions"></span><h3>Admin inlines respect user permissions<a class="headerlink" href="#admin-inlines-respect-user-permissions" title="Permalink to this headline">¶</a></h3>
+<p>Admin inlines will now only allow those actions for which the user has
+permission. For <tt class="docutils literal"><span class="pre">ManyToMany</span></tt> relationships with an auto-created intermediate
+model (which does not have its own permissions), the change permission for the
+related model determines if the user has the permission to add, change or
+delete relationships.</p>
+</div>
+<div class="section" id="s-tools-for-cryptographic-signing">
+<span id="tools-for-cryptographic-signing"></span><h3>Tools for cryptographic signing<a class="headerlink" href="#tools-for-cryptographic-signing" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 adds both a low-level API for signing values and a high-level API
+for setting and reading signed cookies, one of the most common uses of
+signing in Web applications.</p>
+<p>See the <a class="reference internal" href="../topics/signing.html"><em>cryptographic signing</em></a> docs for more
+information.</p>
+</div>
+<div class="section" id="s-cookie-based-session-backend">
+<span id="cookie-based-session-backend"></span><h3>Cookie-based session backend<a class="headerlink" href="#cookie-based-session-backend" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 introduces a new cookie-based backend for the session framework
+which uses the tools for <a class="reference internal" href="../topics/signing.html"><em>cryptographic signing</em></a> to
+store the session data in the client&#8217;s browser.</p>
+<p>See the <a class="reference internal" href="../topics/http/sessions.html#cookie-session-backend"><em>cookie-based session backend</em></a> docs for
+more information.</p>
+</div>
+<div class="section" id="s-new-form-wizard">
+<span id="new-form-wizard"></span><h3>New form wizard<a class="headerlink" href="#new-form-wizard" title="Permalink to this headline">¶</a></h3>
+<p>The previous <tt class="docutils literal"><span class="pre">FormWizard</span></tt> from the formtools contrib app has been
+replaced with a new implementation based on the class-based views
+introduced in Django 1.3. It features a pluggable storage API and doesn&#8217;t
+require the wizard to pass around hidden fields for every previous step.</p>
+<p>Django 1.4 ships with a session-based storage backend and a cookie-based
+storage backend. The latter uses the tools for
+<a class="reference internal" href="../topics/signing.html"><em>cryptographic signing</em></a> also introduced in
+Django 1.4 to store the wizard&#8217;s state in the user&#8217;s cookies.</p>
+<p>See the <a class="reference internal" href="../ref/contrib/formtools/form-wizard.html"><em>form wizard</em></a> docs for
+more information.</p>
+</div>
+<div class="section" id="s-reverse-lazy">
+<span id="reverse-lazy"></span><h3><tt class="docutils literal"><span class="pre">reverse_lazy</span></tt><a class="headerlink" href="#reverse-lazy" title="Permalink to this headline">¶</a></h3>
+<p>A lazily evaluated version of <a class="reference internal" href="../topics/http/urls.html#django.core.urlresolvers.reverse" title="django.core.urlresolvers.reverse"><tt class="xref py py-func docutils literal"><span class="pre">django.core.urlresolvers.reverse()</span></tt></a> was
+added to allow using URL reversals before the project&#8217;s URLConf gets loaded.</p>
+</div>
+<div class="section" id="s-translating-url-patterns">
+<span id="translating-url-patterns"></span><h3>Translating URL patterns<a class="headerlink" href="#translating-url-patterns" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 gained the ability to look for a language prefix in the URL pattern
+when using the new <a class="reference internal" href="../topics/i18n/translation.html#django.conf.urls.i18n.i18n_patterns" title="django.conf.urls.i18n.i18n_patterns"><tt class="xref py py-func docutils literal"><span class="pre">i18n_patterns()</span></tt></a> helper function.
+Additionally, it&#8217;s now possible to define translatable URL patterns using
+<a class="reference internal" href="../ref/utils.html#django.utils.translation.ugettext_lazy" title="django.utils.translation.ugettext_lazy"><tt class="xref py py-func docutils literal"><span class="pre">ugettext_lazy()</span></tt></a>. See
+<a class="reference internal" href="../topics/i18n/translation.html#url-internationalization"><em>Internationalization: in URL patterns</em></a> for more information about the language prefix
+and how to internationalize URL patterns.</p>
+</div>
+<div class="section" id="s-contextual-translation-support-for-trans-and-blocktrans">
+<span id="contextual-translation-support-for-trans-and-blocktrans"></span><h3>Contextual translation support for <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">trans</span> <span class="pre">%}</span></tt> and <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">blocktrans</span> <span class="pre">%}</span></tt><a class="headerlink" href="#contextual-translation-support-for-trans-and-blocktrans" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../topics/i18n/translation.html#contextual-markers"><em>contextual translation</em></a> support introduced in
+Django 1.3 via the <tt class="docutils literal"><span class="pre">pgettext</span></tt> function has been extended to the
+<a class="reference internal" href="../topics/i18n/translation.html#std:templatetag-trans"><tt class="xref std std-ttag docutils literal"><span class="pre">trans</span></tt></a> and <a class="reference internal" href="../topics/i18n/translation.html#std:templatetag-blocktrans"><tt class="xref std std-ttag docutils literal"><span class="pre">blocktrans</span></tt></a> template tags using the new <tt class="docutils literal"><span class="pre">context</span></tt>
+keyword.</p>
+</div>
+<div class="section" id="s-customizable-singleobjectmixin-urlconf-kwargs">
+<span id="customizable-singleobjectmixin-urlconf-kwargs"></span><h3>Customizable <tt class="docutils literal"><span class="pre">SingleObjectMixin</span></tt> URLConf kwargs<a class="headerlink" href="#customizable-singleobjectmixin-urlconf-kwargs" title="Permalink to this headline">¶</a></h3>
+<p>Two new attributes,
+<a class="reference internal" href="../ref/class-based-views.html#django.views.generic.detail.SingleObjectMixin.pk_url_kwarg" title="django.views.generic.detail.SingleObjectMixin.pk_url_kwarg"><tt class="xref py py-attr docutils literal"><span class="pre">pk_url_kwarg</span></tt></a>
+and
+<a class="reference internal" href="../ref/class-based-views.html#django.views.generic.detail.SingleObjectMixin.slug_url_kwarg" title="django.views.generic.detail.SingleObjectMixin.slug_url_kwarg"><tt class="xref py py-attr docutils literal"><span class="pre">slug_url_kwarg</span></tt></a>,
+have been added to <a class="reference internal" href="../ref/class-based-views.html#django.views.generic.detail.SingleObjectMixin" title="django.views.generic.detail.SingleObjectMixin"><tt class="xref py py-class docutils literal"><span class="pre">SingleObjectMixin</span></tt></a> to
+enable the customization of URLConf keyword arguments used for single
+object generic views.</p>
+</div>
+<div class="section" id="s-assignment-template-tags">
+<span id="assignment-template-tags"></span><h3>Assignment template tags<a class="headerlink" href="#assignment-template-tags" title="Permalink to this headline">¶</a></h3>
+<p>A new <a class="reference internal" href="../howto/custom-template-tags.html#howto-custom-template-tags-assignment-tags"><em>assignment_tag</em></a> helper
+function was added to <tt class="docutils literal"><span class="pre">template.Library</span></tt> to ease the creation of template
+tags that store data in a specified context variable.</p>
+</div>
+<div class="section" id="s-args-and-kwargs-support-for-template-tag-helper-functions">
+<span id="args-and-kwargs-support-for-template-tag-helper-functions"></span><h3><tt class="docutils literal"><span class="pre">*args</span></tt> and <tt class="docutils literal"><span class="pre">**kwargs</span></tt> support for template tag helper functions<a class="headerlink" href="#args-and-kwargs-support-for-template-tag-helper-functions" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../howto/custom-template-tags.html#howto-custom-template-tags-simple-tags"><em>simple_tag</em></a>,
+<a class="reference internal" href="../howto/custom-template-tags.html#howto-custom-template-tags-inclusion-tags"><em>inclusion_tag</em></a> and
+newly introduced
+<a class="reference internal" href="../howto/custom-template-tags.html#howto-custom-template-tags-assignment-tags"><em>assignment_tag</em></a> template
+helper functions may now accept any number of positional or keyword arguments.
+For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register.simple_tag</span>
+<span class="k">def</span> <span class="nf">my_tag</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">warning</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;warning&#39;</span><span class="p">]</span>
+    <span class="n">profile</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;profile&#39;</span><span class="p">]</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>Then in the template any number of arguments may be passed to the template tag.
+For example:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">my_tag</span> <span class="m">123</span> <span class="s2">&quot;abcd&quot;</span> <span class="nv">book.title</span> <span class="nv">warning</span><span class="o">=</span><span class="nv">message</span><span class="o">|</span><span class="nf">lower</span> <span class="nv">profile</span><span class="o">=</span><span class="nv">user.profile</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="s-no-wrapping-of-exceptions-in-template-debug-mode">
+<span id="no-wrapping-of-exceptions-in-template-debug-mode"></span><h3>No wrapping of exceptions in <tt class="docutils literal"><span class="pre">TEMPLATE_DEBUG</span></tt> mode<a class="headerlink" href="#no-wrapping-of-exceptions-in-template-debug-mode" title="Permalink to this headline">¶</a></h3>
+<p>In previous versions of Django, whenever the <a class="reference internal" href="../ref/settings.html#std:setting-TEMPLATE_DEBUG"><tt class="xref std std-setting docutils literal"><span class="pre">TEMPLATE_DEBUG</span></tt></a> setting
+was <tt class="docutils literal"><span class="pre">True</span></tt>, any exception raised during template rendering (even exceptions
+unrelated to template syntax) were wrapped in <tt class="docutils literal"><span class="pre">TemplateSyntaxError</span></tt> and
+re-raised. This was done in order to provide detailed template source location
+information in the debug 500 page.</p>
+<p>In Django 1.4, exceptions are no longer wrapped. Instead, the original
+exception is annotated with the source information. This means that catching
+exceptions from template rendering is now consistent regardless of the value of
+<a class="reference internal" href="../ref/settings.html#std:setting-TEMPLATE_DEBUG"><tt class="xref std std-setting docutils literal"><span class="pre">TEMPLATE_DEBUG</span></tt></a>, and there&#8217;s no need to catch and unwrap
+<tt class="docutils literal"><span class="pre">TemplateSyntaxError</span></tt> in order to catch other errors.</p>
+</div>
+<div class="section" id="s-truncatechars-template-filter">
+<span id="truncatechars-template-filter"></span><h3><tt class="docutils literal"><span class="pre">truncatechars</span></tt> template filter<a class="headerlink" href="#truncatechars-template-filter" title="Permalink to this headline">¶</a></h3>
+<p>Added a filter which truncates a string to be no longer than the specified
+number of characters. Truncated strings end with a translatable ellipsis
+sequence (&#8221;...&#8221;). See the documentation for <a class="reference internal" href="../ref/templates/builtins.html#std:templatefilter-truncatechars"><tt class="xref std std-tfilter docutils literal"><span class="pre">truncatechars</span></tt></a> for
+more details.</p>
+</div>
+<div class="section" id="s-static-template-tag">
+<span id="static-template-tag"></span><h3><tt class="docutils literal"><span class="pre">static</span></tt> template tag<a class="headerlink" href="#static-template-tag" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../ref/contrib/staticfiles.html#module-django.contrib.staticfiles" title="django.contrib.staticfiles: An app for handling static files."><tt class="xref py py-mod docutils literal"><span class="pre">staticfiles</span></tt></a> contrib app has a new
+<a class="reference internal" href="../ref/contrib/staticfiles.html#std:templatetag-staticfiles-static"><tt class="xref std std-ttag docutils literal"><span class="pre">static</span></tt></a> template tag to refer to files saved with
+the <a class="reference internal" href="../ref/contrib/staticfiles.html#std:setting-STATICFILES_STORAGE"><tt class="xref std std-setting docutils literal"><span class="pre">STATICFILES_STORAGE</span></tt></a> storage backend. It uses the storage
+backend&#8217;s <tt class="docutils literal"><span class="pre">url</span></tt> method and therefore supports advanced features such as
+<a class="reference internal" href="../howto/static-files.html#staticfiles-from-cdn"><em>serving files from a cloud service</em></a>.</p>
+</div>
+<div class="section" id="s-cachedstaticfilesstorage-storage-backend">
+<span id="cachedstaticfilesstorage-storage-backend"></span><h3><tt class="docutils literal"><span class="pre">CachedStaticFilesStorage</span></tt> storage backend<a class="headerlink" href="#cachedstaticfilesstorage-storage-backend" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the <a class="reference internal" href="#static-template-tag">static template tag</a>, the
+<a class="reference internal" href="../ref/contrib/staticfiles.html#module-django.contrib.staticfiles" title="django.contrib.staticfiles: An app for handling static files."><tt class="xref py py-mod docutils literal"><span class="pre">staticfiles</span></tt></a> contrib app now has a
+<a class="reference internal" href="../ref/contrib/staticfiles.html#django.contrib.staticfiles.storage.CachedStaticFilesStorage" title="django.contrib.staticfiles.storage.CachedStaticFilesStorage"><tt class="xref py py-class docutils literal"><span class="pre">CachedStaticFilesStorage</span></tt></a> backend
+which caches the files it saves (when running the <a class="reference internal" href="../ref/contrib/staticfiles.html#django-admin-collectstatic"><tt class="xref std std-djadmin docutils literal"><span class="pre">collectstatic</span></tt></a>
+management command) by appending the MD5 hash of the file&#8217;s content to the
+filename. For example, the file <tt class="docutils literal"><span class="pre">css/styles.css</span></tt> would also be saved as
+<tt class="docutils literal"><span class="pre">css/styles.55e7cbb9ba48.css</span></tt></p>
+<p>See the <a class="reference internal" href="../ref/contrib/staticfiles.html#django.contrib.staticfiles.storage.CachedStaticFilesStorage" title="django.contrib.staticfiles.storage.CachedStaticFilesStorage"><tt class="xref py py-class docutils literal"><span class="pre">CachedStaticFilesStorage</span></tt></a>
+docs for more information.</p>
+</div>
+<div class="section" id="s-simple-clickjacking-protection">
+<span id="simple-clickjacking-protection"></span><h3>Simple clickjacking protection<a class="headerlink" href="#simple-clickjacking-protection" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;ve added a middleware to provide easy protection against <a class="reference external" href="http://en.wikipedia.org/wiki/Clickjacking">clickjacking</a> using the <tt class="docutils literal"><span class="pre">X-Frame-Options</span></tt>
+header. It&#8217;s not enabled by default for backwards compatibility reasons, but
+you&#8217;ll almost certainly want to <a class="reference internal" href="../ref/clickjacking.html"><em>enable it</em></a> to help
+plug that security hole for browsers that support the header.</p>
+</div>
+<div class="section" id="s-csrf-improvements">
+<span id="csrf-improvements"></span><h3>CSRF improvements<a class="headerlink" href="#csrf-improvements" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;ve made various improvements to our CSRF features, including the
+<a class="reference internal" href="../ref/contrib/csrf.html#django.views.decorators.csrf.ensure_csrf_cookie" title="django.views.decorators.csrf.ensure_csrf_cookie"><tt class="xref py py-func docutils literal"><span class="pre">ensure_csrf_cookie()</span></tt></a> decorator which can
+help with AJAX heavy sites, protection for PUT and DELETE requests, and the
+<a class="reference internal" href="../ref/settings.html#std:setting-CSRF_COOKIE_SECURE"><tt class="xref std std-setting docutils literal"><span class="pre">CSRF_COOKIE_SECURE</span></tt></a> and <a class="reference internal" href="../ref/settings.html#std:setting-CSRF_COOKIE_PATH"><tt class="xref std std-setting docutils literal"><span class="pre">CSRF_COOKIE_PATH</span></tt></a> settings which can
+improve the security and usefulness of the CSRF protection. See the <a class="reference internal" href="../ref/contrib/csrf.html"><em>CSRF
+docs</em></a> for more information.</p>
+</div>
+<div class="section" id="s-error-report-filtering">
+<span id="error-report-filtering"></span><h3>Error report filtering<a class="headerlink" href="#error-report-filtering" title="Permalink to this headline">¶</a></h3>
+<p>Two new function decorators, <a class="reference internal" href="../howto/error-reporting.html#sensitive_variables" title="sensitive_variables"><tt class="xref py py-func docutils literal"><span class="pre">sensitive_variables()</span></tt></a> and
+<a class="reference internal" href="../howto/error-reporting.html#sensitive_post_parameters" title="sensitive_post_parameters"><tt class="xref py py-func docutils literal"><span class="pre">sensitive_post_parameters()</span></tt></a>, were added to allow designating the
+local variables and POST parameters which may contain sensitive
+information and should be filtered out of error reports.</p>
+<p>All POST parameters are now systematically filtered out of error reports for
+certain views (<tt class="docutils literal"><span class="pre">login</span></tt>, <tt class="docutils literal"><span class="pre">password_reset_confirm</span></tt>, <tt class="docutils literal"><span class="pre">password_change</span></tt>, and
+<tt class="docutils literal"><span class="pre">add_view</span></tt> in <a class="reference internal" href="../topics/auth.html#module-django.contrib.auth.views" title="django.contrib.auth.views"><tt class="xref py py-mod docutils literal"><span class="pre">django.contrib.auth.views</span></tt></a>, as well as
+<tt class="docutils literal"><span class="pre">user_change_password</span></tt> in the admin app) to prevent the leaking of sensitive
+information such as user passwords.</p>
+<p>You may override or customize the default filtering by writing a <a class="reference internal" href="../howto/error-reporting.html#custom-error-reports"><em>custom
+filter</em></a>. For more information see the docs on
+<a class="reference internal" href="../howto/error-reporting.html#filtering-error-reports"><em>Filtering error reports</em></a>.</p>
+</div>
+<div class="section" id="s-extended-ipv6-support">
+<span id="extended-ipv6-support"></span><h3>Extended IPv6 support<a class="headerlink" href="#extended-ipv6-support" title="Permalink to this headline">¶</a></h3>
+<p>The previously added support for IPv6 addresses when using the runserver
+management command in Django 1.3 has now been further extended by adding
+a <tt class="xref py py-class docutils literal"><span class="pre">GenericIPAddressField</span></tt> model field,
+a <tt class="xref py py-class docutils literal"><span class="pre">GenericIPAddressField</span></tt> form field and
+the validators <a class="reference internal" href="../ref/validators.html#django.core.validators.validate_ipv46_address" title="django.core.validators.validate_ipv46_address"><tt class="xref py py-data docutils literal"><span class="pre">validate_ipv46_address</span></tt></a> and
+<a class="reference internal" href="../ref/validators.html#django.core.validators.validate_ipv6_address" title="django.core.validators.validate_ipv6_address"><tt class="xref py py-data docutils literal"><span class="pre">validate_ipv6_address</span></tt></a></p>
+</div>
+<div class="section" id="s-updated-default-project-layout-and-manage-py">
+<span id="updated-default-project-layout-and-manage-py"></span><h3>Updated default project layout and <tt class="docutils literal"><span class="pre">manage.py</span></tt><a class="headerlink" href="#updated-default-project-layout-and-manage-py" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 ships with an updated default project layout and <tt class="docutils literal"><span class="pre">manage.py</span></tt> file
+for the <a class="reference internal" href="../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a> management command. These fix some issues with
+the previous <tt class="docutils literal"><span class="pre">manage.py</span></tt> handling of Python import paths that caused double
+imports, trouble moving from development to deployment, and other
+difficult-to-debug path issues.</p>
+<p>The previous <tt class="docutils literal"><span class="pre">manage.py</span></tt> called functions that are now deprecated, and thus
+projects upgrading to Django 1.4 should update their <tt class="docutils literal"><span class="pre">manage.py</span></tt>. (The
+old-style <tt class="docutils literal"><span class="pre">manage.py</span></tt> will continue to work as before until Django 1.6; in
+1.5 it will raise <tt class="docutils literal"><span class="pre">DeprecationWarning</span></tt>).</p>
+<p>The new recommended <tt class="docutils literal"><span class="pre">manage.py</span></tt> file should look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s">&quot;{{ project_name }}.settings&quot;</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">django.core.management</span> <span class="kn">import</span> <span class="n">execute_from_command_line</span>
+
+    <span class="n">execute_from_command_line</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">{{</span> <span class="pre">project_name</span> <span class="pre">}}</span></tt> should be replaced with the Python package name of the
+actual project.</p>
+<p>If settings, URLconfs, and apps within the project are imported or referenced
+using the project name prefix (e.g. <tt class="docutils literal"><span class="pre">myproject.settings</span></tt>, <tt class="docutils literal"><span class="pre">ROOT_URLCONF</span> <span class="pre">=</span>
+<span class="pre">&quot;myproject.urls&quot;</span></tt>, etc), the new <tt class="docutils literal"><span class="pre">manage.py</span></tt> will need to be moved one
+directory up, so it is outside the project package rather than adjacent to
+<tt class="docutils literal"><span class="pre">settings.py</span></tt> and <tt class="docutils literal"><span class="pre">urls.py</span></tt>.</p>
+<p>For instance, with the following layout:</p>
+<div class="highlight-python"><pre>manage.py
+mysite/
+    __init__.py
+    settings.py
+    urls.py
+    myapp/
+        __init__.py
+        models.py</pre>
+</div>
+<p>You could import <tt class="docutils literal"><span class="pre">mysite.settings</span></tt>, <tt class="docutils literal"><span class="pre">mysite.urls</span></tt>, and <tt class="docutils literal"><span class="pre">mysite.myapp</span></tt>,
+but not <tt class="docutils literal"><span class="pre">settings</span></tt>, <tt class="docutils literal"><span class="pre">urls</span></tt>, or <tt class="docutils literal"><span class="pre">myapp</span></tt> as top-level modules.</p>
+<p>Anything imported as a top-level module can be placed adjacent to the new
+<tt class="docutils literal"><span class="pre">manage.py</span></tt>. For instance, to decouple &#8220;myapp&#8221; from the project module and
+import it as just <tt class="docutils literal"><span class="pre">myapp</span></tt>, place it outside the <tt class="docutils literal"><span class="pre">mysite/</span></tt> directory:</p>
+<div class="highlight-python"><pre>manage.py
+myapp/
+    __init__.py
+    models.py
+mysite/
+    __init__.py
+    settings.py
+    urls.py</pre>
+</div>
+<p>If the same code is imported inconsistently (some places with the project
+prefix, some places without it), the imports will need to be cleaned up when
+switching to the new <tt class="docutils literal"><span class="pre">manage.py</span></tt>.</p>
+</div>
+<div class="section" id="s-improved-wsgi-support">
+<span id="improved-wsgi-support"></span><h3>Improved WSGI support<a class="headerlink" href="#improved-wsgi-support" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a> management command now adds a <tt class="file docutils literal"><span class="pre">wsgi.py</span></tt>
+module to the initial project layout, containing a simple WSGI application that
+can be used for <a class="reference internal" href="../howto/deployment/wsgi/index.html"><em>deploying with WSGI app
+servers</em></a>.</p>
+<p>The <a class="reference internal" href="../ref/django-admin.html#django-admin-runserver"><tt class="xref std std-djadmin docutils literal"><span class="pre">built-in</span> <span class="pre">development</span> <span class="pre">server</span></tt></a> now supports using an
+externally-defined WSGI callable, so as to make it possible to run runserver
+with the same WSGI configuration that is used for deployment. A new
+<a class="reference internal" href="../ref/settings.html#std:setting-WSGI_APPLICATION"><tt class="xref std std-setting docutils literal"><span class="pre">WSGI_APPLICATION</span></tt></a> setting is available to configure which WSGI
+callable <a class="reference internal" href="../ref/django-admin.html#django-admin-runserver"><tt class="xref std std-djadmin docutils literal"><span class="pre">runserver</span></tt></a> uses.</p>
+<p>(The <a class="reference internal" href="../ref/django-admin.html#django-admin-runfcgi"><tt class="xref std std-djadmin docutils literal"><span class="pre">runfcgi</span></tt></a> management command also internally wraps the WSGI
+callable configured via <a class="reference internal" href="../ref/settings.html#std:setting-WSGI_APPLICATION"><tt class="xref std std-setting docutils literal"><span class="pre">WSGI_APPLICATION</span></tt></a>.)</p>
+</div>
+<div class="section" id="s-custom-project-and-app-templates">
+<span id="custom-project-and-app-templates"></span><h3>Custom project and app templates<a class="headerlink" href="#custom-project-and-app-templates" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../ref/django-admin.html#django-admin-startapp"><tt class="xref std std-djadmin docutils literal"><span class="pre">startapp</span></tt></a> and <a class="reference internal" href="../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a> management commands
+got a <tt class="docutils literal"><span class="pre">--template</span></tt> option for specifying a path or URL to a custom app or
+project template.</p>
+<p>For example, Django will use the <tt class="docutils literal"><span class="pre">/path/to/my_project_template</span></tt> directory
+when running the following command:</p>
+<div class="highlight-python"><pre>django-admin.py startproject --template=/path/to/my_project_template myproject</pre>
+</div>
+<p>You can also now provide a destination directory as the second
+argument to both <a class="reference internal" href="../ref/django-admin.html#django-admin-startapp"><tt class="xref std std-djadmin docutils literal"><span class="pre">startapp</span></tt></a> and <a class="reference internal" href="../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a>:</p>
+<div class="highlight-python"><pre>django-admin.py startapp myapp /path/to/new/app
+django-admin.py startproject myproject /path/to/new/project</pre>
+</div>
+<p>For more information, see the <a class="reference internal" href="../ref/django-admin.html#django-admin-startapp"><tt class="xref std std-djadmin docutils literal"><span class="pre">startapp</span></tt></a> and <a class="reference internal" href="../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a>
+documentation.</p>
+</div>
+<div class="section" id="s-support-for-time-zones">
+<span id="support-for-time-zones"></span><h3>Support for time zones<a class="headerlink" href="#support-for-time-zones" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 adds <a class="reference internal" href="../topics/i18n/timezones.html#time-zones"><em>support for time zones</em></a>. When it&#8217;s enabled,
+Django stores date and time information in UTC in the database, uses time
+zone-aware datetime objects internally, and translates them to the end user&#8217;s
+time zone in templates and forms.</p>
+<p>Reasons for using this feature include:</p>
+<ul class="simple">
+<li>Customizing date and time display for users around the world.</li>
+<li>Storing datetimes in UTC for database portability and interoperability.
+(This argument doesn&#8217;t apply to PostgreSQL, because it already stores
+timestamps with time zone information in Django 1.3.)</li>
+<li>Avoiding data corruption problems around DST transitions.</li>
+</ul>
+<p>Time zone support is enabled by default in new projects created with
+<a class="reference internal" href="../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a>. If you want to use this feature in an existing
+project, there is a <a class="reference internal" href="../topics/i18n/timezones.html#time-zones-migration-guide"><em>migration guide</em></a>.</p>
+</div>
+<div class="section" id="s-minor-features">
+<span id="minor-features"></span><h3>Minor features<a class="headerlink" href="#minor-features" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.4 also includes several smaller improvements worth noting:</p>
+<ul>
+<li><p class="first">A more usable stacktrace in the technical 500 page: frames in the
+stack trace which reference Django&#8217;s code are dimmed out, while
+frames in user code are slightly emphasized. This change makes it
+easier to scan a stacktrace for issues in user code.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="../topics/db/tablespaces.html"><em>Tablespace support</em></a> in PostgreSQL.</p>
+</li>
+<li><p class="first">Customizable names for <tt class="xref py py-meth docutils literal"><span class="pre">simple_tag()</span></tt>.</p>
+</li>
+<li><p class="first">In the documentation, a helpful <a class="reference internal" href="../topics/security.html"><em>security overview</em></a>
+page.</p>
+</li>
+<li><p class="first">The <tt class="xref py py-func docutils literal"><span class="pre">django.contrib.auth.models.check_password()</span></tt> function has been moved
+to the <tt class="xref py py-mod docutils literal"><span class="pre">django.contrib.auth.utils</span></tt> module. Importing it from the old
+location will still work, but you should update your imports.</p>
+</li>
+<li><p class="first">The <a class="reference internal" href="../ref/contrib/staticfiles.html#django-admin-collectstatic"><tt class="xref std std-djadmin docutils literal"><span class="pre">collectstatic</span></tt></a> management command gained a <tt class="docutils literal"><span class="pre">--clear</span></tt> option
+to delete all files at the destination before copying or linking the static
+files.</p>
+</li>
+<li><p class="first">It is now possible to load fixtures containing forward references when using
+MySQL with the InnoDB database engine.</p>
+</li>
+<li><p class="first">A new 403 response handler has been added as
+<tt class="docutils literal"><span class="pre">'django.views.defaults.permission_denied'</span></tt>. You can set your own handler by
+setting the value of <a class="reference internal" href="../topics/http/urls.html#django.conf.urls.handler403" title="django.conf.urls.handler403"><tt class="xref py py-data docutils literal"><span class="pre">django.conf.urls.handler403</span></tt></a>. See the
+documentation about <a class="reference internal" href="../topics/http/views.html#http-forbidden-view"><em>the 403 (HTTP Forbidden) view</em></a>
+for more information.</p>
+</li>
+<li><p class="first">The <a class="reference internal" href="../topics/i18n/translation.html#std:templatetag-trans"><tt class="xref std std-ttag docutils literal"><span class="pre">trans</span></tt></a> template tag now takes an optional <tt class="docutils literal"><span class="pre">as</span></tt> argument to
+be able to retrieve a translation string without displaying it but setting
+a template context variable instead.</p>
+</li>
+<li><p class="first">The <a class="reference internal" href="../ref/templates/builtins.html#std:templatetag-if"><tt class="xref std std-ttag docutils literal"><span class="pre">if</span></tt></a> template tag now supports <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">elif</span> <span class="pre">%}</span></tt> clauses.</p>
+</li>
+<li><p class="first">A new plain text version of the HTTP 500 status code internal error page
+served when <a class="reference internal" href="../ref/settings.html#std:setting-DEBUG"><tt class="xref std std-setting docutils literal"><span class="pre">DEBUG</span></tt></a> is <tt class="docutils literal"><span class="pre">True</span></tt> is now sent to the client when
+Django detects that the request has originated in JavaScript code
+(<a class="reference internal" href="../ref/request-response.html#django.http.HttpRequest.is_ajax" title="django.http.HttpRequest.is_ajax"><tt class="xref py py-meth docutils literal"><span class="pre">is_ajax()</span></tt></a> is used for this).</p>
+<p>Similarly to its HTML counterpart, it contains a collection of different
+pieces of information about the state of the web application.</p>
+<p>This should make it easier to read when debugging interaction with
+client-side Javascript code.</p>
+</li>
+<li><p class="first">Added the <a class="reference internal" href="../ref/django-admin.html#django-admin-option---no-location"><tt class="xref std std-djadminopt docutils literal"><span class="pre">--no-location</span></tt></a> option to the <a class="reference internal" href="../ref/django-admin.html#django-admin-makemessages"><tt class="xref std std-djadmin docutils literal"><span class="pre">makemessages</span></tt></a>
+command.</p>
+</li>
+<li><p class="first">Changed the <tt class="docutils literal"><span class="pre">locmem</span></tt> cache backend to use
+<tt class="docutils literal"><span class="pre">pickle.HIGHEST_PROTOCOL</span></tt> for better compatibility with the other
+cache backends.</p>
+</li>
+<li><p class="first">Added support in the ORM for generating <tt class="docutils literal"><span class="pre">SELECT</span></tt> queries containing
+<tt class="docutils literal"><span class="pre">DISTINCT</span> <span class="pre">ON</span></tt>.</p>
+<p>The <tt class="docutils literal"><span class="pre">distinct()</span></tt> <tt class="docutils literal"><span class="pre">QuerySet</span></tt> method now accepts an optional list of model
+field names. If specified, then the <tt class="docutils literal"><span class="pre">DISTINCT</span></tt> statement is limited to these
+fields. This is only supported in PostgreSQL.</p>
+<p>For more details, see the documentation for
+<a class="reference internal" href="../ref/models/querysets.html#django.db.models.query.QuerySet.distinct" title="django.db.models.query.QuerySet.distinct"><tt class="xref py py-meth docutils literal"><span class="pre">distinct()</span></tt></a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="s-backwards-incompatible-changes-in-1-4">
+<span id="backwards-incompatible-changes-in-1-4"></span><h2>Backwards incompatible changes in 1.4<a class="headerlink" href="#backwards-incompatible-changes-in-1-4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="s-django-contrib-admin">
+<span id="django-contrib-admin"></span><h3>django.contrib.admin<a class="headerlink" href="#django-contrib-admin" title="Permalink to this headline">¶</a></h3>
+<p>The included administration app <tt class="docutils literal"><span class="pre">django.contrib.admin</span></tt> has for a long time
+shipped with a default set of static files such as JavaScript, images and
+stylesheets. Django 1.3 added a new contrib app <tt class="docutils literal"><span class="pre">django.contrib.staticfiles</span></tt>
+to handle such files in a generic way and defined conventions for static
+files included in apps.</p>
+<p>Starting in Django 1.4 the admin&#8217;s static files also follow this
+convention to make it easier to deploy the included files. In previous
+versions of Django, it was also common to define an <tt class="docutils literal"><span class="pre">ADMIN_MEDIA_PREFIX</span></tt>
+setting to point to the URL where the admin&#8217;s static files are served by a
+web server. This setting has now been deprecated and replaced by the more
+general setting <a class="reference internal" href="../ref/settings.html#std:setting-STATIC_URL"><tt class="xref std std-setting docutils literal"><span class="pre">STATIC_URL</span></tt></a>. Django will now expect to find the
+admin static files under the URL <tt class="docutils literal"><span class="pre">&lt;STATIC_URL&gt;/admin/</span></tt>.</p>
+<p>If you&#8217;ve previously used a URL path for <tt class="docutils literal"><span class="pre">ADMIN_MEDIA_PREFIX</span></tt> (e.g.
+<tt class="docutils literal"><span class="pre">/media/</span></tt>) simply make sure <a class="reference internal" href="../ref/settings.html#std:setting-STATIC_URL"><tt class="xref std std-setting docutils literal"><span class="pre">STATIC_URL</span></tt></a> and <a class="reference internal" href="../ref/settings.html#std:setting-STATIC_ROOT"><tt class="xref std std-setting docutils literal"><span class="pre">STATIC_ROOT</span></tt></a>
+are configured and your web server serves the files correctly. The development
+server continues to serve the admin files just like before. Don&#8217;t hesitate to
+consult the <a class="reference internal" href="../howto/static-files.html"><em>static files howto</em></a> for further
+details.</p>
+<p>In case your <tt class="docutils literal"><span class="pre">ADMIN_MEDIA_PREFIX</span></tt> is set to an specific domain (e.g.
+<tt class="docutils literal"><span class="pre">http://media.example.com/admin/</span></tt>) make sure to also set your
+<a class="reference internal" href="../ref/settings.html#std:setting-STATIC_URL"><tt class="xref std std-setting docutils literal"><span class="pre">STATIC_URL</span></tt></a> setting to the correct URL, for example
+<tt class="docutils literal"><span class="pre">http://media.example.com/</span></tt>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you&#8217;re implicitely relying on the path of the admin static files on
+your server&#8217;s file system when you deploy your site, you have to update
+that path. The files were moved from <tt class="file docutils literal"><span class="pre">django/contrib/admin/media/</span></tt>
+to <tt class="file docutils literal"><span class="pre">django/contrib/admin/static/admin/</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="s-supported-browsers-for-the-admin">
+<span id="supported-browsers-for-the-admin"></span><h3>Supported browsers for the admin<a class="headerlink" href="#supported-browsers-for-the-admin" title="Permalink to this headline">¶</a></h3>
+<p>Django hasn&#8217;t had a clear policy on which browsers are supported for using the
+admin app. Django&#8217;s new policy formalizes existing practices: <a class="reference external" href="http://yuilibrary.com/yui/docs/tutorials/gbs/">YUI&#8217;s A-grade</a>
+browsers should provide a fully-functional admin experience, with the notable
+exception of IE6, which is no longer supported.</p>
+<p>Released over ten years ago, IE6 imposes many limitations on modern web
+development. The practical implications of this policy are that contributors
+are free to improve the admin without consideration for these limitations.</p>
+<p>This new policy <strong>has no impact</strong> on development outside of the admin. Users of
+Django are free to develop webapps compatible with any range of browsers.</p>
+</div>
+<div class="section" id="s-removed-admin-icons">
+<span id="removed-admin-icons"></span><h3>Removed admin icons<a class="headerlink" href="#removed-admin-icons" title="Permalink to this headline">¶</a></h3>
+<p>As part of an effort to improve the performance and usability of the admin&#8217;s
+changelist sorting interface and of the admin&#8217;s <a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.filter_horizontal" title="django.contrib.admin.ModelAdmin.filter_horizontal"><tt class="xref py py-attr docutils literal"><span class="pre">horizontal</span></tt></a> and <a class="reference internal" href="../ref/contrib/admin/index.html#django.contrib.admin.ModelAdmin.filter_vertical" title="django.contrib.admin.ModelAdmin.filter_vertical"><tt class="xref py py-attr docutils literal"><span class="pre">vertical</span></tt></a> &#8220;filter&#8221; widgets, some icon
+files were removed and grouped into two sprite files.</p>
+<p>Specifically: <tt class="docutils literal"><span class="pre">selector-add.gif</span></tt>, <tt class="docutils literal"><span class="pre">selector-addall.gif</span></tt>,
+<tt class="docutils literal"><span class="pre">selector-remove.gif</span></tt>, <tt class="docutils literal"><span class="pre">selector-removeall.gif</span></tt>,
+<tt class="docutils literal"><span class="pre">selector_stacked-add.gif</span></tt> and <tt class="docutils literal"><span class="pre">selector_stacked-remove.gif</span></tt> were
+combined into <tt class="docutils literal"><span class="pre">selector-icons.gif</span></tt>; and <tt class="docutils literal"><span class="pre">arrow-up.gif</span></tt> and
+<tt class="docutils literal"><span class="pre">arrow-down.gif</span></tt> were combined into <tt class="docutils literal"><span class="pre">sorting-icons.gif</span></tt>.</p>
+<p>If you used those icons to customize the admin then you will want to replace
+them with your own icons or retrieve them from a previous release.</p>
+</div>
+<div class="section" id="s-css-class-names-in-admin-forms">
+<span id="css-class-names-in-admin-forms"></span><h3>CSS class names in admin forms<a class="headerlink" href="#css-class-names-in-admin-forms" title="Permalink to this headline">¶</a></h3>
+<p>To avoid conflicts with other common CSS class names (e.g. &#8220;button&#8221;), a prefix
+&#8220;field-&#8221; has been added to all CSS class names automatically generated from the
+form field names in the main admin forms, stacked inline forms and tabular
+inline cells. You will need to take that prefix into account in your custom
+style sheets or javascript files if you previously used plain field names as
+selectors for custom styles or javascript transformations.</p>
+</div>
+<div class="section" id="s-compatibility-with-old-signed-data">
+<span id="compatibility-with-old-signed-data"></span><h3>Compatibility with old signed data<a class="headerlink" href="#compatibility-with-old-signed-data" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.3 changed the cryptographic signing mechanisms used in a number of
+places in Django. While Django 1.3 kept fallbacks that would accept hashes
+produced by the previous methods, these fallbacks are removed in Django 1.4.</p>
+<p>So, if you upgrade to Django 1.4 directly from 1.2 or earlier, you may
+lose/invalidate certain pieces of data that have been cryptographically signed
+using an old method. To avoid this, use Django 1.3 first for a period of time
+to allow the signed data to expire naturally. The affected parts are detailed
+below, with 1) the consequences of ignoring this advice and 2) the amount of
+time you need to run Django 1.3 for the data to expire or become irrelevant.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">contrib.sessions</span></tt> data integrity check<ul>
+<li>consequences: the user will be logged out, and session data will be lost.</li>
+<li>time period: defined by <a class="reference internal" href="../ref/settings.html#std:setting-SESSION_COOKIE_AGE"><tt class="xref std std-setting docutils literal"><span class="pre">SESSION_COOKIE_AGE</span></tt></a>.</li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">contrib.auth</span></tt> password reset hash<ul>
+<li>consequences: password reset links from before the upgrade will not work.</li>
+<li>time period: defined by <a class="reference internal" href="../ref/settings.html#std:setting-PASSWORD_RESET_TIMEOUT_DAYS"><tt class="xref std std-setting docutils literal"><span class="pre">PASSWORD_RESET_TIMEOUT_DAYS</span></tt></a>.</li>
+</ul>
+</li>
+</ul>
+<p>Form-related hashes — these are much shorter lifetime, and are relevant only for
+the short window where a user might fill in a form generated by the pre-upgrade
+Django instance, and try to submit it to the upgraded Django instance:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">contrib.comments</span></tt> form security hash<ul>
+<li>consequences: the user will see a validation error &#8220;Security hash failed&#8221;.</li>
+<li>time period: the amount of time you expect users to take filling out comment
+forms.</li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">FormWizard</span></tt> security hash<ul>
+<li>consequences: the user will see an error about the form having expired,
+and will be sent back to the first page of the wizard, losing the data
+they have entered so far.</li>
+<li>time period: the amount of time you expect users to take filling out the
+affected forms.</li>
+</ul>
+</li>
+<li>CSRF check<ul>
+<li>Note: This is actually a Django 1.1 fallback, not Django 1.2,
+and applies only if you are upgrading from 1.1.</li>
+<li>consequences: the user will see a 403 error with any CSRF protected POST
+form.</li>
+<li>time period: the amount of time you expect user to take filling out
+such forms.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="s-django-contrib-flatpages">
+<span id="django-contrib-flatpages"></span><h3>django.contrib.flatpages<a class="headerlink" href="#django-contrib-flatpages" title="Permalink to this headline">¶</a></h3>
+<p>Starting in the 1.4 release the
+<a class="reference internal" href="../ref/contrib/flatpages.html#django.contrib.flatpages.middleware.FlatpageFallbackMiddleware" title="django.contrib.flatpages.middleware.FlatpageFallbackMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">FlatpageFallbackMiddleware</span></tt></a> only
+adds a trailing slash and redirects if the resulting URL refers to an existing
+flatpage. For example, requesting <tt class="docutils literal"><span class="pre">/notaflatpageoravalidurl</span></tt> in a previous
+version would redirect to <tt class="docutils literal"><span class="pre">/notaflatpageoravalidurl/</span></tt>, which would
+subsequently raise a 404. Requesting <tt class="docutils literal"><span class="pre">/notaflatpageoravalidurl</span></tt> now will
+immediately raise a 404. Additionally redirects returned by flatpages are now
+permanent (301 status code) to match the behavior of the
+<a class="reference internal" href="../ref/middleware.html#django.middleware.common.CommonMiddleware" title="django.middleware.common.CommonMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">CommonMiddleware</span></tt></a>.</p>
+</div>
+<div class="section" id="s-serialization-of-datetime-and-time">
+<span id="serialization-of-datetime-and-time"></span><h3>Serialization of <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a> and <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.time" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">time</span></tt></a><a class="headerlink" href="#serialization-of-datetime-and-time" title="Permalink to this headline">¶</a></h3>
+<p>As a consequence of time zone support, and according to the ECMA-262
+specification, some changes were made to the JSON serializer:</p>
+<ul class="simple">
+<li>It includes the time zone for aware datetime objects. It raises an exception
+for aware time objects.</li>
+<li>It includes milliseconds for datetime and time objects. There is still
+some precision loss, because Python stores microseconds (6 digits) and JSON
+only supports milliseconds (3 digits). However, it&#8217;s better than discarding
+microseconds entirely.</li>
+</ul>
+<p>The XML serializer was also changed to use the ISO8601 format for datetimes.
+The letter <tt class="docutils literal"><span class="pre">T</span></tt> is used to separate the date part from the time part, instead
+of a space. Time zone information is included in the <tt class="docutils literal"><span class="pre">[+-]HH:MM</span></tt> format.</p>
+<p>The serializers will dump datetimes in fixtures with these new formats. They
+can still load fixtures that use the old format.</p>
+</div>
+<div class="section" id="s-supports-timezone-changed-to-false-for-sqlite">
+<span id="supports-timezone-changed-to-false-for-sqlite"></span><h3><tt class="docutils literal"><span class="pre">supports_timezone</span></tt> changed to <tt class="docutils literal"><span class="pre">False</span></tt> for SQLite<a class="headerlink" href="#supports-timezone-changed-to-false-for-sqlite" title="Permalink to this headline">¶</a></h3>
+<p>The database feature <tt class="docutils literal"><span class="pre">supports_timezone</span></tt> used to be <tt class="docutils literal"><span class="pre">True</span></tt> for SQLite.
+Indeed, if you saved an aware datetime object, SQLite stored a string that
+included an UTC offset. However, this offset was ignored when loading the value
+back from the database, which could corrupt the data.</p>
+<p>In the context of time zone support, this flag was changed to <tt class="docutils literal"><span class="pre">False</span></tt>, and
+datetimes are now stored without time zone information in SQLite. When
+<a class="reference internal" href="../ref/settings.html#std:setting-USE_TZ"><tt class="xref std std-setting docutils literal"><span class="pre">USE_TZ</span></tt></a> is <tt class="docutils literal"><span class="pre">False</span></tt>, if you attempt to save an aware datetime
+object, Django raises an exception.</p>
+</div>
+<div class="section" id="s-database-connection-s-thread-locality">
+<span id="database-connection-s-thread-locality"></span><h3>Database connection&#8217;s thread-locality<a class="headerlink" href="#database-connection-s-thread-locality" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">DatabaseWrapper</span></tt> objects (i.e. the connection objects referenced by
+<tt class="docutils literal"><span class="pre">django.db.connection</span></tt> and <tt class="docutils literal"><span class="pre">django.db.connections[&quot;some_alias&quot;]</span></tt>) used to
+be thread-local. They are now global objects in order to be potentially shared
+between multiple threads. While the individual connection objects are now
+global, the <tt class="docutils literal"><span class="pre">django.db.connections</span></tt> dictionary referencing those objects is
+still thread-local. Therefore if you just use the ORM or
+<tt class="docutils literal"><span class="pre">DatabaseWrapper.cursor()</span></tt> then the behavior is still the same as before.
+Note, however, that <tt class="docutils literal"><span class="pre">django.db.connection</span></tt> does not directly reference the
+default <tt class="docutils literal"><span class="pre">DatabaseWrapper</span></tt> object anymore and is now a proxy to access that
+object&#8217;s attributes. If you need to access the actual <tt class="docutils literal"><span class="pre">DatabaseWrapper</span></tt>
+object, use <tt class="docutils literal"><span class="pre">django.db.connections[DEFAULT_DB_ALIAS]</span></tt> instead.</p>
+<p>As part of this change, all underlying SQLite connections are now enabled for
+potential thread-sharing (by passing the <tt class="docutils literal"><span class="pre">check_same_thread=False</span></tt> attribute
+to pysqlite). <tt class="docutils literal"><span class="pre">DatabaseWrapper</span></tt> however preserves the previous behavior by
+disabling thread-sharing by default, so this does not affect any existing
+code that purely relies on the ORM or on <tt class="docutils literal"><span class="pre">DatabaseWrapper.cursor()</span></tt>.</p>
+<p>Finally, while it is now possible to pass connections between threads, Django
+does not make any effort to synchronize access to the underlying backend.
+Concurrency behavior is defined by the underlying backend implementation.
+Check their documentation for details.</p>
+</div>
+<div class="section" id="s-comments-banned-users-group-setting">
+<span id="comments-banned-users-group-setting"></span><h3><cite>COMMENTS_BANNED_USERS_GROUP</cite> setting<a class="headerlink" href="#comments-banned-users-group-setting" title="Permalink to this headline">¶</a></h3>
+<p>Django&#8217;s <a class="reference internal" href="../ref/contrib/comments/index.html"><em>comments app</em></a> has historically
+supported excluding the comments of a special user group, but we&#8217;ve never
+documented the feature properly and didn&#8217;t enforce the exclusion in other parts
+of the app such as the template tags. To fix this problem, we removed the code
+from the feed class.</p>
+<p>If you rely on the feature and want to restore the old behavior, simply use
+a custom comment model manager to exclude the user group, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.contrib.comments.managers</span> <span class="kn">import</span> <span class="n">CommentManager</span>
+
+<span class="k">class</span> <span class="nc">BanningCommentManager</span><span class="p">(</span><span class="n">CommentManager</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_query_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BanningCommentManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_query_set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">&#39;COMMENTS_BANNED_USERS_GROUP&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;user_id NOT IN (SELECT user_id FROM auth_user_groups WHERE group_id = </span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">]</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">settings</span><span class="o">.</span><span class="n">COMMENTS_BANNED_USERS_GROUP</span><span class="p">]</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">extra</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qs</span>
+</pre></div>
+</div>
+<p>Save this model manager in your custom comment app (e.g. in
+<tt class="docutils literal"><span class="pre">my_comments_app/managers.py</span></tt>) and add it your
+<a class="reference internal" href="../ref/contrib/comments/custom.html#custom-comment-app-api"><em>custom comment app model</em></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.comments.models</span> <span class="kn">import</span> <span class="n">Comment</span>
+
+<span class="kn">from</span> <span class="nn">my_comments_app.managers</span> <span class="kn">import</span> <span class="n">BanningCommentManager</span>
+
+<span class="k">class</span> <span class="nc">CommentWithTitle</span><span class="p">(</span><span class="n">Comment</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">BanningCommentManager</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For more details, see the documentation about
+<a class="reference internal" href="../ref/contrib/comments/custom.html"><em>customizing the comments framework</em></a>.</p>
+</div>
+<div class="section" id="s-ignorable-404-starts-and-ignorable-404-ends-settings">
+<span id="ignorable-404-starts-and-ignorable-404-ends-settings"></span><h3><cite>IGNORABLE_404_STARTS</cite> and <cite>IGNORABLE_404_ENDS</cite> settings<a class="headerlink" href="#ignorable-404-starts-and-ignorable-404-ends-settings" title="Permalink to this headline">¶</a></h3>
+<p>Until Django 1.3, it was possible to exclude some URLs from Django&#8217;s
+<a class="reference internal" href="../howto/error-reporting.html"><em>404 error reporting</em></a> by adding prefixes to
+<a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_STARTS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_STARTS</span></tt></a> and suffixes to <a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_ENDS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_ENDS</span></tt></a>.</p>
+<p>In Django 1.4, these two settings are superseded by
+<a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_URLS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_URLS</span></tt></a>, which is a list of compiled regular expressions.
+Django won&#8217;t send an email for 404 errors on URLs that match any of them.</p>
+<p>Furthermore, the previous settings had some rather arbitrary default values:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">IGNORABLE_404_STARTS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;/cgi-bin/&#39;</span><span class="p">,</span> <span class="s">&#39;/_vti_bin&#39;</span><span class="p">,</span> <span class="s">&#39;/_vti_inf&#39;</span><span class="p">)</span>
+<span class="n">IGNORABLE_404_ENDS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;mail.pl&#39;</span><span class="p">,</span> <span class="s">&#39;mailform.pl&#39;</span><span class="p">,</span> <span class="s">&#39;mail.cgi&#39;</span><span class="p">,</span> <span class="s">&#39;mailform.cgi&#39;</span><span class="p">,</span>
+                      <span class="s">&#39;favicon.ico&#39;</span><span class="p">,</span> <span class="s">&#39;.php&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It&#8217;s not Django&#8217;s role to decide if your website has a legacy <tt class="docutils literal"><span class="pre">/cgi-bin/</span></tt>
+section or a <tt class="docutils literal"><span class="pre">favicon.ico</span></tt>. As a consequence, the default values of
+<a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_URLS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_URLS</span></tt></a>, <a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_STARTS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_STARTS</span></tt></a> and
+<a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_ENDS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_ENDS</span></tt></a> are all now empty.</p>
+<p>If you have customized <a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_STARTS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_STARTS</span></tt></a> or
+<a class="reference internal" href="../ref/settings.html#std:setting-IGNORABLE_404_ENDS"><tt class="xref std std-setting docutils literal"><span class="pre">IGNORABLE_404_ENDS</span></tt></a>, or if you want to keep the old default value,
+you should add the following lines in your settings file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">re</span>
+<span class="n">IGNORABLE_404_URLS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="c"># for each &lt;prefix&gt; in IGNORABLE_404_STARTS</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^&lt;prefix&gt;&#39;</span><span class="p">),</span>
+    <span class="c"># for each &lt;suffix&gt; in IGNORABLE_404_ENDS</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;&lt;suffix&gt;$&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Don&#8217;t forget to escape characters that have a special meaning in a regular
+expression.</p>
+</div>
+<div class="section" id="s-csrf-protection-extended-to-put-and-delete">
+<span id="csrf-protection-extended-to-put-and-delete"></span><h3>CSRF protection extended to PUT and DELETE<a class="headerlink" href="#csrf-protection-extended-to-put-and-delete" title="Permalink to this headline">¶</a></h3>
+<p>Previously, Django&#8217;s <a class="reference internal" href="../ref/contrib/csrf.html"><em>CSRF protection</em></a> provided
+protection against only POST requests. Since use of PUT and DELETE methods in
+AJAX applications is becoming more common, we now protect all methods not
+defined as safe by <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2616.html"><strong>RFC 2616</strong></a> i.e. we exempt GET, HEAD, OPTIONS and TRACE, and
+enforce protection on everything else.</p>
+<p>If you are using PUT or DELETE methods in AJAX applications, please see the
+<a class="reference internal" href="../ref/contrib/csrf.html#csrf-ajax"><em>instructions about using AJAX and CSRF</em></a>.</p>
+</div>
+<div class="section" id="s-django-core-template-loaders">
+<span id="django-core-template-loaders"></span><h3><tt class="docutils literal"><span class="pre">django.core.template_loaders</span></tt><a class="headerlink" href="#django-core-template-loaders" title="Permalink to this headline">¶</a></h3>
+<p>This was an alias to <tt class="docutils literal"><span class="pre">django.template.loader</span></tt> since 2005, it has been removed
+without emitting a warning due to the length of the deprecation. If your code
+still referenced this please use <tt class="docutils literal"><span class="pre">django.template.loader</span></tt> instead.</p>
+</div>
+<div class="section" id="s-django-db-models-fields-urlfield-verify-exists">
+<span id="django-db-models-fields-urlfield-verify-exists"></span><h3><tt class="docutils literal"><span class="pre">django.db.models.fields.URLField.verify_exists</span></tt><a class="headerlink" href="#django-db-models-fields-urlfield-verify-exists" title="Permalink to this headline">¶</a></h3>
+<p>This functionality has been removed due to intractable performance and
+security issues. Any existing usage of <tt class="docutils literal"><span class="pre">verify_exists</span></tt> should be
+removed.</p>
+</div>
+<div class="section" id="s-django-core-files-storage-storage-open">
+<span id="django-core-files-storage-storage-open"></span><h3><tt class="docutils literal"><span class="pre">django.core.files.storage.Storage.open</span></tt><a class="headerlink" href="#django-core-files-storage-storage-open" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">open</span></tt> method of the base Storage class took an obscure parameter
+<tt class="docutils literal"><span class="pre">mixin</span></tt> which allowed you to dynamically change the base classes of the
+returned file object. This has been removed. In the rare case you relied on the
+<cite>mixin</cite> parameter, you can easily achieve the same by overriding the <cite>open</cite>
+method, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.core.files</span> <span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span> <span class="nn">django.core.files.storage</span> <span class="kn">import</span> <span class="n">FileSystemStorage</span>
+
+<span class="k">class</span> <span class="nc">Spam</span><span class="p">(</span><span class="n">File</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Spam, spam, spam, spam and spam.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">ham</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;eggs&#39;</span>
+
+<span class="k">class</span> <span class="nc">SpamStorage</span><span class="p">(</span><span class="n">FileSystemStorage</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A custom file storage backend.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;rb&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Spam</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">mode</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="s-yaml-deserializer-now-uses-yaml-safe-load">
+<span id="yaml-deserializer-now-uses-yaml-safe-load"></span><h3>YAML deserializer now uses <tt class="docutils literal"><span class="pre">yaml.safe_load</span></tt><a class="headerlink" href="#yaml-deserializer-now-uses-yaml-safe-load" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">yaml.load</span></tt> is able to construct any Python object, which may trigger
+arbitrary code execution if you process a YAML document that comes from an
+untrusted source. This feature isn&#8217;t necessary for Django&#8217;s YAML deserializer,
+whose primary use is to load fixtures consisting of simple objects. Even though
+fixtures are trusted data, for additional security, the YAML deserializer now
+uses <tt class="docutils literal"><span class="pre">yaml.safe_load</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="s-features-deprecated-in-1-4">
+<span id="features-deprecated-in-1-4"></span><h2>Features deprecated in 1.4<a class="headerlink" href="#features-deprecated-in-1-4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="s-old-styles-of-calling-cache-page-decorator">
+<span id="old-styles-of-calling-cache-page-decorator"></span><h3>Old styles of calling <tt class="docutils literal"><span class="pre">cache_page</span></tt> decorator<a class="headerlink" href="#old-styles-of-calling-cache-page-decorator" title="Permalink to this headline">¶</a></h3>
+<p>Some legacy ways of calling <a class="reference internal" href="../topics/cache.html#django.views.decorators.cache.cache_page" title="django.views.decorators.cache.cache_page"><tt class="xref py py-func docutils literal"><span class="pre">cache_page()</span></tt></a>
+have been deprecated, please see the docs for the correct way to use this
+decorator.</p>
+</div>
+<div class="section" id="s-support-for-postgresql-versions-older-than-8-2">
+<span id="support-for-postgresql-versions-older-than-8-2"></span><h3>Support for PostgreSQL versions older than 8.2<a class="headerlink" href="#support-for-postgresql-versions-older-than-8-2" title="Permalink to this headline">¶</a></h3>
+<p>Django 1.3 dropped support for PostgreSQL versions older than 8.0 and the
+relevant documents suggested to use a recent version because of performance
+reasons but more importantly because end of the upstream support periods for
+releases 8.0 and 8.1 was near (November 2010).</p>
+<p>Django 1.4 takes that policy further and sets 8.2 as the minimum PostgreSQL
+version it officially supports.</p>
+</div>
+<div class="section" id="s-request-exceptions-are-now-always-logged">
+<span id="request-exceptions-are-now-always-logged"></span><h3>Request exceptions are now always logged<a class="headerlink" href="#request-exceptions-are-now-always-logged" title="Permalink to this headline">¶</a></h3>
+<p>When <a class="reference internal" href="../topics/logging.html"><em>logging support</em></a> was added to Django in 1.3, the
+admin error email support was moved into the
+<a class="reference internal" href="../topics/logging.html#django.utils.log.AdminEmailHandler" title="django.utils.log.AdminEmailHandler"><tt class="xref py py-class docutils literal"><span class="pre">django.utils.log.AdminEmailHandler</span></tt></a>, attached to the
+<tt class="docutils literal"><span class="pre">'django.request'</span></tt> logger. In order to maintain the established behavior of
+error emails, the <tt class="docutils literal"><span class="pre">'django.request'</span></tt> logger was called only when
+<a class="reference internal" href="../ref/settings.html#std:setting-DEBUG"><tt class="xref std std-setting docutils literal"><span class="pre">DEBUG</span></tt></a> was <tt class="docutils literal"><span class="pre">False</span></tt>.</p>
+<p>To increase the flexibility of error logging for requests, the
+<tt class="docutils literal"><span class="pre">'django.request'</span></tt> logger is now called regardless of the value of
+<a class="reference internal" href="../ref/settings.html#std:setting-DEBUG"><tt class="xref std std-setting docutils literal"><span class="pre">DEBUG</span></tt></a>, and the default settings file for new projects now includes a
+separate filter attached to <a class="reference internal" href="../topics/logging.html#django.utils.log.AdminEmailHandler" title="django.utils.log.AdminEmailHandler"><tt class="xref py py-class docutils literal"><span class="pre">django.utils.log.AdminEmailHandler</span></tt></a> to
+prevent admin error emails in <tt class="docutils literal"><span class="pre">DEBUG</span></tt> mode:</p>
+<div class="highlight-python"><pre>'filters': {
+     'require_debug_false': {
+         '()': 'django.utils.log.RequireDebugFalse'
+     }
+ },
+ 'handlers': {
+     'mail_admins': {
+         'level': 'ERROR',
+         'filters': ['require_debug_false'],
+         'class': 'django.utils.log.AdminEmailHandler'
+     }
+ },</pre>
+</div>
+<p>If your project was created prior to this change, your <a class="reference internal" href="../ref/settings.html#std:setting-LOGGING"><tt class="xref std std-setting docutils literal"><span class="pre">LOGGING</span></tt></a>
+setting will not include this new filter. In order to maintain
+backwards-compatibility, Django will detect that your <tt class="docutils literal"><span class="pre">'mail_admins'</span></tt> handler
+configuration includes no <tt class="docutils literal"><span class="pre">'filters'</span></tt> section, and will automatically add
+this filter for you and issue a pending-deprecation warning. This will become a
+deprecation warning in Django 1.5, and in Django 1.6 the
+backwards-compatibility shim will be removed entirely.</p>
+<p>The existence of any <tt class="docutils literal"><span class="pre">'filters'</span></tt> key under the <tt class="docutils literal"><span class="pre">'mail_admins'</span></tt> handler will
+disable this backward-compatibility shim and deprecation warning.</p>
+</div>
+<div class="section" id="s-django-conf-urls-defaults">
+<span id="django-conf-urls-defaults"></span><h3><tt class="docutils literal"><span class="pre">django.conf.urls.defaults</span></tt><a class="headerlink" href="#django-conf-urls-defaults" title="Permalink to this headline">¶</a></h3>
+<p>Until Django 1.3 the functions <a class="reference internal" href="../topics/http/urls.html#django.conf.urls.include" title="django.conf.urls.include"><tt class="xref py py-func docutils literal"><span class="pre">include()</span></tt></a>,
+<a class="reference internal" href="../topics/http/urls.html#django.conf.urls.patterns" title="django.conf.urls.patterns"><tt class="xref py py-func docutils literal"><span class="pre">patterns()</span></tt></a> and <a class="reference internal" href="../topics/http/urls.html#django.conf.urls.url" title="django.conf.urls.url"><tt class="xref py py-func docutils literal"><span class="pre">url()</span></tt></a> plus
+<a class="reference internal" href="../topics/http/urls.html#django.conf.urls.handler404" title="django.conf.urls.handler404"><tt class="xref py py-data docutils literal"><span class="pre">handler404</span></tt></a>, <a class="reference internal" href="../topics/http/urls.html#django.conf.urls.handler500" title="django.conf.urls.handler500"><tt class="xref py py-data docutils literal"><span class="pre">handler500</span></tt></a>
+were located in a <tt class="docutils literal"><span class="pre">django.conf.urls.defaults</span></tt> module.</p>
+<p>Starting with Django 1.4 they are now available in <a class="reference internal" href="../topics/http/urls.html#module-django.conf.urls" title="django.conf.urls"><tt class="xref py py-mod docutils literal"><span class="pre">django.conf.urls</span></tt></a>.</p>
+</div>
+<div class="section" id="s-django-contrib-databrowse">
+<span id="django-contrib-databrowse"></span><h3><tt class="docutils literal"><span class="pre">django.contrib.databrowse</span></tt><a class="headerlink" href="#django-contrib-databrowse" title="Permalink to this headline">¶</a></h3>
+<p>Databrowse has not seen active development for some time, and this does not show
+any sign of changing. There had been a suggestion for a <a class="reference external" href="https://code.djangoproject.com/wiki/SummerOfCode2011#Integratedatabrowseintotheadmin">GSOC project</a> to
+integrate the functionality of databrowse into the admin, but no progress was
+made. While Databrowse has been deprecated, an enhancement of
+<tt class="docutils literal"><span class="pre">django.contrib.admin</span></tt> providing a similar feature set is still possible.</p>
+<p>The code that powers Databrowse is licensed under the same terms as Django
+itself, and so is available to be adopted by an individual or group as
+a third-party project.</p>
+</div>
+<div class="section" id="s-django-core-management-setup-environ">
+<span id="django-core-management-setup-environ"></span><h3><tt class="docutils literal"><span class="pre">django.core.management.setup_environ</span></tt><a class="headerlink" href="#django-core-management-setup-environ" title="Permalink to this headline">¶</a></h3>
+<p>This function temporarily modified <tt class="docutils literal"><span class="pre">sys.path</span></tt> in order to make the parent
+&#8220;project&#8221; directory importable under the old flat <a class="reference internal" href="../ref/django-admin.html#django-admin-startproject"><tt class="xref std std-djadmin docutils literal"><span class="pre">startproject</span></tt></a>
+layout. This function is now deprecated, as its path workarounds are no longer
+needed with the new <tt class="docutils literal"><span class="pre">manage.py</span></tt> and default project layout.</p>
+<p>This function was never documented or part of the public API, but was widely
+recommended for use in setting up a &#8220;Django environment&#8221; for a user script.
+These uses should be replaced by setting the <tt class="docutils literal"><span class="pre">DJANGO_SETTINGS_MODULE</span></tt>
+environment variable or using <a class="reference internal" href="../topics/settings.html#django.conf.settings.configure" title="django.conf.settings.configure"><tt class="xref py py-func docutils literal"><span class="pre">django.conf.settings.configure()</span></tt></a>.</p>
+</div>
+<div class="section" id="s-django-core-management-execute-manager">
+<span id="django-core-management-execute-manager"></span><h3><tt class="docutils literal"><span class="pre">django.core.management.execute_manager</span></tt><a class="headerlink" href="#django-core-management-execute-manager" title="Permalink to this headline">¶</a></h3>
+<p>This function was previously used by <tt class="docutils literal"><span class="pre">manage.py</span></tt> to execute a management
+command. It is identical to
+<tt class="docutils literal"><span class="pre">django.core.management.execute_from_command_line</span></tt>, except that it first
+calls <tt class="docutils literal"><span class="pre">setup_environ</span></tt>, which is now deprecated. As such, <tt class="docutils literal"><span class="pre">execute_manager</span></tt>
+is also deprecated; <tt class="docutils literal"><span class="pre">execute_from_command_line</span></tt> can be used instead. Neither
+of these functions is documented as part of the public API, but a deprecation
+path is needed due to use in existing <tt class="docutils literal"><span class="pre">manage.py</span></tt> files.</p>
+</div>
+<div class="section" id="s-is-safe-and-needs-autoescape-attributes-of-template-filters">
+<span id="is-safe-and-needs-autoescape-attributes-of-template-filters"></span><h3><tt class="docutils literal"><span class="pre">is_safe</span></tt> and <tt class="docutils literal"><span class="pre">needs_autoescape</span></tt> attributes of template filters<a class="headerlink" href="#is-safe-and-needs-autoescape-attributes-of-template-filters" title="Permalink to this headline">¶</a></h3>
+<p>Two flags, <tt class="docutils literal"><span class="pre">is_safe</span></tt> and <tt class="docutils literal"><span class="pre">needs_autoescape</span></tt>, define how each template filter
+interacts with Django&#8217;s auto-escaping behavior. They used to be attributes of
+the filter function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register.filter</span>
+<span class="k">def</span> <span class="nf">noop</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span>
+<span class="n">noop</span><span class="o">.</span><span class="n">is_safe</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>However, this technique caused some problems in combination with decorators,
+especially <tt class="xref py py-func docutils literal"><span class="pre">&#64;stringfilter</span></tt>.
+Now, the flags are keyword arguments of <tt class="xref py py-meth docutils literal"><span class="pre">&#64;register.filter</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register.filter</span><span class="p">(</span><span class="n">is_safe</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">noop</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../howto/custom-template-tags.html#filters-auto-escaping"><em>filters and auto-escaping</em></a> for more information.</p>
+</div>
+<div class="section" id="s-session-cookies-now-have-the-httponly-flag-by-default">
+<span id="session-cookies-now-have-the-httponly-flag-by-default"></span><h3>Session cookies now have the <tt class="docutils literal"><span class="pre">httponly</span></tt> flag by default<a class="headerlink" href="#session-cookies-now-have-the-httponly-flag-by-default" title="Permalink to this headline">¶</a></h3>
+<p>Session cookies now include the <tt class="docutils literal"><span class="pre">httponly</span></tt> attribute by default to
+help reduce the impact of potential XSS attacks. For strict backwards
+compatibility, use <tt class="docutils literal"><span class="pre">SESSION_COOKIE_HTTPONLY</span> <span class="pre">=</span> <span class="pre">False</span></tt> in your settings file.</p>
+</div>
+<div class="section" id="s-wildcard-expansion-of-application-names-in-installed-apps">
+<span id="wildcard-expansion-of-application-names-in-installed-apps"></span><h3>Wildcard expansion of application names in <cite>INSTALLED_APPS</cite><a class="headerlink" href="#wildcard-expansion-of-application-names-in-installed-apps" title="Permalink to this headline">¶</a></h3>
+<p>Until Django 1.3, <a class="reference internal" href="../ref/settings.html#std:setting-INSTALLED_APPS"><tt class="xref std std-setting docutils literal"><span class="pre">INSTALLED_APPS</span></tt></a> accepted wildcards in application
+names, like <tt class="docutils literal"><span class="pre">django.contrib.*</span></tt>. The expansion was performed by a
+filesystem-based implementation of <tt class="docutils literal"><span class="pre">from</span> <span class="pre">&lt;package&gt;</span> <span class="pre">import</span> <span class="pre">*</span></tt>. Unfortunately,
+<a class="reference external" href="http://docs.python.org/tutorial/modules.html#importing-from-a-package">this can&#8217;t be done reliably</a>.</p>
+<p>This behavior was never documented. Since it is un-pythonic and not obviously
+useful, it was removed in Django 1.4. If you relied on it, you must edit your
+settings file to list all your applications explicitly.</p>
+</div>
+<div class="section" id="s-httprequest-raw-post-data-renamed-to-httprequest-body">
+<span id="httprequest-raw-post-data-renamed-to-httprequest-body"></span><h3><tt class="docutils literal"><span class="pre">HttpRequest.raw_post_data</span></tt> renamed to <tt class="docutils literal"><span class="pre">HttpRequest.body</span></tt><a class="headerlink" href="#httprequest-raw-post-data-renamed-to-httprequest-body" title="Permalink to this headline">¶</a></h3>
+<p>This attribute was confusingly named <tt class="docutils literal"><span class="pre">HttpRequest.raw_post_data</span></tt>, but it
+actually provided the body of the HTTP request. It&#8217;s been renamed to
+<tt class="docutils literal"><span class="pre">HttpRequest.body</span></tt>, and <tt class="docutils literal"><span class="pre">HttpRequest.raw_post_data</span></tt> has been deprecated.</p>
+</div>
+</div>
+<div class="section" id="s-the-django-1-4-roadmap">
+<span id="the-django-1-4-roadmap"></span><h2>The Django 1.4 roadmap<a class="headerlink" href="#the-django-1-4-roadmap" title="Permalink to this headline">¶</a></h2>
+<p>Before the final Django 1.4 release, several other preview/development releases
+will be made available. The current schedule consists of at least the following:</p>
+<ul class="simple">
+<li>Week of <strong>January 30, 2012</strong>: First Django 1.4 beta release; final
+feature freeze for Django 1.4.</li>
+<li>Week of <strong>February 27, 2012</strong>: First Django 1.4 release
+candidate; string freeze for translations.</li>
+<li>Week of <strong>March 5, 2012</strong>: Django 1.4 final release.</li>
+</ul>
+<p>If necessary, additional alpha, beta or release-candidate packages
+will be issued prior to the final 1.4 release. Django 1.4 will be
+released approximately one week after the final release candidate.</p>
+</div>
+<div class="section" id="s-what-you-can-do-to-help">
+<span id="what-you-can-do-to-help"></span><h2>What you can do to help<a class="headerlink" href="#what-you-can-do-to-help" title="Permalink to this headline">¶</a></h2>
+<p>In order to provide a high-quality 1.4 release, we need your help. Although this
+alpha release is, again, <em>not</em> intended for production use, you can help the
+Django team by trying out the alpha codebase in a safe test environment and
+reporting any bugs or issues you encounter. The Django ticket tracker is the
+central place to search for open issues:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://code.djangoproject.com/timeline">http://code.djangoproject.com/timeline</a></li>
+</ul>
+<p>Please open new tickets if no existing ticket corresponds to a problem you&#8217;re
+running into.</p>
+<p>Additionally, discussion of Django development, including progress toward the
+1.3 release, takes place daily on the django-developers mailing list:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://groups.google.com/group/django-developers">http://groups.google.com/group/django-developers</a></li>
+</ul>
+<p>... and in the <tt class="docutils literal"><span class="pre">#django-dev</span></tt> IRC channel on <tt class="docutils literal"><span class="pre">irc.freenode.net</span></tt>. If you&#8217;re
+interested in helping out with Django&#8217;s development, feel free to join the
+discussions there.</p>
+<p>Django&#8217;s online documentation also includes pointers on how to contribute to
+Django:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../internals/contributing/index.html"><em>How to contribute to Django</em></a></li>
+</ul>
+<p>Contributions on any level &#8211; developing code, writing documentation or simply
+triaging tickets and helping to test proposed bugfixes &#8211; are always welcome and
+appreciated.</p>
+<p>Several development sprints will also be taking place before the 1.4
+release; these will typically be announced in advance on the
+django-developers mailing list, and anyone who wants to help is
+welcome to join in.</p>
+</div>
+</div>
+
+
+          </div>         
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Django 1.4 alpha release notes</a><ul>
+<li><a class="reference internal" href="#python-compatibility">Python compatibility</a></li>
+<li><a class="reference internal" href="#what-s-new-in-django-1-4">What&#8217;s new in Django 1.4</a><ul>
+<li><a class="reference internal" href="#support-for-in-browser-testing-frameworks">Support for in-browser testing frameworks</a></li>
+<li><a class="reference internal" href="#select-for-update-support"><tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">FOR</span> <span class="pre">UPDATE</span></tt> support</a></li>
+<li><a class="reference internal" href="#model-objects-bulk-create-in-the-orm"><tt class="docutils literal"><span class="pre">Model.objects.bulk_create</span></tt> in the ORM</a></li>
+<li><a class="reference internal" href="#queryset-prefetch-related"><tt class="docutils literal"><span class="pre">QuerySet.prefetch_related</span></tt></a></li>
+<li><a class="reference internal" href="#improved-password-hashing">Improved password hashing</a></li>
+<li><a class="reference internal" href="#html5-doctype">HTML5 Doctype</a></li>
+<li><a class="reference internal" href="#list-filters-in-admin-interface">List filters in admin interface</a></li>
+<li><a class="reference internal" href="#multiple-sort-in-admin-interface">Multiple sort in admin interface</a></li>
+<li><a class="reference internal" href="#new-modeladmin-methods">New <tt class="docutils literal"><span class="pre">ModelAdmin</span></tt> methods</a></li>
+<li><a class="reference internal" href="#admin-inlines-respect-user-permissions">Admin inlines respect user permissions</a></li>
+<li><a class="reference internal" href="#tools-for-cryptographic-signing">Tools for cryptographic signing</a></li>
+<li><a class="reference internal" href="#cookie-based-session-backend">Cookie-based session backend</a></li>
+<li><a class="reference internal" href="#new-form-wizard">New form wizard</a></li>
+<li><a class="reference internal" href="#reverse-lazy"><tt class="docutils literal"><span class="pre">reverse_lazy</span></tt></a></li>
+<li><a class="reference internal" href="#translating-url-patterns">Translating URL patterns</a></li>
+<li><a class="reference internal" href="#contextual-translation-support-for-trans-and-blocktrans">Contextual translation support for <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">trans</span> <span class="pre">%}</span></tt> and <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">blocktrans</span> <span class="pre">%}</span></tt></a></li>
+<li><a class="reference internal" href="#customizable-singleobjectmixin-urlconf-kwargs">Customizable <tt class="docutils literal"><span class="pre">SingleObjectMixin</span></tt> URLConf kwargs</a></li>
+<li><a class="reference internal" href="#assignment-template-tags">Assignment template tags</a></li>
+<li><a class="reference internal" href="#args-and-kwargs-support-for-template-tag-helper-functions"><tt class="docutils literal"><span class="pre">*args</span></tt> and <tt class="docutils literal"><span class="pre">**kwargs</span></tt> support for template tag helper functions</a></li>
+<li><a class="reference internal" href="#no-wrapping-of-exceptions-in-template-debug-mode">No wrapping of exceptions in <tt class="docutils literal"><span class="pre">TEMPLATE_DEBUG</span></tt> mode</a></li>
+<li><a class="reference internal" href="#truncatechars-template-filter"><tt class="docutils literal"><span class="pre">truncatechars</span></tt> template filter</a></li>
+<li><a class="reference internal" href="#static-template-tag"><tt class="docutils literal"><span class="pre">static</span></tt> template tag</a></li>
+<li><a class="reference internal" href="#cachedstaticfilesstorage-storage-backend"><tt class="docutils literal"><span class="pre">CachedStaticFilesStorage</span></tt> storage backend</a></li>
+<li><a class="reference internal" href="#simple-clickjacking-protection">Simple clickjacking protection</a></li>
+<li><a class="reference internal" href="#csrf-improvements">CSRF improvements</a></li>
+<li><a class="reference internal" href="#error-report-filtering">Error report filtering</a></li>
+<li><a class="reference internal" href="#extended-ipv6-support">Extended IPv6 support</a></li>
+<li><a class="reference internal" href="#updated-default-project-layout-and-manage-py">Updated default project layout and <tt class="docutils literal"><span class="pre">manage.py</span></tt></a></li>
+<li><a class="reference internal" href="#improved-wsgi-support">Improved WSGI support</a></li>
+<li><a class="reference internal" href="#custom-project-and-app-templates">Custom project and app templates</a></li>
+<li><a class="reference internal" href="#support-for-time-zones">Support for time zones</a></li>
+<li><a class="reference internal" href="#minor-features">Minor features</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backwards-incompatible-changes-in-1-4">Backwards incompatible changes in 1.4</a><ul>
+<li><a class="reference internal" href="#django-contrib-admin">django.contrib.admin</a></li>
+<li><a class="reference internal" href="#supported-browsers-for-the-admin">Supported browsers for the admin</a></li>
+<li><a class="reference internal" href="#removed-admin-icons">Removed admin icons</a></li>
+<li><a class="reference internal" href="#css-class-names-in-admin-forms">CSS class names in admin forms</a></li>
+<li><a class="reference internal" href="#compatibility-with-old-signed-data">Compatibility with old signed data</a></li>
+<li><a class="reference internal" href="#django-contrib-flatpages">django.contrib.flatpages</a></li>
+<li><a class="reference internal" href="#serialization-of-datetime-and-time">Serialization of <tt class="docutils literal"><span class="pre">datetime</span></tt> and <tt class="docutils literal"><span class="pre">time</span></tt></a></li>
+<li><a class="reference internal" href="#supports-timezone-changed-to-false-for-sqlite"><tt class="docutils literal"><span class="pre">supports_timezone</span></tt> changed to <tt class="docutils literal"><span class="pre">False</span></tt> for SQLite</a></li>
+<li><a class="reference internal" href="#database-connection-s-thread-locality">Database connection&#8217;s thread-locality</a></li>
+<li><a class="reference internal" href="#comments-banned-users-group-setting"><cite>COMMENTS_BANNED_USERS_GROUP</cite> setting</a></li>
+<li><a class="reference internal" href="#ignorable-404-starts-and-ignorable-404-ends-settings"><cite>IGNORABLE_404_STARTS</cite> and <cite>IGNORABLE_404_ENDS</cite> settings</a></li>
+<li><a class="reference internal" href="#csrf-protection-extended-to-put-and-delete">CSRF protection extended to PUT and DELETE</a></li>
+<li><a class="reference internal" href="#django-core-template-loaders"><tt class="docutils literal"><span class="pre">django.core.template_loaders</span></tt></a></li>
+<li><a class="reference internal" href="#django-db-models-fields-urlfield-verify-exists"><tt class="docutils literal"><span class="pre">django.db.models.fields.URLField.verify_exists</span></tt></a></li>
+<li><a class="reference internal" href="#django-core-files-storage-storage-open"><tt class="docutils literal"><span class="pre">django.core.files.storage.Storage.open</span></tt></a></li>
+<li><a class="reference internal" href="#yaml-deserializer-now-uses-yaml-safe-load">YAML deserializer now uses <tt class="docutils literal"><span class="pre">yaml.safe_load</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#features-deprecated-in-1-4">Features deprecated in 1.4</a><ul>
+<li><a class="reference internal" href="#old-styles-of-calling-cache-page-decorator">Old styles of calling <tt class="docutils literal"><span class="pre">cache_page</span></tt> decorator</a></li>
+<li><a class="reference internal" href="#support-for-postgresql-versions-older-than-8-2">Support for PostgreSQL versions older than 8.2</a></li>
+<li><a class="reference internal" href="#request-exceptions-are-now-always-logged">Request exceptions are now always logged</a></li>
+<li><a class="reference internal" href="#django-conf-urls-defaults"><tt class="docutils literal"><span class="pre">django.conf.urls.defaults</span></tt></a></li>
+<li><a class="reference internal" href="#django-contrib-databrowse"><tt class="docutils literal"><span class="pre">django.contrib.databrowse</span></tt></a></li>
+<li><a class="reference internal" href="#django-core-management-setup-environ"><tt class="docutils literal"><span class="pre">django.core.management.setup_environ</span></tt></a></li>
+<li><a class="reference internal" href="#django-core-management-execute-manager"><tt class="docutils literal"><span class="pre">django.core.management.execute_manager</span></tt></a></li>
+<li><a class="reference internal" href="#is-safe-and-needs-autoescape-attributes-of-template-filters"><tt class="docutils literal"><span class="pre">is_safe</span></tt> and <tt class="docutils literal"><span class="pre">needs_autoescape</span></tt> attributes of template filters</a></li>
+<li><a class="reference internal" href="#session-cookies-now-have-the-httponly-flag-by-default">Session cookies now have the <tt class="docutils literal"><span class="pre">httponly</span></tt> flag by default</a></li>
+<li><a class="reference internal" href="#wildcard-expansion-of-application-names-in-installed-apps">Wildcard expansion of application names in <cite>INSTALLED_APPS</cite></a></li>
+<li><a class="reference internal" href="#httprequest-raw-post-data-renamed-to-httprequest-body"><tt class="docutils literal"><span class="pre">HttpRequest.raw_post_data</span></tt> renamed to <tt class="docutils literal"><span class="pre">HttpRequest.body</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-django-1-4-roadmap">The Django 1.4 roadmap</a></li>
+<li><a class="reference internal" href="#what-you-can-do-to-help">What you can do to help</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="0.95.html">Django version 0.95 release notes</a></li>
+    
+    
+      <li>Next: <a href="1.3-beta-1.html">Django 1.3 beta 1 release notes</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Django 1.4 alpha 1 documentation</a>
+        
+          <ul><li><a href="index.html">Release notes</a>
+        
+        <ul><li>Django 1.4 alpha release notes</li></ul>
+        </li></ul>
+      </li>
+  </ul>  
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/releases/1.4-alpha-1.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Jan 29, 2012</p>
+          </div> 
+        
+      
+    </div>
+    
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="0.95.html" title="Django version 0.95 release notes">previous</a> 
+     |
+    <a href="index.html" title="Release notes" accesskey="U">up</a>
+   |
+    <a href="1.3-beta-1.html" title="Django 1.3 beta 1 release notes">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

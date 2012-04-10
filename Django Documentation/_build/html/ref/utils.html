@@ -1,0 +1,1015 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Django Utils &mdash; Django 1.4 alpha 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4 alpha 1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Django 1.4 alpha 1 documentation" href="../index.html" />
+    <link rel="up" title="API Reference" href="index.html" />
+    <link rel="next" title="Validators" href="validators.html" />
+    <link rel="prev" title="Unicode data" href="unicode.html" />
+ 
+<script type="text/javascript" src="../templatebuiltins.js"></script>
+<script type="text/javascript">
+(function($) {
+    if (!django_template_builtins) {
+       // templatebuiltins.js missing, do nothing.
+       return;
+    }
+    $(document).ready(function() {
+        // Hyperlink Django template tags and filters
+        var base = "templates/builtins.html";
+        if (base == "#") {
+            // Special case for builtins.html itself
+            base = "";
+        }
+        // Tags are keywords, class '.k'
+        $("div.highlight\\-html\\+django span.k").each(function(i, elem) {
+             var tagname = $(elem).text();
+             if ($.inArray(tagname, django_template_builtins.ttags) != -1) {
+                 var fragment = tagname.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + tagname + "</a>");
+             }
+        });
+        // Filters are functions, class '.nf'
+        $("div.highlight\\-html\\+django span.nf").each(function(i, elem) {
+             var filtername = $(elem).text();
+             if ($.inArray(filtername, django_template_builtins.tfilters) != -1) {
+                 var fragment = filtername.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + filtername + "</a>");
+             }
+        });
+    });
+})(jQuery);
+</script>
+
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../index.html">Django 1.4 alpha 1 documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../index.html">Home</a>  |
+        <a title="Table of contents" href="../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../genindex.html">Index</a>  |
+        <a title="Module index" href="../py-modindex.html">Modules</a>
+      </div>
+      <div class="nav">
+    &laquo; <a href="unicode.html" title="Unicode data">previous</a> 
+     |
+    <a href="index.html" title="API Reference" accesskey="U">up</a>
+   |
+    <a href="validators.html" title="Validators">next</a> &raquo;</div>
+    </div>
+    
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="ref-utils">
+            
+  <div class="section" id="s-module-django.utils">
+<span id="s-django-utils"></span><span id="module-django.utils"></span><span id="django-utils"></span><h1>Django Utils<a class="headerlink" href="#module-django.utils" title="Permalink to this headline">¶</a></h1>
+<p>This document covers all stable modules in <tt class="docutils literal"><span class="pre">django.utils</span></tt>. Most of the
+modules in <tt class="docutils literal"><span class="pre">django.utils</span></tt> are designed for internal use and only the
+following parts can be considered stable and thus backwards compatible as per
+the <a class="reference internal" href="../internals/release-process.html#internal-release-deprecation-policy"><em>internal release deprecation policy</em></a>.</p>
+<div class="section" id="s-module-django.utils.cache">
+<span id="s-django-utils-cache"></span><span id="module-django.utils.cache"></span><span id="django-utils-cache"></span><h2><tt class="docutils literal"><span class="pre">django.utils.cache</span></tt><a class="headerlink" href="#module-django.utils.cache" title="Permalink to this headline">¶</a></h2>
+<p>This module contains helper functions for controlling caching. It does so by
+managing the <tt class="docutils literal"><span class="pre">Vary</span></tt> header of responses. It includes functions to patch the
+header of response objects directly and decorators that change functions to do
+that header-patching themselves.</p>
+<p>For information on the <tt class="docutils literal"><span class="pre">Vary</span></tt> header, see <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2616.html#section-14.44"><strong>RFC 2616</strong></a> section
+14.44.</p>
+<p>Essentially, the <tt class="docutils literal"><span class="pre">Vary</span></tt> HTTP header defines which headers a cache should take
+into account when building its cache key. Requests with the same path but
+different header content for headers named in <tt class="docutils literal"><span class="pre">Vary</span></tt> need to get different
+cache keys to prevent delivery of wrong content.</p>
+<p>For example, <a class="reference internal" href="../topics/i18n/index.html"><em>internationalization</em></a> middleware would need
+to distinguish caches by the <tt class="docutils literal"><span class="pre">Accept-language</span></tt> header.</p>
+<dl class="function">
+<dt id="django.utils.cache.patch_cache_control">
+<tt class="descname">patch_cache_control</tt>(<em>response</em>, <em>**kwargs</em>)<a class="headerlink" href="#django.utils.cache.patch_cache_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function patches the <tt class="docutils literal"><span class="pre">Cache-Control</span></tt> header by adding all keyword
+arguments to it. The transformation is as follows:</p>
+<ul class="simple">
+<li>All keyword parameter names are turned to lowercase, and underscores
+are converted to hyphens.</li>
+<li>If the value of a parameter is <tt class="docutils literal"><span class="pre">True</span></tt> (exactly <tt class="docutils literal"><span class="pre">True</span></tt>, not just a
+true value), only the parameter name is added to the header.</li>
+<li>All other parameters are added with their value, after applying
+<tt class="docutils literal"><span class="pre">str()</span></tt> to it.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.cache.get_max_age">
+<tt class="descname">get_max_age</tt>(<em>response</em>)<a class="headerlink" href="#django.utils.cache.get_max_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the max-age from the response Cache-Control header as an integer
+(or <tt class="docutils literal"><span class="pre">None</span></tt> if it wasn&#8217;t found or wasn&#8217;t an integer).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.cache.patch_response_headers">
+<tt class="descname">patch_response_headers</tt>(<em>response</em>, <em>cache_timeout=None</em>)<a class="headerlink" href="#django.utils.cache.patch_response_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds some useful headers to the given <tt class="docutils literal"><span class="pre">HttpResponse</span></tt> object:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">ETag</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">Last-Modified</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">Expires</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">Cache-Control</span></tt></li>
+</ul>
+<p>Each header is only added if it isn&#8217;t already set.</p>
+<p><tt class="docutils literal"><span class="pre">cache_timeout</span></tt> is in seconds. The <a class="reference internal" href="settings.html#std:setting-CACHE_MIDDLEWARE_SECONDS"><tt class="xref std std-setting docutils literal"><span class="pre">CACHE_MIDDLEWARE_SECONDS</span></tt></a>
+setting is used by default.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.cache.add_never_cache_headers">
+<tt class="descname">add_never_cache_headers</tt>(<em>response</em>)<a class="headerlink" href="#django.utils.cache.add_never_cache_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds headers to a response to indicate that a page should never be cached.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.cache.patch_vary_headers">
+<tt class="descname">patch_vary_headers</tt>(<em>response</em>, <em>newheaders</em>)<a class="headerlink" href="#django.utils.cache.patch_vary_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds (or updates) the <tt class="docutils literal"><span class="pre">Vary</span></tt> header in the given <tt class="docutils literal"><span class="pre">HttpResponse</span></tt> object.
+<tt class="docutils literal"><span class="pre">newheaders</span></tt> is a list of header names that should be in <tt class="docutils literal"><span class="pre">Vary</span></tt>.
+Existing headers in <tt class="docutils literal"><span class="pre">Vary</span></tt> aren&#8217;t removed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.cache.get_cache_key">
+<tt class="descname">get_cache_key</tt>(<em>request</em>, <em>key_prefix=None</em>)<a class="headerlink" href="#django.utils.cache.get_cache_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a cache key based on the request path. It can be used in the
+request phase because it pulls the list of headers to take into account
+from the global path registry and uses those to build a cache key to
+check against.</p>
+<p>If there is no headerlist stored, the page needs to be rebuilt, so this
+function returns <tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.cache.learn_cache_key">
+<tt class="descname">learn_cache_key</tt>(<em>request</em>, <em>response</em>, <em>cache_timeout=None</em>, <em>key_prefix=None</em>)<a class="headerlink" href="#django.utils.cache.learn_cache_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Learns what headers to take into account for some request path from the
+response object. It stores those headers in a global path registry so that
+later access to that path will know what headers to take into account
+without building the response object itself. The headers are named in
+the <tt class="docutils literal"><span class="pre">Vary</span></tt> header of the response, but we want to prevent response
+generation.</p>
+<p>The list of headers to use for cache key generation is stored in the same
+cache as the pages themselves. If the cache ages some data out of the
+cache, this just means that we have to build the response once to get at
+the Vary header and so at the list of headers to use for the cache key.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-module-django.utils.datastructures">
+<span id="s-django-utils-datastructures"></span><span id="module-django.utils.datastructures"></span><span id="django-utils-datastructures"></span><h2><tt class="docutils literal"><span class="pre">django.utils.datastructures</span></tt><a class="headerlink" href="#module-django.utils.datastructures" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="django.utils.datastructures.SortedDict">
+<em class="property">class </em><tt class="descname">SortedDict</tt><a class="headerlink" href="#django.utils.datastructures.SortedDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#django.utils.datastructures.SortedDict" title="django.utils.datastructures.SortedDict"><tt class="xref py py-class docutils literal"><span class="pre">django.utils.datastructures.SortedDict</span></tt></a> class is a dictionary
+that keeps its keys in the order in which they&#8217;re inserted.
+<tt class="docutils literal"><span class="pre">SortedDict</span></tt> adds two additional methods to the standard Python <tt class="docutils literal"><span class="pre">dict</span></tt>
+class:</p>
+<dl class="method">
+<dt id="django.utils.datastructures.SortedDict.insert">
+<tt class="descname">insert</tt>(<em>index</em>, <em>key</em>, <em>value</em>)<a class="headerlink" href="#django.utils.datastructures.SortedDict.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts the key, value pair before the item with the given index.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.datastructures.SortedDict.value_for_index">
+<tt class="descname">value_for_index</tt>(<em>index</em>)<a class="headerlink" href="#django.utils.datastructures.SortedDict.value_for_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the item at the given zero-based index.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="s-creating-a-new-sorteddict">
+<span id="creating-a-new-sorteddict"></span><h3>Creating a new SortedDict<a class="headerlink" href="#creating-a-new-sorteddict" title="Permalink to this headline">¶</a></h3>
+<p>Creating a new <tt class="docutils literal"><span class="pre">SortedDict</span></tt> must be done in a way where ordering is
+guaranteed. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SortedDict</span><span class="p">({</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>will not work. Passing in a basic Python <tt class="docutils literal"><span class="pre">dict</span></tt> could produce unreliable
+results. Instead do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SortedDict</span><span class="p">([(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="s-django-utils-dateparse">
+<span id="django-utils-dateparse"></span><h2><tt class="docutils literal"><span class="pre">django.utils.dateparse</span></tt><a class="headerlink" href="#django-utils-dateparse" title="Permalink to this headline">¶</a></h2>
+<div class="versionadded">
+<span class="title">New in Django Development version.</span> </div>
+<span class="target" id="module-django.utils.dateparse"></span><p>The functions defined in this module share the following properties:</p>
+<ul class="simple">
+<li>They raise <tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt> if their input is well formatted but isn&#8217;t a
+valid date or time.</li>
+<li>They return <tt class="docutils literal"><span class="pre">None</span></tt> if it isn&#8217;t well formatted at all.</li>
+<li>They accept up to picosecond resolution in input, but they truncate it to
+microseconds, since that&#8217;s what Python supports.</li>
+</ul>
+<dl class="function">
+<dt id="django.utils.dateparse.parse_date">
+<tt class="descname">parse_date</tt>(<em>value</em>)<a class="headerlink" href="#django.utils.dateparse.parse_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a string and returns a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.date" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime.date</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.dateparse.parse_time">
+<tt class="descname">parse_time</tt>(<em>value</em>)<a class="headerlink" href="#django.utils.dateparse.parse_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a string and returns a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.time" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime.time</span></tt></a>.</p>
+<p>UTC offsets aren&#8217;t supported; if <tt class="docutils literal"><span class="pre">value</span></tt> describes one, the result is
+<tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.dateparse.parse_datetime">
+<tt class="descname">parse_datetime</tt>(<em>value</em>)<a class="headerlink" href="#django.utils.dateparse.parse_datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a string and returns a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt></a>.</p>
+<p>UTC offsets are supported; if <tt class="docutils literal"><span class="pre">value</span></tt> describes one, the result&#8217;s
+<tt class="docutils literal"><span class="pre">tzinfo</span></tt> attribute is a <a class="reference internal" href="#django.utils.tzinfo.FixedOffset" title="django.utils.tzinfo.FixedOffset"><tt class="xref py py-class docutils literal"><span class="pre">FixedOffset</span></tt></a>
+instance.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-module-django.utils.encoding">
+<span id="s-django-utils-encoding"></span><span id="module-django.utils.encoding"></span><span id="django-utils-encoding"></span><h2><tt class="docutils literal"><span class="pre">django.utils.encoding</span></tt><a class="headerlink" href="#module-django.utils.encoding" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="django.utils.encoding.StrAndUnicode">
+<em class="property">class </em><tt class="descname">StrAndUnicode</tt><a class="headerlink" href="#django.utils.encoding.StrAndUnicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class whose <tt class="docutils literal"><span class="pre">__str__</span></tt> returns its <tt class="docutils literal"><span class="pre">__unicode__</span></tt> as a UTF-8
+bytestring. Useful as a mix-in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.encoding.smart_unicode">
+<tt class="descname">smart_unicode</tt>(<em>s</em>, <em>encoding='utf-8'</em>, <em>strings_only=False</em>, <em>errors='strict'</em>)<a class="headerlink" href="#django.utils.encoding.smart_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <tt class="docutils literal"><span class="pre">unicode</span></tt> object representing <tt class="docutils literal"><span class="pre">s</span></tt>. Treats bytestrings using
+the &#8216;encoding&#8217; codec.</p>
+<p>If <tt class="docutils literal"><span class="pre">strings_only</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>, don&#8217;t convert (some) non-string-like
+objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.encoding.is_protected_type">
+<tt class="descname">is_protected_type</tt>(<em>obj</em>)<a class="headerlink" href="#django.utils.encoding.is_protected_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the object instance is of a protected type.</p>
+<p>Objects of protected types are preserved as-is when passed to
+<tt class="docutils literal"><span class="pre">force_unicode(strings_only=True)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.encoding.force_unicode">
+<tt class="descname">force_unicode</tt>(<em>s</em>, <em>encoding='utf-8'</em>, <em>strings_only=False</em>, <em>errors='strict'</em>)<a class="headerlink" href="#django.utils.encoding.force_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <tt class="docutils literal"><span class="pre">smart_unicode</span></tt>, except that lazy instances are resolved to
+strings, rather than kept as lazy objects.</p>
+<p>If <tt class="docutils literal"><span class="pre">strings_only</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>, don&#8217;t convert (some) non-string-like
+objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.encoding.smart_str">
+<tt class="descname">smart_str</tt>(<em>s</em>, <em>encoding='utf-8'</em>, <em>strings_only=False</em>, <em>errors='strict'</em>)<a class="headerlink" href="#django.utils.encoding.smart_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a bytestring version of <tt class="docutils literal"><span class="pre">s</span></tt>, encoded as specified in
+<tt class="docutils literal"><span class="pre">encoding</span></tt>.</p>
+<p>If <tt class="docutils literal"><span class="pre">strings_only</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>, don&#8217;t convert (some) non-string-like
+objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.encoding.iri_to_uri">
+<tt class="descname">iri_to_uri</tt>(<em>iri</em>)<a class="headerlink" href="#django.utils.encoding.iri_to_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an Internationalized Resource Identifier (IRI) portion to a URI
+portion that is suitable for inclusion in a URL.</p>
+<p>This is the algorithm from section 3.1 of <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc3987.html#section-3.1"><strong>RFC 3987</strong></a>. However,
+since we are assuming input is either UTF-8 or unicode already, we can
+simplify things a little from the full method.</p>
+<p>Returns an ASCII string containing the encoded result.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-module-django.utils.feedgenerator">
+<span id="s-django-utils-feedgenerator"></span><span id="module-django.utils.feedgenerator"></span><span id="django-utils-feedgenerator"></span><h2><tt class="docutils literal"><span class="pre">django.utils.feedgenerator</span></tt><a class="headerlink" href="#module-django.utils.feedgenerator" title="Permalink to this headline">¶</a></h2>
+<p>Sample usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">feedgenerator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feed</span> <span class="o">=</span> <span class="n">feedgenerator</span><span class="o">.</span><span class="n">Rss201rev2Feed</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">title</span><span class="o">=</span><span class="s">u&quot;Poynter E-Media Tidbits&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">link</span><span class="o">=</span><span class="s">u&quot;http://www.poynter.org/column.asp?id=31&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">description</span><span class="o">=</span><span class="s">u&quot;A group Weblog by the sharpest minds in online media/journalism/publishing.&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">language</span><span class="o">=</span><span class="s">u&quot;en&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feed</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">title</span><span class="o">=</span><span class="s">&quot;Hello&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">link</span><span class="o">=</span><span class="s">u&quot;http://www.holovaty.com/test/&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">description</span><span class="o">=</span><span class="s">&quot;Testing.&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;test.rss&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feed</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For simplifying the selection of a generator use <tt class="docutils literal"><span class="pre">feedgenerator.DefaultFeed</span></tt>
+which is currently <tt class="docutils literal"><span class="pre">Rss201rev2Feed</span></tt></p>
+<p>For definitions of the different versions of RSS, see:
+<a class="reference external" href="http://diveintomark.org/archives/2004/02/04/incompatible-rss">http://diveintomark.org/archives/2004/02/04/incompatible-rss</a></p>
+<dl class="function">
+<dt id="django.utils.feedgenerator.get_tag_uri">
+<tt class="descname">get_tag_uri</tt>(<em>url</em>, <em>date</em>)<a class="headerlink" href="#django.utils.feedgenerator.get_tag_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a TagURI.</p>
+<p>See <a class="reference external" href="http://diveintomark.org/archives/2004/05/28/howto-atom-id">http://diveintomark.org/archives/2004/05/28/howto-atom-id</a></p>
+</dd></dl>
+
+<div class="section" id="s-syndicationfeed">
+<span id="syndicationfeed"></span><h3>SyndicationFeed<a class="headerlink" href="#syndicationfeed" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="django.utils.feedgenerator.SyndicationFeed">
+<em class="property">class </em><tt class="descname">SyndicationFeed</tt><a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all syndication feeds. Subclasses should provide write().</p>
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.__init__">
+<tt class="descname">__init__</tt>(<em>title</em>, <em>link</em>, <em>description</em><span class="optional">[</span>, <em>language=None</em>, <em>author_email=None</em>, <em>author_name=None</em>, <em>author_link=None</em>, <em>subtitle=None</em>, <em>categories=None</em>, <em>feed_url=None</em>, <em>feed_copyright=None</em>, <em>feed_guid=None</em>, <em>ttl=None</em>, <em>**kwargs</em><span class="optional">]</span>)<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the feed with the given dictionary of metadata, which applies
+to the entire feed.</p>
+<p>Any extra keyword arguments you pass to <tt class="docutils literal"><span class="pre">__init__</span></tt> will be stored in
+<tt class="docutils literal"><span class="pre">self.feed</span></tt>.</p>
+<p>All parameters should be Unicode objects, except <tt class="docutils literal"><span class="pre">categories</span></tt>, which
+should be a sequence of Unicode objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.add_item">
+<tt class="descname">add_item</tt>(<em>title</em>, <em>link</em>, <em>description</em><span class="optional">[</span>, <em>author_email=None</em>, <em>author_name=None</em>, <em>author_link=None</em>, <em>pubdate=None</em>, <em>comments=None</em>, <em>unique_id=None</em>, <em>enclosure=None</em>, <em>categories=()</em>, <em>item_copyright=None</em>, <em>ttl=None</em>, <em>**kwargs</em><span class="optional">]</span>)<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.add_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an item to the feed. All args are expected to be Python <tt class="docutils literal"><span class="pre">unicode</span></tt>
+objects except <tt class="docutils literal"><span class="pre">pubdate</span></tt>, which is a <tt class="docutils literal"><span class="pre">datetime.datetime</span></tt> object, and
+<tt class="docutils literal"><span class="pre">enclosure</span></tt>, which is an instance of the <tt class="docutils literal"><span class="pre">Enclosure</span></tt> class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.num_items">
+<tt class="descname">num_items</tt>()<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.num_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.root_attributes">
+<tt class="descname">root_attributes</tt>()<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.root_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return extra attributes to place on the root (i.e. feed/channel)
+element. Called from <tt class="docutils literal"><span class="pre">write()</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.add_root_elements">
+<tt class="descname">add_root_elements</tt>(<em>handler</em>)<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.add_root_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add elements in the root (i.e. feed/channel) element.
+Called from <tt class="docutils literal"><span class="pre">write()</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.item_attributes">
+<tt class="descname">item_attributes</tt>(<em>item</em>)<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.item_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return extra attributes to place on each item (i.e. item/entry)
+element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.add_item_elements">
+<tt class="descname">add_item_elements</tt>(<em>handler</em>, <em>item</em>)<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.add_item_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add elements on each item (i.e. item/entry) element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.write">
+<tt class="descname">write</tt>(<em>outfile</em>, <em>encoding</em>)<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs the feed in the given encoding to <tt class="docutils literal"><span class="pre">outfile</span></tt>, which is a
+file-like object. Subclasses should override this.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.writeString">
+<tt class="descname">writeString</tt>(<em>encoding</em>)<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.writeString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the feed in the given encoding as a string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django.utils.feedgenerator.SyndicationFeed.latest_post_date">
+<tt class="descname">latest_post_date</tt>()<a class="headerlink" href="#django.utils.feedgenerator.SyndicationFeed.latest_post_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the latest item&#8217;s <tt class="docutils literal"><span class="pre">pubdate</span></tt>. If none of them have a
+<tt class="docutils literal"><span class="pre">pubdate</span></tt>, this returns the current date/time.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="s-enclosure">
+<span id="enclosure"></span><h3>Enclosure<a class="headerlink" href="#enclosure" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="django.utils.feedgenerator.Enclosure">
+<em class="property">class </em><tt class="descname">Enclosure</tt><a class="headerlink" href="#django.utils.feedgenerator.Enclosure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents an RSS enclosure</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-rssfeed">
+<span id="rssfeed"></span><h3>RssFeed<a class="headerlink" href="#rssfeed" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="django.utils.feedgenerator.RssFeed">
+<em class="property">class </em><tt class="descname">RssFeed</tt>(<em>SyndicationFeed</em>)<a class="headerlink" href="#django.utils.feedgenerator.RssFeed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="s-rss201rev2feed">
+<span id="rss201rev2feed"></span><h3>Rss201rev2Feed<a class="headerlink" href="#rss201rev2feed" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="django.utils.feedgenerator.Rss201rev2Feed">
+<em class="property">class </em><tt class="descname">Rss201rev2Feed</tt>(<em>RssFeed</em>)<a class="headerlink" href="#django.utils.feedgenerator.Rss201rev2Feed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spec: <a class="reference external" href="http://blogs.law.harvard.edu/tech/rss">http://blogs.law.harvard.edu/tech/rss</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-rssuserland091feed">
+<span id="rssuserland091feed"></span><h3>RssUserland091Feed<a class="headerlink" href="#rssuserland091feed" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="django.utils.feedgenerator.RssUserland091Feed">
+<em class="property">class </em><tt class="descname">RssUserland091Feed</tt>(<em>RssFeed</em>)<a class="headerlink" href="#django.utils.feedgenerator.RssUserland091Feed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spec: <a class="reference external" href="http://backend.userland.com/rss091">http://backend.userland.com/rss091</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-atom1feed">
+<span id="atom1feed"></span><h3>Atom1Feed<a class="headerlink" href="#atom1feed" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="django.utils.feedgenerator.Atom1Feed">
+<em class="property">class </em><tt class="descname">Atom1Feed</tt>(<em>SyndicationFeed</em>)<a class="headerlink" href="#django.utils.feedgenerator.Atom1Feed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spec: <a class="reference external" href="http://www.atomenabled.org/developers/syndication/atom-format-spec.php">http://www.atomenabled.org/developers/syndication/atom-format-spec.php</a></p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="s-module-django.utils.functional">
+<span id="s-django-utils-functional"></span><span id="module-django.utils.functional"></span><span id="django-utils-functional"></span><h2><tt class="docutils literal"><span class="pre">django.utils.functional</span></tt><a class="headerlink" href="#module-django.utils.functional" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="django.utils.functional.allow_lazy">
+<tt class="descname">allow_lazy</tt>(<em>func</em>, <em>*resultclasses</em>)<a class="headerlink" href="#django.utils.functional.allow_lazy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Django offers many utility functions (particularly in <tt class="docutils literal"><span class="pre">django.utils</span></tt>) that
+take a string as their first argument and do something to that string. These
+functions are used by template filters as well as directly in other code.</p>
+<p>If you write your own similar functions and deal with translations, you&#8217;ll
+face the problem of what to do when the first argument is a lazy translation
+object. You don&#8217;t want to convert it to a string immediately, because you might
+be using this function outside of a view (and hence the current thread&#8217;s locale
+setting will not be correct).</p>
+<p>For cases like this, use the <tt class="docutils literal"><span class="pre">django.utils.functional.allow_lazy()</span></tt>
+decorator. It modifies the function so that <em>if</em> it&#8217;s called with a lazy
+translation as the first argument, the function evaluation is delayed until it
+needs to be converted to a string.</p>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.utils.functional</span> <span class="kn">import</span> <span class="n">allow_lazy</span>
+
+<span class="k">def</span> <span class="nf">fancy_utility_function</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+    <span class="c"># Do some conversion on string &#39;s&#39;</span>
+    <span class="o">...</span>
+<span class="n">fancy_utility_function</span> <span class="o">=</span> <span class="n">allow_lazy</span><span class="p">(</span><span class="n">fancy_utility_function</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">allow_lazy()</span></tt> decorator takes, in addition to the function to decorate,
+a number of extra arguments (<tt class="docutils literal"><span class="pre">*args</span></tt>) specifying the type(s) that the
+original function can return. Usually, it&#8217;s enough to include <tt class="docutils literal"><span class="pre">unicode</span></tt> here
+and ensure that your function returns only Unicode strings.</p>
+<p>Using this decorator means you can write your function and assume that the
+input is a proper string, then add support for lazy translation objects at the
+end.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-module-django.utils.http">
+<span id="s-django-utils-http"></span><span id="module-django.utils.http"></span><span id="django-utils-http"></span><h2><tt class="docutils literal"><span class="pre">django.utils.http</span></tt><a class="headerlink" href="#module-django.utils.http" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="django.utils.http.urlquote">
+<tt class="descname">urlquote</tt>(<em>url</em>, <em>safe='/'</em>)<a class="headerlink" href="#django.utils.http.urlquote" title="Permalink to this definition">¶</a></dt>
+<dd><p>A version of Python&#8217;s <tt class="docutils literal"><span class="pre">urllib.quote()</span></tt> function that can operate on
+unicode strings. The url is first UTF-8 encoded before quoting. The
+returned string can safely be used as part of an argument to a subsequent
+<tt class="docutils literal"><span class="pre">iri_to_uri()</span></tt> call without double-quoting occurring. Employs lazy
+execution.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.http.urlquote_plus">
+<tt class="descname">urlquote_plus</tt>(<em>url</em>, <em>safe=''</em>)<a class="headerlink" href="#django.utils.http.urlquote_plus" title="Permalink to this definition">¶</a></dt>
+<dd><p>A version of Python&#8217;s urllib.quote_plus() function that can operate on
+unicode strings. The url is first UTF-8 encoded before quoting. The
+returned string can safely be used as part of an argument to a subsequent
+<tt class="docutils literal"><span class="pre">iri_to_uri()</span></tt> call without double-quoting occurring. Employs lazy
+execution.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.http.urlencode">
+<tt class="descname">urlencode</tt>(<em>query</em>, <em>doseq=0</em>)<a class="headerlink" href="#django.utils.http.urlencode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A version of Python&#8217;s urllib.urlencode() function that can operate on
+unicode strings. The parameters are first case to UTF-8 encoded strings
+and then encoded as per normal.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.http.cookie_date">
+<tt class="descname">cookie_date</tt>(<em>epoch_seconds=None</em>)<a class="headerlink" href="#django.utils.http.cookie_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats the time to ensure compatibility with Netscape&#8217;s cookie standard.</p>
+<p>Accepts a floating point number expressed in seconds since the epoch in
+UTC&#8211;such as that outputted by <tt class="docutils literal"><span class="pre">time.time()</span></tt>. If set to <tt class="docutils literal"><span class="pre">None</span></tt>,
+defaults to the current time.</p>
+<p>Outputs a string in the format <tt class="docutils literal"><span class="pre">Wdy,</span> <span class="pre">DD-Mon-YYYY</span> <span class="pre">HH:MM:SS</span> <span class="pre">GMT</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.http.http_date">
+<tt class="descname">http_date</tt>(<em>epoch_seconds=None</em>)<a class="headerlink" href="#django.utils.http.http_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats the time to match the <span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc1123.html"><strong>RFC 1123</strong></a> date format as specified by HTTP
+<span class="target" id="index-3"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2616.html#section-3.3.1"><strong>RFC 2616</strong></a> section 3.3.1.</p>
+<p>Accepts a floating point number expressed in seconds since the epoch in
+UTC&#8211;such as that outputted by <tt class="docutils literal"><span class="pre">time.time()</span></tt>. If set to <tt class="docutils literal"><span class="pre">None</span></tt>,
+defaults to the current time.</p>
+<p>Outputs a string in the format <tt class="docutils literal"><span class="pre">Wdy,</span> <span class="pre">DD</span> <span class="pre">Mon</span> <span class="pre">YYYY</span> <span class="pre">HH:MM:SS</span> <span class="pre">GMT</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.http.base36_to_int">
+<tt class="descname">base36_to_int</tt>(<em>s</em>)<a class="headerlink" href="#django.utils.http.base36_to_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a base 36 string to an integer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.http.int_to_base36">
+<tt class="descname">int_to_base36</tt>(<em>i</em>)<a class="headerlink" href="#django.utils.http.int_to_base36" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an integer to a base 36 string.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-module-django.utils.safestring">
+<span id="s-django-utils-safestring"></span><span id="module-django.utils.safestring"></span><span id="django-utils-safestring"></span><h2><tt class="docutils literal"><span class="pre">django.utils.safestring</span></tt><a class="headerlink" href="#module-django.utils.safestring" title="Permalink to this headline">¶</a></h2>
+<p>Functions and classes for working with &#8220;safe strings&#8221;: strings that can be
+displayed safely without further escaping in HTML. Marking something as a &#8220;safe
+string&#8221; means that the producer of the string has already turned characters
+that should not be interpreted by the HTML engine (e.g. &#8216;&lt;&#8217;) into the
+appropriate entities.</p>
+<dl class="class">
+<dt id="django.utils.safestring.SafeString">
+<em class="property">class </em><tt class="descname">SafeString</tt><a class="headerlink" href="#django.utils.safestring.SafeString" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string subclass that has been specifically marked as &#8220;safe&#8221; (requires no
+further escaping) for HTML output purposes.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="django.utils.safestring.SafeUnicode">
+<em class="property">class </em><tt class="descname">SafeUnicode</tt><a class="headerlink" href="#django.utils.safestring.SafeUnicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unicode subclass that has been specifically marked as &#8220;safe&#8221; for HTML
+output purposes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.safestring.mark_safe">
+<tt class="descname">mark_safe</tt>(<em>s</em>)<a class="headerlink" href="#django.utils.safestring.mark_safe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly mark a string as safe for (HTML) output purposes. The returned
+object can be used everywhere a string or unicode object is appropriate.</p>
+<p>Can be called multiple times on a single string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.safestring.mark_for_escaping">
+<tt class="descname">mark_for_escaping</tt>(<em>s</em>)<a class="headerlink" href="#django.utils.safestring.mark_for_escaping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly mark a string as requiring HTML escaping upon output. Has no
+effect on <tt class="docutils literal"><span class="pre">SafeData</span></tt> subclasses.</p>
+<p>Can be called multiple times on a single string (the resulting escaping is
+only applied once).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-module-django.utils.translation">
+<span id="s-django-utils-translation"></span><span id="module-django.utils.translation"></span><span id="django-utils-translation"></span><h2><tt class="docutils literal"><span class="pre">django.utils.translation</span></tt><a class="headerlink" href="#module-django.utils.translation" title="Permalink to this headline">¶</a></h2>
+<p>For a complete discussion on the usage of the following see the
+<a class="reference internal" href="../topics/i18n/translation.html"><em>translation documentation</em></a>.</p>
+<dl class="function">
+<dt id="django.utils.translation.gettext">
+<tt class="descname">gettext</tt>(<em>message</em>)<a class="headerlink" href="#django.utils.translation.gettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translates <tt class="docutils literal"><span class="pre">message</span></tt> and returns it in a UTF-8 bytestring</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.ugettext">
+<tt class="descname">ugettext</tt>(<em>message</em>)<a class="headerlink" href="#django.utils.translation.ugettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translates <tt class="docutils literal"><span class="pre">message</span></tt> and returns it in a unicode string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.pgettext">
+<tt class="descname">pgettext</tt>(<em>context</em>, <em>message</em>)<a class="headerlink" href="#django.utils.translation.pgettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translates <tt class="docutils literal"><span class="pre">message</span></tt> given the <tt class="docutils literal"><span class="pre">context</span></tt> and returns
+it in a unicode string.</p>
+<p>For more information, see <a class="reference internal" href="../topics/i18n/translation.html#contextual-markers"><em>Contextual markers</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.gettext_lazy">
+<tt class="descname">gettext_lazy</tt>(<em>message</em>)<a class="headerlink" href="#django.utils.translation.gettext_lazy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.ugettext_lazy">
+<tt class="descname">ugettext_lazy</tt>(<em>message</em>)<a class="headerlink" href="#django.utils.translation.ugettext_lazy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.pgettext_lazy">
+<tt class="descname">pgettext_lazy</tt>(<em>context</em>, <em>message</em>)<a class="headerlink" href="#django.utils.translation.pgettext_lazy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as the non-lazy versions above, but using lazy execution.</p>
+<p>See <a class="reference internal" href="../topics/i18n/translation.html#lazy-translations"><em>lazy translations documentation</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.gettext_noop">
+<tt class="descname">gettext_noop</tt>(<em>message</em>)<a class="headerlink" href="#django.utils.translation.gettext_noop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.ugettext_noop">
+<tt class="descname">ugettext_noop</tt>(<em>message</em>)<a class="headerlink" href="#django.utils.translation.ugettext_noop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks strings for translation but doesn&#8217;t translate them now. This can be
+used to store strings in global variables that should stay in the base
+language (because they might be used externally) and will be translated
+later.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.ngettext">
+<tt class="descname">ngettext</tt>(<em>singular</em>, <em>plural</em>, <em>number</em>)<a class="headerlink" href="#django.utils.translation.ngettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translates <tt class="docutils literal"><span class="pre">singular</span></tt> and <tt class="docutils literal"><span class="pre">plural</span></tt> and returns the appropriate string
+based on <tt class="docutils literal"><span class="pre">number</span></tt> in a UTF-8 bytestring.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.ungettext">
+<tt class="descname">ungettext</tt>(<em>singular</em>, <em>plural</em>, <em>number</em>)<a class="headerlink" href="#django.utils.translation.ungettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translates <tt class="docutils literal"><span class="pre">singular</span></tt> and <tt class="docutils literal"><span class="pre">plural</span></tt> and returns the appropriate string
+based on <tt class="docutils literal"><span class="pre">number</span></tt> in a unicode string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.npgettext">
+<tt class="descname">npgettext</tt>(<em>context</em>, <em>singular</em>, <em>plural</em>, <em>number</em>)<a class="headerlink" href="#django.utils.translation.npgettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translates <tt class="docutils literal"><span class="pre">singular</span></tt> and <tt class="docutils literal"><span class="pre">plural</span></tt> and returns the appropriate string
+based on <tt class="docutils literal"><span class="pre">number</span></tt> and the <tt class="docutils literal"><span class="pre">context</span></tt> in a unicode string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.ngettext_lazy">
+<tt class="descname">ngettext_lazy</tt>(<em>singular</em>, <em>plural</em>, <em>number</em>)<a class="headerlink" href="#django.utils.translation.ngettext_lazy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.ungettext_lazy">
+<tt class="descname">ungettext_lazy</tt>(<em>singular</em>, <em>plural</em>, <em>number</em>)<a class="headerlink" href="#django.utils.translation.ungettext_lazy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.npgettext_lazy">
+<tt class="descname">npgettext_lazy</tt>(<em>singular</em>, <em>plural</em>, <em>number</em>)<a class="headerlink" href="#django.utils.translation.npgettext_lazy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as the non-lazy versions above, but using lazy execution.</p>
+<p>See <a class="reference internal" href="../topics/i18n/translation.html#lazy-translations"><em>lazy translations documentation</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.string_concat">
+<tt class="descname">string_concat</tt>(<em>*strings</em>)<a class="headerlink" href="#django.utils.translation.string_concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lazy variant of string concatenation, needed for translations that are
+constructed from multiple parts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.activate">
+<tt class="descname">activate</tt>(<em>language</em>)<a class="headerlink" href="#django.utils.translation.activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the translation object for a given language and installs it as
+the current translation object for the current thread.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.deactivate">
+<tt class="descname">deactivate</tt>()<a class="headerlink" href="#django.utils.translation.deactivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>De-installs the currently active translation object so that further _ calls
+will resolve against the default translation object, again.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.deactivate_all">
+<tt class="descname">deactivate_all</tt>()<a class="headerlink" href="#django.utils.translation.deactivate_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes the active translation object a NullTranslations() instance. This is
+useful when we want delayed translations to appear as the original string
+for some reason.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.override">
+<tt class="descname">override</tt>(<em>language</em>, <em>deactivate=False</em>)<a class="headerlink" href="#django.utils.translation.override" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<span class="title">New in Django Development version.</span> </div>
+<p>A Python context manager that uses
+<a class="reference internal" href="#django.utils.translation.activate" title="django.utils.translation.activate"><tt class="xref py py-func docutils literal"><span class="pre">django.utils.translation.activate()</span></tt></a> to fetch the translation object
+for a given language, installing it as the translation object for the
+current thread and reinstall the previous active language on exit.
+Optionally it can simply deinstall the temporary translation on exit with
+<a class="reference internal" href="#django.utils.translation.deactivate" title="django.utils.translation.deactivate"><tt class="xref py py-func docutils literal"><span class="pre">django.utils.translation.deactivate()</span></tt></a> if the deactivate argument is
+True. If you pass None as the language argument, a NullTranslations()
+instance is installed while the context is active.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.get_language">
+<tt class="descname">get_language</tt>()<a class="headerlink" href="#django.utils.translation.get_language" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the currently selected language code.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.get_language_bidi">
+<tt class="descname">get_language_bidi</tt>()<a class="headerlink" href="#django.utils.translation.get_language_bidi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns selected language&#8217;s BiDi layout:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">False</span></tt> = left-to-right layout</li>
+<li><tt class="docutils literal"><span class="pre">True</span></tt> = right-to-left layout</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.get_language_from_request">
+<tt class="descname">get_language_from_request</tt>(<em>request</em>)<a class="headerlink" href="#django.utils.translation.get_language_from_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyzes the request to find what language the user wants the system to show.
+Only languages listed in settings.LANGUAGES are taken into account. If the user
+requests a sublanguage where we have a main language, we send out the main
+language.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.to_locale">
+<tt class="descname">to_locale</tt>(<em>language</em>)<a class="headerlink" href="#django.utils.translation.to_locale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns a language name (en-us) into a locale name (en_US).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.translation.templatize">
+<tt class="descname">templatize</tt>(<em>src</em>)<a class="headerlink" href="#django.utils.translation.templatize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns a Django template into something that is understood by xgettext. It does
+so by translating the Django translation tags into standard gettext function
+invocations.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-django-utils-timezone">
+<span id="s-time-zone-selection-functions"></span><span id="django-utils-timezone"></span><span id="time-zone-selection-functions"></span><h2><tt class="docutils literal"><span class="pre">django.utils.timezone</span></tt><a class="headerlink" href="#django-utils-timezone" title="Permalink to this headline">¶</a></h2>
+<div class="versionadded">
+<span class="title">New in Django Development version.</span> </div>
+<span class="target" id="module-django.utils.timezone"></span><dl class="data">
+<dt id="django.utils.timezone.utc">
+<tt class="descname">utc</tt><a class="headerlink" href="#django.utils.timezone.utc" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.tzinfo" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">tzinfo</span></tt></a> instance that represents UTC.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.get_default_timezone">
+<tt class="descname">get_default_timezone</tt>()<a class="headerlink" href="#django.utils.timezone.get_default_timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.tzinfo" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">tzinfo</span></tt></a> instance that represents the
+<a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>default time zone</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.get_default_timezone_name">
+<tt class="descname">get_default_timezone_name</tt>()<a class="headerlink" href="#django.utils.timezone.get_default_timezone_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the <a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>default time zone</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.get_current_timezone">
+<tt class="descname">get_current_timezone</tt>()<a class="headerlink" href="#django.utils.timezone.get_current_timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.tzinfo" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">tzinfo</span></tt></a> instance that represents the
+<a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>current time zone</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.get_current_timezone_name">
+<tt class="descname">get_current_timezone_name</tt>()<a class="headerlink" href="#django.utils.timezone.get_current_timezone_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the <a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>current time zone</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.activate">
+<tt class="descname">activate</tt>(<em>timezone</em>)<a class="headerlink" href="#django.utils.timezone.activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the <a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>current time zone</em></a>. The
+<tt class="docutils literal"><span class="pre">timezone</span></tt> argument must be an instance of a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.tzinfo" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">tzinfo</span></tt></a>
+subclass or, if <a class="reference external" href="http://pytz.sourceforge.net/">pytz</a> is available, a time zone name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.deactivate">
+<tt class="descname">deactivate</tt>()<a class="headerlink" href="#django.utils.timezone.deactivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unsets the <a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>current time zone</em></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.override">
+<tt class="descname">override</tt>(<em>timezone</em>)<a class="headerlink" href="#django.utils.timezone.override" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a Python context manager that sets the <a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>current time zone</em></a> on entry with <a class="reference internal" href="#django.utils.timezone.activate" title="django.utils.timezone.activate"><tt class="xref py py-func docutils literal"><span class="pre">activate()</span></tt></a>, and restores
+the previously active time zone on exit. If the <tt class="docutils literal"><span class="pre">timezone</span></tt> argument is
+<tt class="docutils literal"><span class="pre">None</span></tt>, the <a class="reference internal" href="../topics/i18n/timezones.html#default-current-time-zone"><em>current time zone</em></a> is unset
+on entry with <a class="reference internal" href="#django.utils.timezone.deactivate" title="django.utils.timezone.deactivate"><tt class="xref py py-func docutils literal"><span class="pre">deactivate()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.localtime">
+<tt class="descname">localtime</tt>(<em>value</em>, <em>use_tz=None</em>)<a class="headerlink" href="#django.utils.timezone.localtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by the template engine to convert datetimes to local
+time where appropriate.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.now">
+<tt class="descname">now</tt>()<a class="headerlink" href="#django.utils.timezone.now" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an aware or naive <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a> that represents the
+current point in time when <a class="reference internal" href="settings.html#std:setting-USE_TZ"><tt class="xref std std-setting docutils literal"><span class="pre">USE_TZ</span></tt></a> is <tt class="docutils literal"><span class="pre">True</span></tt> or <tt class="docutils literal"><span class="pre">False</span></tt>
+respectively.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.is_aware">
+<tt class="descname">is_aware</tt>(<em>value</em>)<a class="headerlink" href="#django.utils.timezone.is_aware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if <tt class="docutils literal"><span class="pre">value</span></tt> is aware, <tt class="docutils literal"><span class="pre">False</span></tt> if it is naive. This
+function assumes that <tt class="docutils literal"><span class="pre">value</span></tt> is a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.is_naive">
+<tt class="descname">is_naive</tt>(<em>value</em>)<a class="headerlink" href="#django.utils.timezone.is_naive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if <tt class="docutils literal"><span class="pre">value</span></tt> is naive, <tt class="docutils literal"><span class="pre">False</span></tt> if it is aware. This
+function assumes that <tt class="docutils literal"><span class="pre">value</span></tt> is a <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.make_aware">
+<tt class="descname">make_aware</tt>(<em>value</em>, <em>timezone</em>)<a class="headerlink" href="#django.utils.timezone.make_aware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an aware <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a> that represents the same
+point in time as <tt class="docutils literal"><span class="pre">value</span></tt> in <tt class="docutils literal"><span class="pre">timezone</span></tt>, <tt class="docutils literal"><span class="pre">value</span></tt> being a naive
+<a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a>.</p>
+<p>This function can raise an exception if <tt class="docutils literal"><span class="pre">value</span></tt> doesn&#8217;t exist or is
+ambiguous because of DST transitions.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="django.utils.timezone.make_naive">
+<tt class="descname">make_naive</tt>(<em>value</em>, <em>timezone</em>)<a class="headerlink" href="#django.utils.timezone.make_naive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an naive <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a> that represents in
+<tt class="docutils literal"><span class="pre">timezone</span></tt>  the same point in time as <tt class="docutils literal"><span class="pre">value</span></tt>, <tt class="docutils literal"><span class="pre">value</span></tt> being an
+aware <a class="reference external" href="http://docs.python.org/2.7/library/datetime.html#datetime.datetime" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="s-module-django.utils.tzinfo">
+<span id="s-django-utils-tzinfo"></span><span id="module-django.utils.tzinfo"></span><span id="django-utils-tzinfo"></span><h2><tt class="docutils literal"><span class="pre">django.utils.tzinfo</span></tt><a class="headerlink" href="#module-django.utils.tzinfo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="django.utils.tzinfo.FixedOffset">
+<em class="property">class </em><tt class="descname">FixedOffset</tt><a class="headerlink" href="#django.utils.tzinfo.FixedOffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fixed offset in minutes east from UTC.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="django.utils.tzinfo.LocalTimezone">
+<em class="property">class </em><tt class="descname">LocalTimezone</tt><a class="headerlink" href="#django.utils.tzinfo.LocalTimezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy timezone information from time module.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>         
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Django Utils</a><ul>
+<li><a class="reference internal" href="#module-django.utils.cache"><tt class="docutils literal"><span class="pre">django.utils.cache</span></tt></a></li>
+<li><a class="reference internal" href="#module-django.utils.datastructures"><tt class="docutils literal"><span class="pre">django.utils.datastructures</span></tt></a><ul>
+<li><a class="reference internal" href="#creating-a-new-sorteddict">Creating a new SortedDict</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#django-utils-dateparse"><tt class="docutils literal"><span class="pre">django.utils.dateparse</span></tt></a></li>
+<li><a class="reference internal" href="#module-django.utils.encoding"><tt class="docutils literal"><span class="pre">django.utils.encoding</span></tt></a></li>
+<li><a class="reference internal" href="#module-django.utils.feedgenerator"><tt class="docutils literal"><span class="pre">django.utils.feedgenerator</span></tt></a><ul>
+<li><a class="reference internal" href="#syndicationfeed">SyndicationFeed</a></li>
+<li><a class="reference internal" href="#enclosure">Enclosure</a></li>
+<li><a class="reference internal" href="#rssfeed">RssFeed</a></li>
+<li><a class="reference internal" href="#rss201rev2feed">Rss201rev2Feed</a></li>
+<li><a class="reference internal" href="#rssuserland091feed">RssUserland091Feed</a></li>
+<li><a class="reference internal" href="#atom1feed">Atom1Feed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-django.utils.functional"><tt class="docutils literal"><span class="pre">django.utils.functional</span></tt></a></li>
+<li><a class="reference internal" href="#module-django.utils.http"><tt class="docutils literal"><span class="pre">django.utils.http</span></tt></a></li>
+<li><a class="reference internal" href="#module-django.utils.safestring"><tt class="docutils literal"><span class="pre">django.utils.safestring</span></tt></a></li>
+<li><a class="reference internal" href="#module-django.utils.translation"><tt class="docutils literal"><span class="pre">django.utils.translation</span></tt></a></li>
+<li><a class="reference internal" href="#django-utils-timezone"><tt class="docutils literal"><span class="pre">django.utils.timezone</span></tt></a></li>
+<li><a class="reference internal" href="#module-django.utils.tzinfo"><tt class="docutils literal"><span class="pre">django.utils.tzinfo</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="unicode.html">Unicode data</a></li>
+    
+    
+      <li>Next: <a href="validators.html">Validators</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../index.html">Django 1.4 alpha 1 documentation</a>
+        
+          <ul><li><a href="index.html">API Reference</a>
+        
+        <ul><li>Django Utils</li></ul>
+        </li></ul>
+      </li>
+  </ul>  
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/utils.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Jan 29, 2012</p>
+          </div> 
+        
+      
+    </div>
+    
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="unicode.html" title="Unicode data">previous</a> 
+     |
+    <a href="index.html" title="API Reference" accesskey="U">up</a>
+   |
+    <a href="validators.html" title="Validators">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,378 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Coding Style &mdash; Django 1.4 alpha 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.4 alpha 1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Django 1.4 alpha 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Writing code" href="index.html" />
+    <link rel="next" title="Unit tests" href="unit-tests.html" />
+    <link rel="prev" title="Writing code" href="index.html" />
+ 
+<script type="text/javascript" src="../../../templatebuiltins.js"></script>
+<script type="text/javascript">
+(function($) {
+    if (!django_template_builtins) {
+       // templatebuiltins.js missing, do nothing.
+       return;
+    }
+    $(document).ready(function() {
+        // Hyperlink Django template tags and filters
+        var base = "../../../ref/templates/builtins.html";
+        if (base == "#") {
+            // Special case for builtins.html itself
+            base = "";
+        }
+        // Tags are keywords, class '.k'
+        $("div.highlight\\-html\\+django span.k").each(function(i, elem) {
+             var tagname = $(elem).text();
+             if ($.inArray(tagname, django_template_builtins.ttags) != -1) {
+                 var fragment = tagname.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + tagname + "</a>");
+             }
+        });
+        // Filters are functions, class '.nf'
+        $("div.highlight\\-html\\+django span.nf").each(function(i, elem) {
+             var filtername = $(elem).text();
+             if ($.inArray(filtername, django_template_builtins.tfilters) != -1) {
+                 var fragment = filtername.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + filtername + "</a>");
+             }
+        });
+    });
+})(jQuery);
+</script>
+
+  </head>
+  <body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../../../index.html">Django 1.4 alpha 1 documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../../../index.html">Home</a>  |
+        <a title="Table of contents" href="../../../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../../../genindex.html">Index</a>  |
+        <a title="Module index" href="../../../py-modindex.html">Modules</a>
+      </div>
+      <div class="nav">
+    &laquo; <a href="index.html" title="Writing code">previous</a> 
+     |
+    <a href="../../index.html" title="Django internals" accesskey="U">up</a>
+   |
+    <a href="unit-tests.html" title="Unit tests">next</a> &raquo;</div>
+    </div>
+    
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="internals-contributing-writing-code-coding-style">
+            
+  <div class="section" id="s-coding-style">
+<span id="coding-style"></span><h1>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this headline">¶</a></h1>
+<p>Please follow these coding standards when writing code for inclusion in Django.</p>
+<div class="section" id="s-python-style">
+<span id="python-style"></span><h2>Python style<a class="headerlink" href="#python-style" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Unless otherwise specified, follow <span class="target" id="index-0"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0008"><strong>PEP 8</strong></a>.</p>
+<p>You could use a tool like <a class="reference external" href="http://pypi.python.org/pypi/pep8">pep8</a> to check for some problems in this
+area, but remember that <span class="target" id="index-1"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0008"><strong>PEP 8</strong></a> is only a guide, so respect the style of
+the surrounding code as a primary goal.</p>
+</li>
+<li><p class="first">Use four spaces for indentation.</p>
+</li>
+<li><p class="first">Use underscores, not camelCase, for variable, function and method names
+(i.e. <tt class="docutils literal"><span class="pre">poll.get_unique_voters()</span></tt>, not <tt class="docutils literal"><span class="pre">poll.getUniqueVoters</span></tt>).</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal"><span class="pre">InitialCaps</span></tt> for class names (or for factory functions that
+return classes).</p>
+</li>
+<li><p class="first">In docstrings, use &#8220;action words&#8221; such as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates something and returns the result.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Here&#8217;s an example of what not to do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate something and return the result.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="s-template-style">
+<span id="template-style"></span><h2>Template style<a class="headerlink" href="#template-style" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">In Django template code, put one (and only one) space between the curly
+brackets and the tag contents.</p>
+<p>Do this:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span class="cp">{{</span> <span class="nv">foo</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>Don&#8217;t do this:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span class="cp">{{</span><span class="nv">foo</span><span class="cp">}}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="s-view-style">
+<span id="view-style"></span><h2>View style<a class="headerlink" href="#view-style" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">In Django views, the first parameter in a view function should be called
+<tt class="docutils literal"><span class="pre">request</span></tt>.</p>
+<p>Do this:</p>
+<div class="highlight-python"><pre>def my_view(request, foo):
+    # ...</pre>
+</div>
+<p>Don&#8217;t do this:</p>
+<div class="highlight-python"><pre>def my_view(req, foo):
+    # ...</pre>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="s-model-style">
+<span id="model-style"></span><h2>Model style<a class="headerlink" href="#model-style" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Field names should be all lowercase, using underscores instead of
+camelCase.</p>
+<p>Do this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Don&#8217;t do this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">FirstName</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">Last_Name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">class</span> <span class="pre">Meta</span></tt> should appear <em>after</em> the fields are defined, with
+a single blank line separating the fields and the class definition.</p>
+<p>Do this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s">&#39;people&#39;</span>
+</pre></div>
+</div>
+<p>Don&#8217;t do this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s">&#39;people&#39;</span>
+</pre></div>
+</div>
+<p>Don&#8217;t do this, either:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s">&#39;people&#39;</span>
+
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The order of model inner classes and standard methods should be as
+follows (noting that these are not all required):</p>
+<ul class="simple">
+<li>All database fields</li>
+<li>Custom manager attributes</li>
+<li><tt class="docutils literal"><span class="pre">class</span> <span class="pre">Meta</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">def</span> <span class="pre">__unicode__()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">def</span> <span class="pre">__str__()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">def</span> <span class="pre">save()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">def</span> <span class="pre">get_absolute_url()</span></tt></li>
+<li>Any custom methods</li>
+</ul>
+</li>
+<li><p class="first">If <tt class="docutils literal"><span class="pre">choices</span></tt> is defined for a given model field, define the choices as
+a tuple of tuples, with an all-uppercase name, either near the top of
+the model module or just above the model class. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GENDER_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s">&#39;M&#39;</span><span class="p">,</span> <span class="s">&#39;Male&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span> <span class="s">&#39;Female&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="s-use-of-django-conf-settings">
+<span id="use-of-django-conf-settings"></span><h2>Use of <tt class="docutils literal"><span class="pre">django.conf.settings</span></tt><a class="headerlink" href="#use-of-django-conf-settings" title="Permalink to this headline">¶</a></h2>
+<p>Modules should not in general use settings stored in <tt class="docutils literal"><span class="pre">django.conf.settings</span></tt>
+at the top level (i.e. evaluated when the module is imported). The explanation
+for this is as follows:</p>
+<p>Manual configuration of settings (i.e. not relying on the
+<tt class="docutils literal"><span class="pre">DJANGO_SETTINGS_MODULE</span></tt> environment variable) is allowed and possible as
+follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="n">settings</span><span class="o">.</span><span class="n">configure</span><span class="p">({},</span> <span class="n">SOME_SETTING</span><span class="o">=</span><span class="s">&#39;foo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>However, if any setting is accessed before the <tt class="docutils literal"><span class="pre">settings.configure</span></tt> line,
+this will not work. (Internally, <tt class="docutils literal"><span class="pre">settings</span></tt> is a <tt class="docutils literal"><span class="pre">LazyObject</span></tt> which
+configures itself automatically when the settings are accessed if it has not
+already been configured).</p>
+<p>So, if there is a module containing some code as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">get_callable</span>
+
+<span class="n">default_foo_view</span> <span class="o">=</span> <span class="n">get_callable</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">FOO_VIEW</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>...then importing this module will cause the settings object to be configured.
+That means that the ability for third parties to import the module at the top
+level is incompatible with the ability to configure the settings object
+manually, or makes it very difficult in some circumstances.</p>
+<p>Instead of the above code, a level of laziness or indirection must be used, such
+as <tt class="xref py py-class docutils literal"><span class="pre">django.utils.functional.LazyObject</span></tt>,
+<tt class="xref py py-func docutils literal"><span class="pre">django.utils.functional.lazy()</span></tt> or <tt class="docutils literal"><span class="pre">lambda</span></tt>.</p>
+</div>
+<div class="section" id="s-miscellaneous">
+<span id="miscellaneous"></span><h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Mark all strings for internationalization; see the <a class="reference internal" href="../../../topics/i18n/index.html"><em>i18n
+documentation</em></a> for details.</li>
+<li>Remove <tt class="docutils literal"><span class="pre">import</span></tt> statements that are no longer used when you change code.
+The most common tools for this task are <a class="reference external" href="http://pypi.python.org/pypi/pyflakes">pyflakes</a> and <a class="reference external" href="http://pypi.python.org/pypi/pylint">pylint</a>.</li>
+<li>Systematically remove all trailing whitespaces from your code as those
+add unnecessary bytes, add visual clutter to the patches and can also
+occasionally cause unnecessary merge conflicts. Some IDE&#8217;s can be
+configured to automatically remove them and most VCS tools can be set to
+highlight them in diff outputs. Note, however, that patches which only
+remove whitespace (or only make changes for nominal PEP 8 conformance)
+are likely to be rejected, since they only introduce noise rather than
+code improvement. Tidy up when you&#8217;re next changing code in the area.</li>
+<li>Please don&#8217;t put your name in the code you contribute. Our policy is to
+keep contributors&#8217; names in the <tt class="docutils literal"><span class="pre">AUTHORS</span></tt> file distributed with Django
+&#8211; not scattered throughout the codebase itself. Feel free to include a
+change to the <tt class="docutils literal"><span class="pre">AUTHORS</span></tt> file in your patch if you make more than a
+single trivial change.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>         
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Coding Style</a><ul>
+<li><a class="reference internal" href="#python-style">Python style</a></li>
+<li><a class="reference internal" href="#template-style">Template style</a></li>
+<li><a class="reference internal" href="#view-style">View style</a></li>
+<li><a class="reference internal" href="#model-style">Model style</a></li>
+<li><a class="reference internal" href="#use-of-django-conf-settings">Use of <tt class="docutils literal"><span class="pre">django.conf.settings</span></tt></a></li>
+<li><a class="reference internal" href="#miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>Browse</h3>
+  <ul>
+    
+      <li>Prev: <a href="index.html">Writing code</a></li>
+    
+    
+      <li>Next: <a href="unit-tests.html">Unit tests</a></li>
+    
+  </ul>
+  <h3>You are here:</h3>
+  <ul>
+      <li>
+        <a href="../../../index.html">Django 1.4 alpha 1 documentation</a>
+        
+          <ul><li><a href="../../index.html">Django internals</a>
+        
+          <ul><li><a href="../index.html">Contributing to Django</a>
+        
+          <ul><li><a href="index.html">Writing code</a>
+        
+        <ul><li>Coding Style</li></ul>
+        </li></ul></li></ul></li></ul>
+      </li>
+  </ul>  
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/internals/contributing/writing-code/coding-style.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Jan 29, 2012</p>
+          </div> 
+        
+      
+    </div>
+    
+    <div id="ft">
+      <div class="nav">
+    &laquo; <a href="index.html" title="Writing code">previous</a> 
+     |
+    <a href="../../index.html" title="Django internals" accesskey="U">up</a>
+   |
+    <a href="unit-tests.html" title="Unit tests">next</a> &raquo;</div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
