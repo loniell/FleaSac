@@ -14,6 +14,9 @@ def decideBet(outcome, betID, user):
     personBet = bet.personBets.get(person = person)
     if outcome == "win":
         person.score = person.score + personBet.wager
+        personBet.outcome = "W"
     else:
         person.score = person.score - personBet.wager
+        personBet.outcome = "L"
     person.save()
+    personBet.save()

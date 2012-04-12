@@ -4,60 +4,91 @@
 {% block user_first_name %}{{user.first_name}}{% endblock %}
 
 <!--user profile-->
+{% block user_username_settings %} {{user.username}} {% endblock %}
 {% block user_name_profile %}{{user.get_full_name}}{% endblock %}
-{% block user_dob_profile %}{{user.get_profile.demographics.dateOfBirth}}{% endblock %}
+{% block user_dob_profile %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
 {% block user_email_profile %}{{user.email}}{% endblock %}
 {% block user_loc_profile %}{{user.get_profile.demographics.location}}{% endblock %}
+{% block change_password %}
+<form action="" method="post" name="change_password">
+        {% csrf_token %}
+        <!--<label>New Password: </label><input type="password" name="new_password" value="" id="new_password"/><br/>
+        <label>Retype Password: </label><input type="password" name="new_password_retype" value="" id="new_password_retype"/><br/><br/>
+        -->
+        {% block content %}
+        <div>
+            {{ form.password1.errors }}
+            <label for="id_password1">Password: </label>
+            {{ form.password1 }}
+        </div>
+        <div>
+            {{ form.password2.errors }}
+            <label for="id_password2">Repeat password: </label>
+            {{ form.password2 }}
+        </div>
+        {% endblock %}
+        <input type="submit" name="submit" value="Change Password" id="submit" class="button small"/>
+        <input type="hidden" name="name" value="new_password" id="new_password"/>
+</form><br/>
+{% endblock %}
 
 {% block user_name_open %}{{user.get_full_name}}{% endblock %}
-{% block user_dob_open %}{{user.get_profile.demographics.dateOfBirth}}{% endblock %}
+{% block user_dob_open %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
 {% block user_email_open %}{{user.email}}{% endblock %}
 {% block user_loc_open %}{{user.get_profile.demographics.location}}{% endblock %}
 
 {% block user_name_closed %}{{user.get_full_name}}{% endblock %}
-{% block user_dob_closed %}{{user.get_profile.demographics.dateOfBirth}}{% endblock %}
+{% block user_dob_closed %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
 {% block user_email_closed %}{{user.email}}{% endblock %}
 {% block user_loc_closed %}{{user.get_profile.demographics.location}}{% endblock %}
 
+{% block user_name_settings %}{{user.get_full_name}}{% endblock %}
+{% block user_dob_settings %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
+{% block user_email_settings %}{{user.email}}{% endblock %}
+{% block user_loc_settings %}{{user.get_profile.demographics.location}}{% endblock %}
+
 {% block scoreboard %}
-    {% for user in list_of_users %}
-        <p>{{user.first_name}} | {{user.get_profile.score}}</p>
+    <h3 style="color:white">{{user.get_profile.demographics.firstName}} | {{user.get_profile.score}}</h3><br/><br/>
+    {% for person in list_of_persons %}
+        {% if user.get_profile.id != person.id %}
+            <h3>{{person.demographics.firstName}} | {{person.score}}</h3><br/><br/>      
+        {% endif %}
     {% endfor %}
 {% endblock %}
 
 {% block my_score_profile %}
 {% if user.get_profile.score > 0 %}
-    <p style="color:green">{{user.get_profile.score}}</p>
+    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% if user.get_profile.score < 0 %}
-    <p style="color:red">{{user.get_profile.score}}</p>
+    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% if user.get_profile.score = 0 %}
-    <p>{{user.get_profile.score}}</p>
+    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% endblock %}
 
 {% block my_score_profile_open %}
 {% if user.get_profile.score > 0 %}
-    <p style="color:green">{{user.get_profile.score}}</p>
+    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% if user.get_profile.score < 0 %}
-    <p style="color:red">{{user.get_profile.score}}</p>
+    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% if user.get_profile.score = 0 %}
-    <p>{{user.get_profile.score}}</p>
+    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% endblock %}
 
 {% block my_score_profile_closed %}
 {% if user.get_profile.score > 0 %}
-    <p style="color:green">{{user.get_profile.score}}</p>
+    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% if user.get_profile.score < 0 %}
-    <p style="color:red">{{user.get_profile.score}}</p>
+    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% if user.get_profile.score = 0 %}
-    <p>{{user.get_profile.score}}</p>
+    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p>
 {% endif %}
 {% endblock %}
 
@@ -65,19 +96,29 @@
 {% if list_of_bets %}
     <ul class="rows">
     {% for bet in list_of_bets %}
-        <li>
-            <div><h3>{{ bet.itemOfDispute }}</h3>
-            {% if bet.closeDate == null %}
-                <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
-            {% else %}
-                <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
-            {% endif %}
-            <!--For when we have multiple people betting-->
-            <!--{% for personBet in bet.personBets.all %}
-                {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
-            {% endfor %}-->
-            <strong>Opened: </strong> {{bet.openDate}}
-        </li>
+        {% for personBet in bet.personBets.all %}
+            <li>
+                <div style="width:500px"><h3>{{personBet.wager}} | {{ bet.itemOfDispute }}</h3>
+                {% if bet.closeDate == null %}
+                    <img src="{{ MEDIA_URL}}images/blue.png" align="right"><br/><br/></div>
+                {% else %}
+                    {% if personBet.outcome == "W" %}
+                        <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
+                    {% else %}
+                        <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
+                    {% endif %}
+                {% endif %}
+                <!--For when we have multiple people betting-->
+                <!--{% for personBet in bet.personBets.all %}
+                    {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
+                {% endfor %}-->
+                <strong>Placed By: </strong> {{personBet.person.demographics.firstName}} <br/>
+                <strong>Opened: </strong> {{bet.openDate}}
+                {% if bet.closeDate != null %}
+                    <br/><strong>Closed: </strong> {{bet.closeDate}}
+                {% endif %}
+            </li>
+        {% endfor %}
     {% endfor %}
     </ul>
 {% else %}
@@ -92,17 +133,24 @@
         {% for personBet in bet.personBets.all %}
             {% if personBet.person.user == user %}
                 <li>
-                    <div><h3>{{ bet.itemOfDispute }}</h3>
+                    <div style="width:500px"><h3>{{personBet.wager}} | {{ bet.itemOfDispute }}</h3>
                     {% if bet.closeDate == null %}
-                        <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
+                        <img src="{{ MEDIA_URL}}images/blue.png" align="right"><br/><br/></div>
                     {% else %}
-                        <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
+                        {% if personBet.outcome == "W" %}
+                            <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
+                        {% else %}
+                            <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
+                        {% endif %}
                     {% endif %}
                     <!--For when we have multiple people betting-->
                     <!--{% for personBet in bet.personBets.all %}
                         {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
                     {% endfor %}-->
                     <strong>Opened: </strong> {{bet.openDate}}
+                    {% if bet.closeDate != null %}
+                        <br/><strong>Closed: </strong> {{bet.closeDate}}
+                    {% endif %}
                 </li>
             {% endif %}
         {% endfor %}
@@ -117,28 +165,30 @@
 {% if list_of_bets %}
     <ul class="rows">
     {% for bet in list_of_bets %}
-        {% if bet.closeDate == null %}
-        <li>
-            <div><h3>{{ bet.itemOfDispute }}</h3><img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
-            <!--For when we have multiple people betting-->
-            <!--{% for personBet in bet.personBets.all %}
-                {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
-            {% endfor %}-->
-            <strong>Opened: </strong> {{bet.openDate}} <br/><br />
-            <form action="" method="post" name="decide_bet" style="display:inline;float:left;">
-		    {% csrf_token %}
-                    <input type="hidden" name="betID" value="{{bet.id}}" id="betID"/>
-		    <input type="submit" name="submit" value="I won" id="submit" class="button small"/>
-                    <input type="hidden" name="name" value="win" id="win"/>
-            </form>
-            <form action="" method="post" name="decide_bet" style="display:inline;float:left;padding: 0 20px;">
-		    {% csrf_token %}
-                    <input type="hidden" name="betID" value="{{bet.id}}" id="betID"/>
-                    <input type="submit" name="submit" value="I lost" id="submit" class="button small"/>
-		    <input type="hidden" name="name" value="lose" id="lose"/>
-	    </form><br/>
-        </li>
-        {% endif %}
+        {% for personBet in bet.personBets.all %}
+            {% if bet.closeDate == null  and personBet.person.user == user %}
+            <li>
+                <div style="width:500px"><h3>{{personBet.wager}} | {{ bet.itemOfDispute }}</h3><img src="{{ MEDIA_URL}}images/blue.png" align="right"><br/><br/></div>
+                <!--For when we have multiple people betting-->
+                <!--{% for personBet in bet.personBets.all %}
+                    {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
+                {% endfor %}-->
+                <strong>Opened: </strong> {{bet.openDate}} <br/><br />
+                <form action="" method="post" name="decide_bet" style="display:inline;float:left;">
+                        {% csrf_token %}
+                        <input type="hidden" name="betID" value="{{bet.id}}" id="betID"/>
+                        <input type="submit" name="submit" value="I won" id="submit" class="button small"/>
+                        <input type="hidden" name="name" value="win" id="win"/>
+                </form>
+                <form action="" method="post" name="decide_bet" style="display:inline;float:left;padding: 0 20px;">
+                        {% csrf_token %}
+                        <input type="hidden" name="betID" value="{{bet.id}}" id="betID"/>
+                        <input type="submit" name="submit" value="I lost" id="submit" class="button small"/>
+                        <input type="hidden" name="name" value="lose" id="lose"/>
+                </form><br/>
+            </li>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
     </ul>
 {% else %}
@@ -150,16 +200,24 @@
 {% if list_of_bets %}
     <ul class="rows">
     {% for bet in list_of_bets %}
-        {% if bet.closeDate != null %}
-        <li>
-            <div><h3>{{ bet.itemOfDispute }}</h3><img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
-            <!--For when we have multiple people betting-->
-            <!--{% for personBet in bet.personBets.all %}
-                {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
-            {% endfor %}-->
-            <strong>Opened: </strong> {{bet.openDate}}
-        </li>
-        {% endif %}
+        {% for personBet in bet.personBets.all %}
+            {% if bet.closeDate != null  and personBet.person.user == user %}
+            <li>
+                <div style="width:500px"><h3>{{personBet.wager}} | {{ bet.itemOfDispute }}</h3>
+                {% if personBet.outcome == "W" %}
+                    <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
+                {% else %}
+                    <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
+                {% endif %}
+                <!--For when we have multiple people betting-->
+                <!--{% for personBet in bet.personBets.all %}
+                    {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
+                {% endfor %}-->
+                <strong>Opened: </strong> {{bet.openDate}} <br/>
+                <strong>Closed: </strong> {{bet.closeDate}}
+            </li>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
     </ul>
 {% else %}
@@ -171,19 +229,29 @@
 {% if list_of_bets %}
     <ul class="rows">
     {% for bet in list_of_bets %}
-        <li>
-            <div><h3>{{ bet.itemOfDispute }}</h3>
-            {% if bet.closeDate == null %}
-                <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
-            {% else %}
-                <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
-            {% endif %}
-            <!--For when we have multiple people betting-->
-            <!--{% for personBet in bet.personBets.all %}
-                {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
-            {% endfor %}-->
-            <strong>Opened: </strong> {{bet.openDate}}
-        </li>
+        {% for personBet in bet.personBets.all %}
+            <li>
+                <div style="width:450px"><h3>{{personBet.wager }} | {{ bet.itemOfDispute }}</h3>
+                {% if bet.closeDate == null %}
+                    <img src="{{ MEDIA_URL}}images/blue.png" align="right"><br/><br/></div>
+                {% else %}
+                    {% if personBet.outcome == "W" %}
+                        <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
+                    {% else %}
+                        <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
+                    {% endif %}
+                {% endif %}
+                <!--For when we have multiple people betting-->
+                <!--{% for personBet in bet.personBets.all %}
+                    {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
+                {% endfor %}-->
+                <strong>Placed By: </strong> {{personBet.person.demographics.firstName}} <br/>
+                <strong>Opened: </strong> {{bet.openDate}}
+                {% if bet.closeDate != null %}
+                    <br/><strong>Closed: </strong> {{bet.closeDate}}
+                {% endif %}
+            </li>
+        {% endfor %}
     {% endfor %}
     </ul>
 {% else %}

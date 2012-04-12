@@ -12,8 +12,9 @@ from RegistrationForm import *
 from DecideBet import *
 
 def index(request):
+    form = RegisterForm()
     list_of_bets = Bet.objects.all().order_by('-dueDate')[:10]
-    list_of_users = User.objects.all()[:10]
+    list_of_persons = Person.objects.all()[:10]
     error = ""
     if request.method == "POST" and request.POST.__getitem__("name") == "logon" :
         username = request.POST['username']
@@ -22,7 +23,7 @@ def index(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render_to_response('bets/index.html', {'user': user}, context_instance=RequestContext(request))
+                return render_to_response('bets/index.html', {'user': user, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
             else:
                 error="Your account has been disabled."
                 return render_to_response('bets/index.html', {'error': error}, context_instance=RequestContext(request))
@@ -46,8 +47,11 @@ def index(request):
         betID = request.POST['betID']
         decideBet("lose", betID, request.user)
         return HttpResponseRedirect('')
+    elif request.method == "POST" and request.POST.__getitem__("name") == "new_password" :
+        register(request)
+        return HttpResponseRedirect('')
     else:
-        return render_to_response('bets/index.html', {'user':request.user, 'list_of_bets': list_of_bets, 'list_of_users': list_of_users}, context_instance=RequestContext(request))
+        return render_to_response('bets/index.html', {'user':request.user, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
 
 #register a user   
 def register(request):

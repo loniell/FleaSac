@@ -45,6 +45,7 @@ class PersonBet(models.Model):
     person = models.ForeignKey(Person)
     position = models.CharField(max_length=160)
     wager = models.IntegerField()
+    outcome = models.CharField(max_length=160)
 
 # Standard Bet Object 
 class Bet(models.Model):

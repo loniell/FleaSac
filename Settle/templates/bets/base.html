@@ -20,13 +20,16 @@
 		  {%if user.is_authenticated %}
 		  <li id="menu">
 			     <ul>
-			     <li><a href="#index">HOME</a></li>
+			     <li><a href="">HOME</a></li>
 			    <li>
-				 <a href="#about">PROFILE</a>
+				 <a href="#profile">PROFILE</a>
 				 <ul>
-				     <li><a href="#about/overview">Profile</a></li>
+				     <!--<li><a href="#about/overview">Profile</a></li>
 				     <li><a href="#about/technical-skills">Open Bets</a></li>
-				     <li><a href="#about/education">Closed Bets</a></li>
+				     <li><a href="#about/education">Closed Bets</a></li>-->
+				     <li><a href="#profile/profile">Profile</a></li>
+				     <li><a href="#profile/open">Open Bets</a></li>
+				     <li><a href="#profile/closed">Closed Bets</a></li>
 				 </ul>
 			    </li>
 			     <!--<li><a href="#portfolio">FRIENDS</a></li>-->
@@ -38,7 +41,7 @@
 					      <li><a href="#blog/webdevelopment">Web Development</a></li>
 					  </ul>
 				     </li>-->
-			    <li><a href="#contact">PLACE A BET</a></li>
+			    <li><a href="#placebet">PLACE A BET</a></li>
 			     </ul>
 			 </li>
 	     {%else%}
@@ -53,13 +56,12 @@
 		  {%if user.is_authenticated %}
 		  <!--Home page when LOGGED in! -->
 			  <!-- Begin of INDEX Page -->
-		
 		  <li id="index_logged_in">
 			      <ul class="page">
 				 <li class="top">&nbsp;</li>
-			 <div class="ribbon"><span class="arrow">&nbsp;</span>
-			      <h2 style="float:left;"> Welcome {% block user_first_name%} {% endblock %}! </h2>
-			 </div>
+				    <div class="ribbon"><span class="arrow">&nbsp;</span>
+					 <h2 style="float:left;"> Welcome {% block user_first_name%} {% endblock %}! </h2>
+				    </div>
 				 <li class="middle">
 				    <ul class="subPages">
 				      <li id="overview_index">
@@ -73,7 +75,7 @@
 						 <span style="color:red">{% block place_bet_error %}{% endblock %}</span>
 						 <form action="" method="post" name="place_bet">
 						    {% csrf_token %}
-						    <label>Your Issue: </label> <input type="text" name="itemOfDispute" value="" id="itemOfDispute" /><br/>
+						    <label>Your Issue: </label> <input type="text" maxlength=120 name="itemOfDispute" value="" id="itemOfDispute" /><br/>
 						    <label>Wager: </label>
 						    <select name="wager" id="wager">
 							<option selected="selected">1</option>
@@ -94,8 +96,8 @@
 						 </form>
 					       </li> <!--end first row first column-->
 					       <li> <!--second row first column-->
-						       <h3> SCOREBOARD </h3><br />
-						       <p>{% block scoreboard %}NO USERS.{% endblock %}</p>
+						       <h2> SCOREBOARD </h2>
+						       <p>{% block scoreboard %}NO USERS.{% endblock %}</p
 					       </li> <!--end second row first column-->
 					       </ul> <!--End rows-->
 					       </li> <!--end first column-->
@@ -129,9 +131,9 @@
 				 <li class="top">&nbsp;</li>
 				 <li class="middle">
 
-					<div id="prevButton"> <span class="arrow">&nbsp;</span> <a href="#" class="nivo-prevNav"> <img src="{{ MEDIA_URL }}images/prev.png" alt="Previous" /> </a></div>
+					<!--<div id="prevButton"> <span class="arrow">&nbsp;</span> <a href="#" class="nivo-prevNav"> <img src="{{ MEDIA_URL }}images/prev.png" alt="Previous" /> </a></div>
 					<div id="nextButton"> <span class="arrow">&nbsp;</span> <a href="#" class="nivo-nextNav"> <img src="{{ MEDIA_URL }}images/next.png" alt="Next" /> </a></div>
-
+					-->
 							   <ul class="subPages">
 							       <li>
 								 <div id="slider">
@@ -183,30 +185,34 @@
 
 
 		 <!-- Begin of Profile page -->
-			  <li id="about">
+			  <!--<li id="about">-->
+			  <li id="profile">
 			      <ul class="page">
 				 <li class="top">
 				     <div class="ribbon"><span class="arrow">&nbsp;</span>
 						  <h2 style="float:left;">Profile </h2>
 						  <ul class="sidemenu">
-						    <li class="active"><a href="#overview">Profile</a></li>
-						    <li><a href="#technical-skills">Open Bets</a></li>
-						    <li><a href="#education">Closed Bets</a></li>
+						    <!--<li class="active"><a href="#overview">Profile</a></li>-->
+						    <li class="active"><a href="#profile/profile">Profile</a></li>
+						    <!--<li><a href="#technical-skills">Open Bets</a></li>-->
+						    <li><a href="#profile/open">Open Bets</a></li>
+						    <!--<li><a href="#education">Closed Bets</a></li>-->
+						    <li><a href="#profile/closed">Closed Bets</a></li>
 						  </ul>
 					       </div>
 				 </li>
 				 <li class="middle">
 				    <ul class="subPages">
-					<li id="overview_profile">
+					<li id="profile">
 					    <ul class="columns">
 						<!--First Column-->
 						<li>
 						<ul class="rows">
 						 <!--first row of first column-->
 						 <li>
-						 <img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />
+						 <!--<img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />-->
+						 <h3>{% block user_name_profile %} Anon Ymous {% endblock %}</h3>
 						 <p>
-						 <strong>Name:</strong> {% block user_name_profile %} Anon Ymous {% endblock %}<br />
 						 <strong>Birth Date:</strong> {% block user_dob_profile %} 09/09/1999 {% endblock %}<br />
 						 <strong>Email:</strong> {% block user_email_profile %} anon@email.com {% endblock %}<br />
 						 <strong>Location:</strong> {% block user_loc_profile %} City, ST {% endblock %}<br />
@@ -233,16 +239,17 @@
 					</li>
 
 					<!-- Begin of OPEN bets -->
-					<li id="technical-skills">
+					<!--<li id="technical-skills">-->
+					<li id="open">
 					  <ul class="columns">
 						<!--First Column-->
 						<li>
 						<ul class="rows">
 						 <!--first row of first column-->
 						 <li>
-						  <img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />
-						  <p>
-						    <strong>Name:</strong>{% block user_name_open %} Anon Ymous {% endblock %}<br />
+						  <!--<img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />-->
+						 <h3>{% block user_name_open %} Anon Ymous {% endblock %}</h3>
+						 <p>
 						    <strong>Birth Date:</strong>{% block user_dob_open %} 09/09/1999 {% endblock %}<br />
 						    <strong>Email:</strong> {% block user_email_open %} anon@email.com {% endblock %}<br />
 						    <strong>Location:</strong>{% block user_loc_open %} City, ST {% endblock %}<br />
@@ -265,16 +272,17 @@
 					<!-- End of Open Bets -->
 
 					<!-- Begin of Closed Bets  -->
-					<li id="education">
+					<!--<li id="education">-->
+					<li id="closed">
 					   <ul class="columns">
 						<!--First Column-->
 						<li>
 						<ul class="rows">
 						 <!--first row of first column-->
 						 <li>
-						    <img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />
+						    <!--<img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />-->
+						    <h3>{% block user_name_closed %} Anon Ymous {% endblock %}</h3>
 						    <p>
-						      <strong>Name:</strong>{% block user_name_closed %} Anon Ymous {% endblock %}<br />
 						      <strong>Birth Date:</strong>{% block user_dob_closed %} 09/09/1999 {% endblock %}<br />
 						      <strong>Email:</strong> {% block user_email_closed %} anon@email.com {% endblock %}<br />
 						      <strong>Location:</strong>{% block user_loc_closed %} City, ST {% endblock %}<br />
@@ -304,18 +312,9 @@
 		    </li>
 		    <!-- End of Profile page -->
 		    
-		<!-- Settings Page -->
-		<!--<li id="blog">
-		  <ul class="page">
-		    <li class="top">&nbsp;</li>
-		    <li class="middle">&nbsp;</li>
-		    <li class="bottom">&nbsp;</li>
-		  </ul>
-		</li>-->
-		<!--End Settings Page-->
-		
 	    <!-- Begin of Place a Bet -->
-		    <li id="contact">
+		    <!--<li id="contact">-->
+		    <li id="placebet">
 			 <ul class="page">
 			     <li class="top">
 				 <div class="ribbon"><span class="arrow">&nbsp;</span>
@@ -332,7 +331,7 @@
 						  <form action="" method="post" name="place_bet_main">
 						    {% csrf_token %}
 						    <span>Issue:</span>
-							<textarea name="itemOfDispute_main" id="itemOfDispute_main" rows="2" cols="2"></textarea><br/><br/>
+							<textarea name="itemOfDispute_main" maxlength=120 id="itemOfDispute_main" rows="2" cols="2"></textarea><br/><br/>
 	
 						    <label for="wager_main"> Wager: </label>
 	
@@ -370,6 +369,40 @@
 			  </ul>
 		    </li>
 	    <!-- End of Place a Bet -->
+	    
+	    <!--Begin Settings-->
+		  <li id="settings">
+		    <ul class="page">
+		      <li class="top">
+			<div class="ribbon"><span class="arrow">&nbsp;</span>
+			      <h2 style="float:left;"> Settings </h2>
+			 </div>
+		      <li class="middle">
+			<ul class="subPages">
+			  <ul class="columns">
+			      <!--First Column-->
+			      <li>
+			       <h3>{% block user_name_settings %} Anon Ymous {% endblock %}</h3>
+			       <p>
+				<strong>Username: </strong> {% block user_username_settings %} username {% endblock %}<br/>
+				<strong>Birth Date:</strong> {% block user_dob_settings %} 09/09/1999 {% endblock %}<br />
+				<strong>Email:</strong> {% block user_email_settings %} anon@email.com {% endblock %}<br />
+				<strong>Location:</strong> {% block user_loc_settings %} City, ST {% endblock %}<br />
+			       </p>
+			     </li>
+			     <li> <!--beginning of second column-->
+			      <h3>Change Password</h3>
+			      <p>{% block change_password %}{% endblock %}</p>
+			     </li> <!--end second column-->
+  
+			  </ul>
+			</ul>
+		      <li class="bottom">
+		    </ul>
+		    <!--END Settings-->
+		    
+		    
+		  </li>
 		 </ul>
      </div> <!-- END pageSlider -->
 
@@ -378,14 +411,15 @@
 	       <div><div>
 	       <ul class="footer_controls">
 	     {%if user.is_authenticated %}
-	     <li>Hey, {{user.username}}!</li>
+	     <li>Hey, {{user.first_name}}!</li>
 	     <li>
-		<!--<a href="#/blog" class="sprite-settings" span="Settings" title="Settings">&nbsp;</a>-->
-		<form action="" method="post" name="settings">
+		<!--<a href="#settings" class="sprite-settings" span="Settings" title="Settings">&nbsp;</a>-->
+		<a href="#settings" class="sprite-settings" span="Settings" title="Settings">&nbsp;</a>
+		<!--<form action="" method="post" name="settings">
 		    {% csrf_token %}
 		    <input type="submit" name="submit" value="Settings" id="submit" class="button small"/>
 		    <input type="hidden" name="name" value="settings" id="settings"/>
-		</form>
+		</form>-->
 	     </li>
 	     <li>
 		<form action="" method="post" name="logout">
