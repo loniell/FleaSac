@@ -11,14 +11,15 @@ class RegisterForm(UserCreationForm):
         ('', '--Select--'),
         ('M', 'Male'),
         ('F', 'Female'),
-        ('X', 'Who cares?'),
     )
     gender = forms.ChoiceField(label="Gender", choices=GENDER_CHOICES)
-    dateOfBirth = forms.DateTimeField(label="Date of Birth")
+    #dateOfBirth = forms.DateTimeField(label="Date of Birth")
  
     class Meta:
         model = User
-        fields = ("username", "email", "firstName", "lastName", "gender", "dateOfBirth")
+        #fields = ("username", "email", "firstName", "lastName", "gender", "dateOfBirth")
+        fields = ("username", "email", "firstName", "lastName", "gender")
+        
     
     def clean_email(self):
         email = self.cleaned_data["email"]

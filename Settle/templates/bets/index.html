@@ -3,49 +3,45 @@
 {% block logon_error %}{{ error }}{% endblock %}
 {% block user_first_name %}{{user.first_name}}{% endblock %}
 
+{% block main_page_bet%}
+<div style="width:200px; height:40px">
+<p style="font-size: large"><strong>{{list_of_bets.0.personBets.all.0.wager}} | {{ list_of_bets.0.itemOfDispute }}</strong></p>
+<p>- {{list_of_bets.0.personBets.all.0.person.demographics.firstName}}</p>
+</div>    
+{% endblock %}
+
+{% block change_password %}
+    <form action="" method="post" name="change_password">
+        {% csrf_token %}
+        <label>Password: </label><input type="password" name="password1" value="" id="password1"/><br/>
+        <label>Repeat password: </label><input type="password" name="password2" value="" id="password2"/><br/>
+        <input type="submit" name="submit" value="Change Password" id="submit" class="button small"/>
+        <input type="hidden" name="name" value="change_password" id="change_password"/>
+</form><br/>
+        {{ password_message }}
+{% endblock %}
+
 <!--user profile-->
 {% block user_username_settings %} {{user.username}} {% endblock %}
 {% block user_name_profile %}{{user.get_full_name}}{% endblock %}
-{% block user_dob_profile %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
+<!--{% block user_dob_profile %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}-->
 {% block user_email_profile %}{{user.email}}{% endblock %}
-{% block user_loc_profile %}{{user.get_profile.demographics.location}}{% endblock %}
-{% block change_password %}
-<form action="" method="post" name="change_password">
-        {% csrf_token %}
-        <!--<label>New Password: </label><input type="password" name="new_password" value="" id="new_password"/><br/>
-        <label>Retype Password: </label><input type="password" name="new_password_retype" value="" id="new_password_retype"/><br/><br/>
-        -->
-        {% block content %}
-        <div>
-            {{ form.password1.errors }}
-            <label for="id_password1">Password: </label>
-            {{ form.password1 }}
-        </div>
-        <div>
-            {{ form.password2.errors }}
-            <label for="id_password2">Repeat password: </label>
-            {{ form.password2 }}
-        </div>
-        {% endblock %}
-        <input type="submit" name="submit" value="Change Password" id="submit" class="button small"/>
-        <input type="hidden" name="name" value="new_password" id="new_password"/>
-</form><br/>
-{% endblock %}
+<!--{% block user_loc_profile %}{{user.get_profile.demographics.location}}{% endblock %}-->
 
 {% block user_name_open %}{{user.get_full_name}}{% endblock %}
-{% block user_dob_open %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
+<!--{% block user_dob_open %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}-->
 {% block user_email_open %}{{user.email}}{% endblock %}
-{% block user_loc_open %}{{user.get_profile.demographics.location}}{% endblock %}
+<!--{% block user_loc_open %}{{user.get_profile.demographics.location}}{% endblock %}-->
 
 {% block user_name_closed %}{{user.get_full_name}}{% endblock %}
-{% block user_dob_closed %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
+<!--{% block user_dob_closed %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}-->
 {% block user_email_closed %}{{user.email}}{% endblock %}
-{% block user_loc_closed %}{{user.get_profile.demographics.location}}{% endblock %}
+<!--{% block user_loc_closed %}{{user.get_profile.demographics.location}}{% endblock %}-->
 
 {% block user_name_settings %}{{user.get_full_name}}{% endblock %}
-{% block user_dob_settings %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}
+<!--{% block user_dob_settings %}{{user.get_profile.demographics.dateOfBirth|date:"SHORT_DATE_FORMAT"}}{% endblock %}-->
 {% block user_email_settings %}{{user.email}}{% endblock %}
-{% block user_loc_settings %}{{user.get_profile.demographics.location}}{% endblock %}
+<!--{% block user_loc_settings %}{{user.get_profile.demographics.location}}{% endblock %}-->
 
 {% block scoreboard %}
     <h3 style="color:white">{{user.get_profile.demographics.firstName}} | {{user.get_profile.score}}</h3><br/><br/>
@@ -58,37 +54,37 @@
 
 {% block my_score_profile %}
 {% if user.get_profile.score > 0 %}
-    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% if user.get_profile.score < 0 %}
-    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% if user.get_profile.score = 0 %}
-    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% endblock %}
 
 {% block my_score_profile_open %}
 {% if user.get_profile.score > 0 %}
-    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% if user.get_profile.score < 0 %}
-    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% if user.get_profile.score = 0 %}
-    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% endblock %}
 
 {% block my_score_profile_closed %}
 {% if user.get_profile.score > 0 %}
-    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="color:green; font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% if user.get_profile.score < 0 %}
-    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="color:red; font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% if user.get_profile.score = 0 %}
-    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p>
+    <br/><p style="font-size:60px; text-align:center">{{user.get_profile.score}}</p><br/><br/>
 {% endif %}
 {% endblock %}
 
@@ -113,6 +109,14 @@
                     {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
                 {% endfor %}-->
                 <strong>Placed By: </strong> {{personBet.person.demographics.firstName}} <br/>
+                <!-- BELOW FOR WHEN FIGURE OUT PROFILE PAGE -->
+                <!--<strong>Placed By: </strong>
+                <form action="" method="post" name="view_user_profile" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="username" value="{{personBet.person.user.username}}" id="username"/>
+                        <input type="submit" name="submit" value="{{personBet.person.demographics.firstName}}" id="submit" class = "button small"/>
+                        <input type="hidden" name="name" value="view_user_profile" id="win"/>
+                </form><br/>-->
                 <strong>Opened: </strong> {{bet.openDate}}
                 {% if bet.closeDate != null %}
                     <br/><strong>Closed: </strong> {{bet.closeDate}}
@@ -257,4 +261,68 @@
 {% else %}
     <p>No bets.</p>
 {% endif %}
+{% endblock %}
+
+{% block registration_page %}
+{% block content %}
+    <!--All in register.html-->
+{% endblock %}
+{% endblock %}
+
+
+<!--Friend's Page -->
+{% block list_of_friends %}
+<ul class="rows">
+{% for aUser in list_of_users %}
+    {% if aUser.get_full_name %}
+    <li>
+    <!--<p><a href="#friends" title = "{{aUser.get_full_name}}">{{aUser.get_full_name}}</a></p>-->
+    <form action="" method="post" name="view_user_profile" style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="{{aUser.username}}" id="username"/>
+        <input type="submit" name="submit" value="{{aUser.username}} ({{aUser.get_full_name}})" id="submit" class = "button small"/>
+        <input type="hidden" name="name" value="view_user_profile" id="win"/>
+    </form>
+    </li>
+    {% endif %}
+{% endfor %}
+</ul>
+
+{% endblock %}
+{% block selected_user_full_name %}{{selectedUser.get_full_name}}{% endblock %}
+{% block selected_user_details %}
+    Email: {{selectedUser.email}} <br/>
+    Date Joined: {{selectedUser.date_joined|date:"SHORT_DATE_FORMAT"}}<br/>
+    </li>
+    <li>
+    <h3> Bets </h3>
+        <!--{% if list_of_user_bets %}
+        <ul class="rows">
+        {% for bet in list_of_user_bets %}
+            {% for personBet in bet.personBets.all %}
+                {% if personBet.person.user == user %}
+                    <li>
+                        <div style="width:500px"><h3>{{personBet.wager}} | {{ bet.itemOfDispute }}</h3>
+                        {% if bet.closeDate == null %}
+                            <img src="{{ MEDIA_URL}}images/blue.png" align="right"><br/><br/></div>
+                        {% else %}
+                            {% if personBet.outcome == "W" %}
+                                <img src="{{ MEDIA_URL}}images/green.png" align="right"><br/><br/></div>
+                            {% else %}
+                                <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
+                            {% endif %}
+                        {% endif %}
+                        <strong>Opened: </strong> {{bet.openDate}}
+                        {% if bet.closeDate != null %}
+                            <br/><strong>Closed: </strong> {{bet.closeDate}}
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bets.</p>
+    {% endif %}-->
+    </li>
 {% endblock %}

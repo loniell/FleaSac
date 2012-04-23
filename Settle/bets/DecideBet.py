@@ -9,7 +9,7 @@ def decideBet(outcome, betID, user):
     bet.save()
     
     #Now, give points to the user who won
-    #Future: take points from users, update PersonBet to indicate win or loss.
+    #Future: update PersonBet to indicate win or loss.
     person = Person.objects.get(user = user)
     personBet = bet.personBets.get(person = person)
     if outcome == "win":

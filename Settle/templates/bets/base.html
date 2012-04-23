@@ -20,7 +20,7 @@
 		  {%if user.is_authenticated %}
 		  <li id="menu">
 			     <ul>
-			     <li><a href="">HOME</a></li>
+			     <li><a href="#home">HOME</a></li>
 			    <li>
 				 <a href="#profile">PROFILE</a>
 				 <ul>
@@ -42,6 +42,7 @@
 					  </ul>
 				     </li>-->
 			    <li><a href="#placebet">PLACE A BET</a></li>
+			    <li><a href="#friends">FRIENDS</a></li>
 			     </ul>
 			 </li>
 	     {%else%}
@@ -51,16 +52,42 @@
 
 
 		<!-- Begin of Page Slider -->
+
 	<div id="pageSlider">
 		<ul>
+		  <!--begin REGISTER page-->
+		{% if not user.is_authenticated %}
+		<li id="register">
+		  <ul class="page">
+		    <li class="top">
+		      <div class="ribbon"><span class="arrow">&nbsp;</span>
+			<h2 style="float:left;"> Register!</h2>
+		      </div>
+		    </li>
+		    <li class="middle">
+		      <ul class="subPages">
+			<li>
+			   <br/>
+			  {% block registration_page %}{% endblock %}
+			  <a href="/bets/#index" style="float:right" class="button medium">Take Me Home!</a><br/>
+			</li>
+			
+		      </ul>
+		    </li>
+		    <li class="bottom"></li>		    
+		  </ul>
+		  
+		</li>
+		<!--end REGISTER page-->
+		{% endif %}
 		  {%if user.is_authenticated %}
 		  <!--Home page when LOGGED in! -->
 			  <!-- Begin of INDEX Page -->
-		  <li id="index_logged_in">
+		  <li id="home">
 			      <ul class="page">
 				 <li class="top">&nbsp;</li>
 				    <div class="ribbon"><span class="arrow">&nbsp;</span>
-					 <h2 style="float:left;"> Welcome {% block user_first_name%} {% endblock %}! </h2>
+					 <h2 style="float:left;"> Welcome {% block user_first_name %} {% endblock %}! </h2>
 				    </div>
 				 <li class="middle">
 				    <ul class="subPages">
@@ -72,10 +99,10 @@
 						 <!--first row of first column-->
 						 <li>
 						 <h3 style="float:left;"> Place a Bet! </h3><br /><br/>
-						 <span style="color:red">{% block place_bet_error %}{% endblock %}</span>
+						 <span style="color:red">{{place_bet_error}}</span>
 						 <form action="" method="post" name="place_bet">
 						    {% csrf_token %}
-						    <label>Your Issue: </label> <input type="text" maxlength=120 name="itemOfDispute" value="" id="itemOfDispute" /><br/>
+						    <textarea name="itemOfDispute" maxlength=120 id="itemOfDispute" rows="2" cols="2"></textarea><br/><br/>
 						    <label>Wager: </label>
 						    <select name="wager" id="wager">
 							<option selected="selected">1</option>
@@ -158,16 +185,19 @@
 					      </li>
 									  <li>
 						    <div>
-							<h3>Latest Tweet:</h3>
-							<div class='tweet'></div>
+							<h3>Latest Bet:</h3>
+							{% block main_page_bet %}
+							{% endblock %}
 						    </div>
 					      </li>
 					      <li>
-									  <h3>not a member? sign up!</h3>
-						  <form name="contact_form" id="contact_form">
-						    <label for="email">Email: </label> <input type="text" name="email" value="" id="email" /><br />
-						    <input type="submit" name="submit" value="Sign Up!" id="submit" class="button small"/>
-						  </form>
+						  <h3 style="text-align: center">not a member? sign up!</h3>
+						  <a href="/bets/register" class="button big" style="margin-left: 100px"> Sign Up</a>
+						  <!--<form action="#register" method="link" name="register" id="register">
+						    {% csrf_token %}
+						    <input type="submit" name="submit" value="Sign Up!" id="submit" class="button big" style="margin-left: 100px"/>
+						    <input type="hidden" name="name" value="register" id="register"/>
+						  </form>-->
 					      </li>
 
 					  </ul>
@@ -183,7 +213,7 @@
 		  <!--End home page when NOT LOGGED IN! -->
 		  {%endif%}
 
-
+		  {% if user.is_authenticated %}
 		 <!-- Begin of Profile page -->
 			  <!--<li id="about">-->
 			  <li id="profile">
@@ -213,9 +243,9 @@
 						 <!--<img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />-->
 						 <h3>{% block user_name_profile %} Anon Ymous {% endblock %}</h3>
 						 <p>
-						 <strong>Birth Date:</strong> {% block user_dob_profile %} 09/09/1999 {% endblock %}<br />
+						 <!--<strong>Birth Date:</strong> {% block user_dob_profile %} 09/09/1999 {% endblock %}<br />-->
 						 <strong>Email:</strong> {% block user_email_profile %} anon@email.com {% endblock %}<br />
-						 <strong>Location:</strong> {% block user_loc_profile %} City, ST {% endblock %}<br />
+						 <!--<strong>Location:</strong> {% block user_loc_profile %} City, ST {% endblock %}<br />-->
 						 </p>
 					       </li>
 						 <!--end first row first column-->
@@ -250,9 +280,9 @@
 						  <!--<img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />-->
 						 <h3>{% block user_name_open %} Anon Ymous {% endblock %}</h3>
 						 <p>
-						    <strong>Birth Date:</strong>{% block user_dob_open %} 09/09/1999 {% endblock %}<br />
+						    <!--<strong>Birth Date:</strong>{% block user_dob_open %} 09/09/1999 {% endblock %}<br />-->
 						    <strong>Email:</strong> {% block user_email_open %} anon@email.com {% endblock %}<br />
-						    <strong>Location:</strong>{% block user_loc_open %} City, ST {% endblock %}<br />
+						    <!--<strong>Location:</strong>{% block user_loc_open %} City, ST {% endblock %}<br />-->
 						  </p>
 					         </li> <!--end first row first column-->
 					       <li> <!--second row first column-->
@@ -283,9 +313,9 @@
 						    <!--<img src="{{ MEDIA_URL }}images/photo.jpg" alt="Photo Description" height="150"><br />-->
 						    <h3>{% block user_name_closed %} Anon Ymous {% endblock %}</h3>
 						    <p>
-						      <strong>Birth Date:</strong>{% block user_dob_closed %} 09/09/1999 {% endblock %}<br />
+						      <!--<strong>Birth Date:</strong>{% block user_dob_closed %} 09/09/1999 {% endblock %}<br />-->
 						      <strong>Email:</strong> {% block user_email_closed %} anon@email.com {% endblock %}<br />
-						      <strong>Location:</strong>{% block user_loc_closed %} City, ST {% endblock %}<br />
+						      <!--<strong>Location:</strong>{% block user_loc_closed %} City, ST {% endblock %}<br />-->
 						    </p>
 						 </li> <!--end first row first column-->
 					       <li> <!--second row first column-->
@@ -331,6 +361,7 @@
 						  <form action="" method="post" name="place_bet_main">
 						    {% csrf_token %}
 						    <span>Issue:</span>
+						    <br/><span style="color:red">{{place_bet_main_error}}</span>
 							<textarea name="itemOfDispute_main" maxlength=120 id="itemOfDispute_main" rows="2" cols="2"></textarea><br/><br/>
 	
 						    <label for="wager_main"> Wager: </label>
@@ -360,15 +391,48 @@
 				     </li> <!--end second column-->
 
 
-							     </ul>
-						 </li>
-						 </ul>
+				    </ul>
+			    	 </li>
+				 </ul>
 
 				    </li>
 				    <li class="bottom">&nbsp;</li>
 			  </ul>
 		    </li>
 	    <!-- End of Place a Bet -->
+	    
+	    
+	    <!--Begin Other User's Profile Page-->
+		  <li id="friends">
+		    <ul class="page">
+		      <li class="top">
+			<div class="ribbon"><span class="arrow">&nbsp;</span>
+			   <h2 style="float:left;">FRIENDS</h2>
+			</div>
+		      </li>
+		      <li class="middle">
+			<ul class="subPages">
+			  <li>
+			  <ul class="columns">
+			    <!--First Column-->
+			    <li>
+			      <h3>Select a user below:</h3>
+			      <p>{% block list_of_friends %}NONE.{% endblock %}</p>
+
+			   </li> <!--end first column-->
+			   <li> <!--beginning of second column-->
+			    <h3>{% block selected_user_full_name %}NO ONE{% endblock %}'s Info: </h3>
+			    <p>{% block selected_user_details %}NO INFORMATION.{% endblock %}</p>
+			   </li> <!--end second column-->
+
+			</ul>
+			  </li>
+			</ul>
+		      </li>
+		      <li class="bottom">&nbsp;</li>
+		    </ul>
+		  </li>
+		  <!--END Other User's Profile Page-->
 	    
 	    <!--Begin Settings-->
 		  <li id="settings">
@@ -377,6 +441,7 @@
 			<div class="ribbon"><span class="arrow">&nbsp;</span>
 			      <h2 style="float:left;"> Settings </h2>
 			 </div>
+		      </li>
 		      <li class="middle">
 			<ul class="subPages">
 			  <ul class="columns">
@@ -385,9 +450,9 @@
 			       <h3>{% block user_name_settings %} Anon Ymous {% endblock %}</h3>
 			       <p>
 				<strong>Username: </strong> {% block user_username_settings %} username {% endblock %}<br/>
-				<strong>Birth Date:</strong> {% block user_dob_settings %} 09/09/1999 {% endblock %}<br />
+				<!--<strong>Birth Date:</strong> {% block user_dob_settings %} 09/09/1999 {% endblock %}<br />-->
 				<strong>Email:</strong> {% block user_email_settings %} anon@email.com {% endblock %}<br />
-				<strong>Location:</strong> {% block user_loc_settings %} City, ST {% endblock %}<br />
+				<!--<strong>Location:</strong> {% block user_loc_settings %} City, ST {% endblock %}<br />-->
 			       </p>
 			     </li>
 			     <li> <!--beginning of second column-->
@@ -397,12 +462,13 @@
   
 			  </ul>
 			</ul>
-		      <li class="bottom">
+		      </li>
+		      <li class="bottom"></li>
 		    </ul>
+		  </li>
 		    <!--END Settings-->
 		    
-		    
-		  </li>
+		  
 		 </ul>
      </div> <!-- END pageSlider -->
 
@@ -489,7 +555,7 @@
 		 </li>
 	     {%else%}
 	     {%endif%}
-		 <!--<li>
+		 <li>
 		     <a href="#" class="sprite-social-connect" title="Social">&nbsp;</a>
 		     <div><a href="#" class="close">&nbsp;</a>
 
@@ -517,8 +583,10 @@
 		     <a href="#contact" class="sprite-contact-me" title="Contact Us">&nbsp;</a>
 		 </li>
 	     <li><a href="#" class="sprite-hide_tool" title="Show / Hide Bar">&nbsp;</a>
-	     </li>-->
+	     </li>
 	       </ul>
+	       
+	       {%endif%}
 		  <!--<a href="#" id="showTool">&nbsp;</a>-->
 		  </div></div>
 	</div>

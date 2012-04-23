@@ -1,6 +1,6 @@
+{% extends "bets/index.html" %}
 {% block content %}
-    <h1>Join us. </h1>
- 
+    {{ register_message }}
     <form action="" method="post">
     {% csrf_token %}
     <div>
@@ -37,12 +37,14 @@
         {{ form.gender.errors }}
         <label for="id_gender">Gender: </label>
         {{ form.gender }}
+        {{ form.dateOfBirth.errors }}
     </div>
-    <div>
+    <!--<div>
         {{ form.dateOfBirth.errors }}
         <label for="id_dateOfBirth">Date Of Birth: </label>
         {{ form.dateOfBirth }}
-    </div>
-    <input type="submit" value="Register" />
+    </div>-->
+    <input type="submit" value="Register" class="button medium"/>
+    <input type="hidden" name="name" value="register_submit" id="register_submit"/>
     </form>
 {% endblock %}
