@@ -76,10 +76,16 @@ var $cookiePageSlider = $.cookie('PageSlider_settings'),
     portfolioTitleSortSet = false,
     portfolioIdSortSet = false,
     currentURL, currentURL2, menuHref, menuHref2, url, url2, murig;
-
+    
+//If not initialized already, initialize it. 
+if (!$cookiePreviousUrl){
+    var $cookiePreviousUrl = $.cookie('previousUrl');
+}
 
 /* Window is loaded */
 $(window).bind("load", function () {
+    
+    //"Current URL: " + $(location).attr('href') + ";     Previous URL: " + $.cookie("previousUrl"));
 
     if (getBrowserHeight() < 620) {
         $('.sprite-hide-tool').click();
@@ -88,6 +94,12 @@ $(window).bind("load", function () {
         $(this).remove();
     });
 
+    if(!$("#logo-menu").hasClass('ah')){
+	$("#logo-menu").dequeue().animate({top:0}, 700, "easeInOutSine", function(){
+	      $("#logo>img").addClass("animated");
+	});
+    }
+    
     $('#slider').nivoSlider({
         directionNav: $slider_directionNav,
         pauseOnHover: $slider_pauseOnHover,
@@ -142,7 +154,7 @@ $(window).bind("load", function () {
             goToSubPage("#" + url2[0], url2[1], $subPageSlider_speed);
             return false;
         }
-
+	//$cookiePreviousUrl = $(location).attr('href');
         goToPage("#" + url2[0], url2[1], $pageSlider_speed);
 
     });
@@ -150,7 +162,7 @@ $(window).bind("load", function () {
     // Since the event is only triggered when the hash changes, we need
     // to trigger the event now, to handle the hash the page may have
     // loaded with.
-
+   
     currentURL = $.bbq.getState("p");
     if (currentURL) {
         currentURL2 = currentURL.split('/');
@@ -158,6 +170,7 @@ $(window).bind("load", function () {
     } else {
 
     }
+    
  
 if(!$("#logo-menu").hasClass('ah')){
     $("#logo-menu").dequeue().animate({top:0}, 700, "easeInOutSine", function(){
@@ -197,13 +210,9 @@ if(!$("#logo-menu").hasClass('ah')){
 });
 });
 
-
 /* Document is ready */
 $(function () {
 
-				
-				
-    
     $('a[href=#]').attr('href', 'javascript:void(0)');
 
     /* Pagination */
@@ -358,8 +367,13 @@ function fancyBox_create(){
     });
 } 
 fancyBox_create();
-
-
+    
+    //Lindsey's attempt at defaulting the page settings
+    $cookiePageSlider = "horisontal";
+    $cookieLogoButtons = "gray";
+    $cookieBackground = null;
+    $cookiePageSytle = "dark";
+    
     if ($cookiePageSlider == "vertical") {
         $("input[name=pageSliderVariant][value=vertical").attr("checked", "checked");
         $("#pageSlider").removeAttr("class").addClass("vertical");
@@ -501,8 +515,6 @@ if($("#logo-menu").hasClass("ah")){
         q.preventDefault();
     });
 
-
-
     $('a').live("click", function (event) {
 
 
@@ -519,7 +531,6 @@ if($("#logo-menu").hasClass("ah")){
                 $.bbq.pushState({
                     p: menuHref
                 });
-
                 // Prevent the default click behavior.
                 return false;
             }
@@ -1291,7 +1302,19 @@ else{
     
     addEvent(window, "load", dynamicLayout);
     addEvent(window, "resize", dynamicLayout);
-
+   
+    if (location.href != $cookiePreviousUrl){
+	var prevUrl = $cookiePreviousUrl.split('#p=');
+	//alert(prevUrl[1]);
+	var prevUrlSub = prevUrl[1].split('/');
+	//alert(prevUrlSub);
+	if (prevUrlSub[1]){
+	    goToPage("#" + prevUrlSub[0], prevUrlSub[1], $pageSlider_speed);
+	}
+	else{
+	    goToPage("#" + prevUrl[1], null, $pageSlider_speed);
+	}
+    }
     /*End of Document ready*/
 });
 
@@ -1342,6 +1365,10 @@ function getBrowserWidth() {
 
 
 function goToPage(hrefValue0, hrefValue1, animation_speed) {
+    //alert("1: " + hrefValue0 + " 2: " + hrefValue1);
+    $cookiePreviousUrl = $.cookie('previousUrl', location.href, { path: '/' });
+    var newUrl = hrefValue0.split("#");
+    location.replace("http://127.0.0.1:8000/bets/#p=" + newUrl[1]);
     $('#pageSlider').scrollTo(hrefValue0, animation_speed, {
         easing: $pageSlider_easing,
         onAfter: function () {
@@ -1359,23 +1386,32 @@ function goToPage(hrefValue0, hrefValue1, animation_speed) {
         $('#slider').data('nivoslider').stop();
     }
 
+
 }
 
 function goToSubPage(hrefValue0, hrefValue1, animation_speed2) {
+    $cookiePreviousUrl = $.cookie('previousUrl', location.href, { path: '/' });
+    var newUrl = hrefValue0.split("#");
+    //alert("newurl: " + newUrl + " newSubUrl: " + hrefValue1);
+    location.replace("http://127.0.0.1:8000/bets/#p=" + newUrl[1] + "/" + hrefValue1);
     if ($(hrefValue0 + ' .subPages').find('li#' + hrefValue1).length != 0) {
         $(hrefValue0 + " .sidemenu li").removeClass();
         $(hrefValue0 + " .sidemenu").find('a[href=#' + hrefValue1 + ']').parent().addClass('active');
         $(hrefValue0 + ' .subPages').scrollTo('#' + hrefValue1, animation_speed2, {
             easing: $subPageSlider_easing
         });
+	return;
 
     }
     if ($(hrefValue0 + ' .portfolio_filter').find('a[data-value=' + hrefValue1 + ']').length != 0) {
         $('.portfolio_filter').addClass('clicked');
         $(hrefValue0 + ' .portfolio_filter').find('a[data-value=' + hrefValue1 + ']').trigger('click');
+	return;
     }
     if ($(hrefValue0 + ' .blog_filter').find('a[data-value=' + hrefValue1 + ']').length != 0) {
         $('.blog_filter').addClass('clicked');
         $(hrefValue0 + ' .blog_filter').find('a[data-value=' + hrefValue1 + ']').trigger('click');
+	return;
     }
+    return;
 }

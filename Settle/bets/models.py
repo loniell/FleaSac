@@ -66,4 +66,10 @@ class Bet(models.Model):
     categories = models.ManyToManyField(Category)
     personBets = models.ManyToManyField(PersonBet)
     
+#For collecting emails when people sign up
+class SignUpEmails(models.Model):
+    def __unicode__(self):
+        return self.email
+    email = models.CharField(max_length=160)
+    
     

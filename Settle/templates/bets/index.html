@@ -117,9 +117,9 @@
                         <input type="submit" name="submit" value="{{personBet.person.demographics.firstName}}" id="submit" class = "button small"/>
                         <input type="hidden" name="name" value="view_user_profile" id="win"/>
                 </form><br/>-->
-                <strong>Opened: </strong> {{bet.openDate}}
+                <strong>Proposed: </strong> {{bet.openDate}}
                 {% if bet.closeDate != null %}
-                    <br/><strong>Closed: </strong> {{bet.closeDate}}
+                    <br/><strong>Settled: </strong> {{bet.closeDate}}
                 {% endif %}
             </li>
         {% endfor %}
@@ -151,9 +151,9 @@
                     <!--{% for personBet in bet.personBets.all %}
                         {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
                     {% endfor %}-->
-                    <strong>Opened: </strong> {{bet.openDate}}
+                    <strong>Proposed: </strong> {{bet.openDate}}
                     {% if bet.closeDate != null %}
-                        <br/><strong>Closed: </strong> {{bet.closeDate}}
+                        <br/><strong>Settled: </strong> {{bet.closeDate}}
                     {% endif %}
                 </li>
             {% endif %}
@@ -177,7 +177,7 @@
                 <!--{% for personBet in bet.personBets.all %}
                     {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
                 {% endfor %}-->
-                <strong>Opened: </strong> {{bet.openDate}} <br/><br />
+                <strong>Proposed: </strong> {{bet.openDate}} <br/><br />
                 <form action="" method="post" name="decide_bet" style="display:inline;float:left;">
                         {% csrf_token %}
                         <input type="hidden" name="betID" value="{{bet.id}}" id="betID"/>
@@ -217,8 +217,8 @@
                 <!--{% for personBet in bet.personBets.all %}
                     {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
                 {% endfor %}-->
-                <strong>Opened: </strong> {{bet.openDate}} <br/>
-                <strong>Closed: </strong> {{bet.closeDate}}
+                <strong>Proposed: </strong> {{bet.openDate}} <br/>
+                <strong>Settled: </strong> {{bet.closeDate}}
             </li>
             {% endif %}
         {% endfor %}
@@ -250,9 +250,9 @@
                     {{personBet.person.demographics.firstName}} | {{personBet.wager}} <br/>
                 {% endfor %}-->
                 <strong>Placed By: </strong> {{personBet.person.demographics.firstName}} <br/>
-                <strong>Opened: </strong> {{bet.openDate}}
+                <strong>Proposed: </strong> {{bet.openDate}}
                 {% if bet.closeDate != null %}
-                    <br/><strong>Closed: </strong> {{bet.closeDate}}
+                    <br/><strong>Settled: </strong> {{bet.closeDate}}
                 {% endif %}
             </li>
         {% endfor %}
@@ -263,46 +263,64 @@
 {% endif %}
 {% endblock %}
 
-{% block registration_page %}
-{% block content %}
+<!--{% block registration_page %}
+{% block content %}-->
     <!--All in register.html-->
-{% endblock %}
-{% endblock %}
+<!--{% endblock %}
+{% endblock %}-->
 
 
 <!--Friend's Page -->
 {% block list_of_friends %}
-<ul class="rows">
 {% for aUser in list_of_users %}
     {% if aUser.get_full_name %}
-    <li>
-    <!--<p><a href="#friends" title = "{{aUser.get_full_name}}">{{aUser.get_full_name}}</a></p>-->
     <form action="" method="post" name="view_user_profile" style="display:inline;">
         {% csrf_token %}
         <input type="hidden" name="username" value="{{aUser.username}}" id="username"/>
         <input type="submit" name="submit" value="{{aUser.username}} ({{aUser.get_full_name}})" id="submit" class = "button small"/>
         <input type="hidden" name="name" value="view_user_profile" id="win"/>
-    </form>
-    </li>
+    </form><br/><br/>
     {% endif %}
 {% endfor %}
-</ul>
 
 {% endblock %}
-{% block selected_user_full_name %}{{selectedUser.get_full_name}}{% endblock %}
+{% block selected_user_full_name %}
+{%if selectedUser %}
+    {{selectedUser.get_full_name}}'s Info
+{%endif%}
+{% endblock %}
 {% block selected_user_details %}
-    Email: {{selectedUser.email}} <br/>
-    Date Joined: {{selectedUser.date_joined|date:"SHORT_DATE_FORMAT"}}<br/>
+    {%if selectedUser %}
+    <ul class="rows">
+    <li>
+        Email: {{selectedUser.email}} <br/>
+        Date Joined: {{selectedUser.date_joined|date:"SHORT_DATE_FORMAT"}}<br/>
     </li>
     <li>
-    <h3> Bets </h3>
-        <!--{% if list_of_user_bets %}
+        Score: <br/>
+        <h1>
+        {% if selectedUser.get_profile.score > 0 %}
+            <br/><p style="color:green; font-size:60px; text-align:center">{{selectedUser.get_profile.score}}</p><br/><br/>
+        {% endif %}
+        {% if selectedUser.get_profile.score < 0 %}
+            <br/><p style="color:red; font-size:60px; text-align:center">{{selectedUser.get_profile.score}}</p><br/><br/>
+        {% endif %}
+        {% if selectedUser.get_profile.score = 0 %}
+            <br/><p style="font-size:60px; text-align:center">{{selectedUser.get_profile.score}}</p><br/><br/>
+        {% endif %}
+        </h1>
+    </li>
+    </ul>
+    </li>
+    <li>
+    <h3> {{selectedUser.get_full_name}}'s Latest </h3>
+        {% if list_of_bets %}
         <ul class="rows">
-        {% for bet in list_of_user_bets %}
+        {% for bet in list_of_bets %}
             {% for personBet in bet.personBets.all %}
-                {% if personBet.person.user == user %}
+                {% if personBet.person.user == selectedUser %}
                     <li>
-                        <div style="width:500px"><h3>{{personBet.wager}} | {{ bet.itemOfDispute }}</h3>
+                        <div style="width:380px"><h3>{{personBet.wager}} | {{ bet.itemOfDispute }}</h3>
                         {% if bet.closeDate == null %}
                             <img src="{{ MEDIA_URL}}images/blue.png" align="right"><br/><br/></div>
                         {% else %}
@@ -312,9 +330,9 @@
                                 <img src="{{ MEDIA_URL}}images/red.png" align="right"><br/><br/></div>
                             {% endif %}
                         {% endif %}
-                        <strong>Opened: </strong> {{bet.openDate}}
+                        <strong>Proposed: </strong> {{bet.openDate}}
                         {% if bet.closeDate != null %}
-                            <br/><strong>Closed: </strong> {{bet.closeDate}}
+                            <br/><strong>Settled: </strong> {{bet.closeDate}}
                         {% endif %}
                     </li>
                 {% endif %}
@@ -323,6 +341,7 @@
         </ul>
     {% else %}
         <p>No bets.</p>
-    {% endif %}-->
+    {% endif %}
     </li>
+    {%endif%}
 {% endblock %}

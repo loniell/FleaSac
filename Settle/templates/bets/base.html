@@ -10,6 +10,20 @@
     <noscript>
        <link rel="stylesheet" href="{{ MEDIA_URL }}css/noscript.css" type="text/css" media="screen" />
     </noscript>
+    <!-- GOOGLE ANALYTICS! --> 
+  	<script type="text/javascript">
+
+	 var _gaq = _gaq || [];
+	 _gaq.push(['_setAccount', 'UA-31400376-1']);
+	 _gaq.push(['_trackPageview']);
+	
+	 (function() {
+	   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	 })();
+
+  	</script>
   </head>
 <body class="blue">
 	    <div id="preloader">&nbsp;</div>
@@ -28,8 +42,8 @@
 				     <li><a href="#about/technical-skills">Open Bets</a></li>
 				     <li><a href="#about/education">Closed Bets</a></li>-->
 				     <li><a href="#profile/profile">Profile</a></li>
-				     <li><a href="#profile/open">Open Bets</a></li>
-				     <li><a href="#profile/closed">Closed Bets</a></li>
+				     <li><a href="#profile/unsettled">Unsettled</a></li>
+				     <li><a href="#profile/settled">Settled</a></li>
 				 </ul>
 			    </li>
 			     <!--<li><a href="#portfolio">FRIENDS</a></li>-->
@@ -41,8 +55,8 @@
 					      <li><a href="#blog/webdevelopment">Web Development</a></li>
 					  </ul>
 				     </li>-->
-			    <li><a href="#placebet">PLACE A BET</a></li>
-			    <li><a href="#friends">FRIENDS</a></li>
+			    <li><a href="#settle_it">SETTLE IT</a></li>
+			    <li><a href="#competition">COMPETITION</a></li>
 			     </ul>
 			 </li>
 	     {%else%}
@@ -55,7 +69,10 @@
 
 	<div id="pageSlider">
 		<ul>
+		<!--NO REGISTER PAGE FOR NOW! 5/7/12-->
+		
 		  <!--begin REGISTER page-->
+		<!--
 		{% if not user.is_authenticated %}
 		<li id="register">
 		  <ul class="page">
@@ -78,9 +95,9 @@
 		  </ul>
 		  
 		</li>
+		{% endif %}-->
 		<!--end REGISTER page-->
-		{% endif %}
-		  {%if user.is_authenticated %}
+		{%if user.is_authenticated %}
 		  <!--Home page when LOGGED in! -->
 			  <!-- Begin of INDEX Page -->
 		  <li id="home">
@@ -98,12 +115,13 @@
 						<ul class="rows">
 						 <!--first row of first column-->
 						 <li>
-						 <h3 style="float:left;"> Place a Bet! </h3><br /><br/>
+						 <h3 style="float:left;"> Settle It! </h3><br /><br/>
 						 <span style="color:red">{{place_bet_error}}</span>
 						 <form action="" method="post" name="place_bet">
 						    {% csrf_token %}
-						    <textarea name="itemOfDispute" maxlength=120 id="itemOfDispute" rows="2" cols="2"></textarea><br/><br/>
-						    <label>Wager: </label>
+						    <span>Terms:</span>
+						    <textarea name="itemOfDispute" maxlength=120 id="itemOfDispute" rows="2" cols="2" style="resize: none;"></textarea><br/><br/>
+						    <label>Price: </label>
 						    <select name="wager" id="wager">
 							<option selected="selected">1</option>
 							<option>2</option>
@@ -117,7 +135,7 @@
 							<option>10</option>
 						    </select> <br>
 
-						    <input type="submit" name="submit" value="Place Bet" id="submit" class="button medium"/>
+						    <input type="submit" name="submit" value="Settle It" id="submit" class="button medium"/>
 						    <input type="hidden" name="name" value="place_bet" id="place_bet"/>
 
 						 </form>
@@ -129,11 +147,11 @@
 					       </ul> <!--End rows-->
 					       </li> <!--end first column-->
 					       <li> <!--beginning of second column-->
-						<h2 style="float:left;"> Running Bets </h2>
+						<h2 style="float:left;"> The Latest </h2>
 						<br/>
 						<br/>
 						<p>
-						{% block list_of_bets %}No bets.{% endblock %}
+						{% block list_of_bets %}Nothing{% endblock %}
 						</p>
 					       </li> <!--end second column-->
 
@@ -163,14 +181,22 @@
 					-->
 							   <ul class="subPages">
 							       <li>
-								 <div id="slider">
-								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-1.jpg"></a>
-								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" title="This is an example with caption" src="{{ MEDIA_URL }}images/projects/featured-2.jpg"></a>
-								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-3.jpg"></a>
-								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-4.jpg"></a>
-								      <a href="{{ MEDIA_URL }}project.html" class="nivo-imageLink details"><img alt="Image Caption" src="{{ MEDIA_URL }}images/projects/featured-5.jpg"></a>
-								 </div>
-
+								  <div id="entryImage">
+									  <br/>
+									  <img src="{{ MEDIA_URL }}images/BigUnderLogo.png" class="centered" alt="MegaLogo"/><br/>
+									  <ul class="myColumns">
+										  <li> 
+											  <h3 class="bgBlue">1)</h3>
+											  <h3 class="bgBlue">Place a value on the predictions you make about sports, politics, and pop culture.</h3>
+										  </li>
+										  <li> 
+											  <h3 class="bgBlue">2)</h3>
+											  <h3 class="bgBlue">When the outcome is decided, collect your winnings.</h3>
+										  </li>
+									  </ul>	
+								  </div>
+								  <br/>
+								  <br/>
 					      <ul class="columns">
 					      <li>
 						<h3>Already Registered? Log in!</h3>
@@ -185,19 +211,22 @@
 					      </li>
 									  <li>
 						    <div>
-							<h3>Latest Bet:</h3>
+							<h3>Latest</h3>
 							{% block main_page_bet %}
 							{% endblock %}
 						    </div>
 					      </li>
 					      <li>
-						  <h3 style="text-align: center">not a member? sign up!</h3>
-						  <a href="/bets/register" class="button big" style="margin-left: 100px"> Sign Up</a>
-						  <!--<form action="#register" method="link" name="register" id="register">
+						  <h3 style="text-align: center">want to be a member?</h3>
+						  <!--line below is for when re-open register page-->
+						  <!--<a href="/bets/register" class="button big" style="margin-left: 100px"> Sign Up</a>-->
+						  <form action="" method="post" name="signup" id="signup">
 						    {% csrf_token %}
-						    <input type="submit" name="submit" value="Sign Up!" id="submit" class="button big" style="margin-left: 100px"/>
-						    <input type="hidden" name="name" value="register" id="register"/>
-						  </form>-->
+						    <strong style="color:limegreen">{{sign_up_msg}}</strong></br>
+						    <label>Email: </label><input type="text" name="sign_up_email" value="" id="sign_up_email" /><br/>
+						    <input type="submit" name="submit" value="Yes!" id="submit" class="button big" style="margin-left: 100px"/>
+						    <input type="hidden" name="name" value="signup" id="signup"/>
+						  </form>
 					      </li>
 
 					  </ul>
@@ -225,9 +254,9 @@
 						    <!--<li class="active"><a href="#overview">Profile</a></li>-->
 						    <li class="active"><a href="#profile/profile">Profile</a></li>
 						    <!--<li><a href="#technical-skills">Open Bets</a></li>-->
-						    <li><a href="#profile/open">Open Bets</a></li>
+						    <li><a href="#profile/unsettled">Unsettled</a></li>
 						    <!--<li><a href="#education">Closed Bets</a></li>-->
-						    <li><a href="#profile/closed">Closed Bets</a></li>
+						    <li><a href="#profile/settled">Settled</a></li>
 						  </ul>
 					       </div>
 				 </li>
@@ -260,8 +289,8 @@
 						<!--End rows-->
 					       </li> <!--end first column-->
 					       <li> <!--beginning of second column-->
-						<h3>Running Bets</h3>
-						<p>{% block list_of_bets_profile %}No bets.{% endblock %}</p>
+						<h3>The Latest</h3>
+						<p>{% block list_of_bets_profile %}Nothing.{% endblock %}</p>
 					       </li> <!--end second column-->
 
 					    </ul>
@@ -270,7 +299,7 @@
 
 					<!-- Begin of OPEN bets -->
 					<!--<li id="technical-skills">-->
-					<li id="open">
+					<li id="unsettled">
 					  <ul class="columns">
 						<!--First Column-->
 						<li>
@@ -293,8 +322,8 @@
 					       </ul> <!--End rows-->
 					       </li> <!--end first column-->
 					       <li> <!--beginning of second column-->
-						<h3>Open Bets</h3>
-						<p>{% block list_of_bets_profile_open %}No bets.{% endblock %}</p>
+						<h3>Unsettled</h3>
+						<p>{% block list_of_bets_profile_open %}Nothing.{% endblock %}</p>
 					       </li> <!--end second column-->
 
 					      </ul>
@@ -303,7 +332,7 @@
 
 					<!-- Begin of Closed Bets  -->
 					<!--<li id="education">-->
-					<li id="closed">
+					<li id="settled">
 					   <ul class="columns">
 						<!--First Column-->
 						<li>
@@ -326,8 +355,8 @@
 					       </ul> <!--End rows-->
 					       </li> <!--end first column-->
 					       <li> <!--beginning of second column-->
-						<h3>Closed Bets</h3>
-						<p>{% block list_of_bets_profile_closed %}No bets.{% endblock %}</p>
+						<h3>Settled</h3>
+						<p>{% block list_of_bets_profile_closed %}Nothing.{% endblock %}</p>
 					       </li> <!--end second column-->
 
 					      </ul> <!--end columns-->
@@ -344,11 +373,11 @@
 		    
 	    <!-- Begin of Place a Bet -->
 		    <!--<li id="contact">-->
-		    <li id="placebet">
+		    <li id="settle_it">
 			 <ul class="page">
 			     <li class="top">
 				 <div class="ribbon"><span class="arrow">&nbsp;</span>
-					 <h2 style="float:left;">Place a bet</h2>
+					 <h2 style="float:left;">Settle It!</h2>
 				 </div>
 			     </li>
 			     <!-- Begin of Content -->
@@ -360,11 +389,11 @@
 						<li>
 						  <form action="" method="post" name="place_bet_main">
 						    {% csrf_token %}
-						    <span>Issue:</span>
+						    <span>Terms:</span>
 						    <br/><span style="color:red">{{place_bet_main_error}}</span>
-							<textarea name="itemOfDispute_main" maxlength=120 id="itemOfDispute_main" rows="2" cols="2"></textarea><br/><br/>
+							<textarea name="itemOfDispute_main" maxlength=120 id="itemOfDispute_main" rows="2" cols="2" style="resize: none;"></textarea><br/><br/>
 	
-						    <label for="wager_main"> Wager: </label>
+						    <label for="wager_main"> Price: </label>
 	
 						    <select name="wager_main" id="wager_main">
 							<option selected="selected">1</option>
@@ -379,15 +408,15 @@
 							<option>10</option>
 						    </select> <br>
 	
-						    <input type="submit" name="submit" value="Place Bet" id="submit" class="button medium"/>
+						    <input type="submit" name="submit" value="Settle It" id="submit" class="button medium"/>
 						    <input type="hidden" name="name" value="place_bet_main" id="place_bet_main"/>
 
       
 						  </form>
 				     </li>
 				     <li> <!--beginning of second column-->
-						<h3>Running Bets</h3>
-						<p>{% block list_of_bets_place_a_bet %}{% endblock %}</p>
+						<h3>The Latest</h3>
+						<p>{% block list_of_bets_place_a_bet %}Nothing.{% endblock %}</p>
 				     </li> <!--end second column-->
 
 
@@ -403,11 +432,11 @@
 	    
 	    
 	    <!--Begin Other User's Profile Page-->
-		  <li id="friends">
+		  <li id="competition">
 		    <ul class="page">
 		      <li class="top">
 			<div class="ribbon"><span class="arrow">&nbsp;</span>
-			   <h2 style="float:left;">FRIENDS</h2>
+			   <h2 style="float:left;">COMPETITION</h2>
 			</div>
 		      </li>
 		      <li class="middle">
@@ -416,12 +445,12 @@
 			  <ul class="columns">
 			    <!--First Column-->
 			    <li>
-			      <h3>Select a user below:</h3>
+			      <h3></h3>
 			      <p>{% block list_of_friends %}NONE.{% endblock %}</p>
 
 			   </li> <!--end first column-->
 			   <li> <!--beginning of second column-->
-			    <h3>{% block selected_user_full_name %}NO ONE{% endblock %}'s Info: </h3>
+			    <h3>{% block selected_user_full_name %}NO ONE{% endblock %}</h3>
 			    <p>{% block selected_user_details %}NO INFORMATION.{% endblock %}</p>
 			   </li> <!--end second column-->
 
@@ -474,7 +503,7 @@
 
 
 	 <div id="footer" class="visible">
-	       <div><div>
+	       <div><div><a style="float:right; padding-right: 45px" href="mailto:contact@thesettle.com?subject=You guys are so awesome.">Contact Us</a> 
 	       <ul class="footer_controls">
 	     {%if user.is_authenticated %}
 	     <li>Hey, {{user.first_name}}!</li>
@@ -497,7 +526,7 @@
 	     <li>
 		     <a href="#" class="sprite-settings" title="Settings">&nbsp;</a>
 		     <div><a href="#" class="close">&nbsp;</a>
-
+<!--
 		     <ul class="settings">
 			 <li>
 			     <h3>Background:</h3>
@@ -552,10 +581,10 @@
 
 
 			     <span class="arrow">&nbsp;</span></div>
-		 </li>
+	     </li>-->
 	     {%else%}
 	     {%endif%}
-		 <li>
+		<!-- <li>
 		     <a href="#" class="sprite-social-connect" title="Social">&nbsp;</a>
 		     <div><a href="#" class="close">&nbsp;</a>
 
@@ -583,7 +612,7 @@
 		     <a href="#contact" class="sprite-contact-me" title="Contact Us">&nbsp;</a>
 		 </li>
 	     <li><a href="#" class="sprite-hide_tool" title="Show / Hide Bar">&nbsp;</a>
-	     </li>
+	     </li>-->
 	       </ul>
 	       
 	       {%endif%}

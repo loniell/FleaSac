@@ -27,13 +27,13 @@ def index(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render_to_response('bets/index.html', {'user': user, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
+                return render_to_response('bets/index.html', {'list_of_users':list_of_users, 'user': user, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
             else:
                 error="Your account has been disabled."
-                return render_to_response('bets/index.html', {'error': error}, context_instance=RequestContext(request))
+                return render_to_response('bets/index.html', {'list_of_users':list_of_users, 'error': error}, context_instance=RequestContext(request))
         else:
             error="Your username or password is incorrect."
-            return render_to_response('bets/index.html', {'error': error}, context_instance=RequestContext(request)) 
+            return render_to_response('bets/index.html', {'list_of_users':list_of_users, 'error': error, 'list_of_bets': list_of_bets}, context_instance=RequestContext(request)) 
     elif request.method == "POST" and request.POST.__getitem__("name") == "logout" :
         logout(request)
         #logout_then_login(request, {'login_url':'/bets/index.html'})
@@ -42,13 +42,13 @@ def index(request):
     elif request.method == "POST" and request.POST.__getitem__("name") == "place_bet" :
         bet = request.POST['itemOfDispute']
         if bet == "":
-            return render_to_response('bets/index.html', {'place_bet_error': "You gotta put something.", 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request)) 
+            return render_to_response('bets/index.html', {'list_of_users':list_of_users, 'place_bet_error': "You gotta put something.", 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request)) 
         placebet(request)
         return HttpResponseRedirect('')
     elif request.method == "POST" and request.POST.__getitem__("name") == "place_bet_main" :
         bet = request.POST['itemOfDispute_main']
         if bet == "":
-            return render_to_response('bets/index.html', {'place_bet_main_error': "You gotta put something.", 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request)) 
+            return render_to_response('bets/index.html', {'list_of_users':list_of_users, 'place_bet_main_error': "You gotta put something.", 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request)) 
         placebet_main(request)
         return HttpResponseRedirect('')
     elif request.method == "POST" and request.POST.__getitem__("name") == "win" :
@@ -73,20 +73,27 @@ def index(request):
         #form = RegisterForm(request.POST)
         if password1 != password2:
             password_message = "The passwords do not match."
-            return render_to_response('bets/index.html',  {'password_message': password_message, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
+            return render_to_response('bets/index.html',  {'list_of_users':list_of_users, 'password_message': password_message, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
         else:
             request.user.set_password(password1)
             request.user.save()
             password_message = "Your password has been changed."
-            return render(request, 'bets/index.html', {'password_message': password_message, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons})
+            return render(request, 'bets/index.html', {'list_of_users':list_of_users, 'password_message': password_message, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons})
     elif request.method == "POST" and request.POST.__getitem__("name") == "view_user_profile" :
         username = request.POST['username']
         selectedUser = User.objects.get(username__exact=username)
-        return render_to_response('bets/index.html',  {'list_of_users':list_of_users, 'selectedUser': selectedUser, 'list_of_bets': list_of_bets}, context_instance=RequestContext(request))
+        return render_to_response('bets/index.html',  {'list_of_users':list_of_users, 'selectedUser': selectedUser, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
+    elif request.method == "POST" and request.POST.__getitem__("name") == "signup" :
+        sign_up_email = request.POST['sign_up_email']
+        signupemail = SignUpEmails(email=sign_up_email)
+        signupemail.save()
+        message = "Thanks! We'll get back to you."
+        return render_to_response('bets/index.html', {'sign_up_msg': message, 'list_of_bets': list_of_bets}, context_instance=RequestContext(request)) 
     else:
-        return render_to_response('bets/register.html', {'list_of_users':list_of_users, 'user':request.user, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
+        return render_to_response('bets/index.html', {'list_of_users':list_of_users, 'user':request.user, 'form': form, 'list_of_bets': list_of_bets, 'list_of_persons': list_of_persons}, context_instance=RequestContext(request))
 
 #register a user   
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
